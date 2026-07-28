@@ -3,6 +3,7 @@ import { z } from "zod";
 export const envSchema = z.object({
   NODE_ENV: z.string(),
   PORT: z.coerce.number(),
+  FRONTEND_URL: z.url()
 });
 
 export type Env = z.infer<typeof envSchema>

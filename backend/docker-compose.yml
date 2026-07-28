@@ -1,0 +1,25 @@
+services:
+  backend:
+
+    image: food-delivery-backend:v1
+
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+
+    env_file:
+      - .env
+
+    ports:
+      - "4000:4000"
+
+    networks:
+      - food-delivery-network
+
+    restart: unless-stopped
+
+
+networks:
+  food-delivery-network:
+    name: food-delivery-network
+    driver: bridge
