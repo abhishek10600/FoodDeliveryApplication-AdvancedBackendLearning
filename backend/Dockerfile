@@ -43,5 +43,8 @@ USER node
 # Document the application port
 EXPOSE 4000
 
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 CMD node -e "fetch('http://127.0.0.1:4000/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+
 # Start the application
 CMD ["node", "dist/main.js"]
