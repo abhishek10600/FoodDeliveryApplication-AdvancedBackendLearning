@@ -14,6 +14,9 @@ RUN npm ci
 # Copy the remaining application source code
 COPY . .
 
+# Crete the dist folder
+RUN npm run build
+
 
 # STAGE 2 - Production
 
@@ -41,4 +44,4 @@ USER node
 EXPOSE 4000
 
 # Start the application
-CMD ["node", "dist/index.js"]
+CMD ["node", "dist/main.js"]
