@@ -80,7 +80,7 @@ export class CacheService {
 
   async increament(key: string): Promise<number> {
     try {
-      await redis.incr(key)
+      return await redis.incr(key)
     } catch (error) {
       logger.error({
         error,
