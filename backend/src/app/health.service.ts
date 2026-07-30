@@ -1,3 +1,5 @@
 export const checkApiHealth = () => {
-  return "Healthy"
+  return {
+    status: "healthy"
+  }
 }

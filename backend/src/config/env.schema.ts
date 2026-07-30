@@ -7,7 +7,10 @@ export const envSchema = z.object({
     "production"
   ]),
   PORT: z.coerce.number(),
-  FRONTEND_URL: z.url()
+  FRONTEND_URL: z.url(),
+  DATABASE_URL: z.url(),
+  REDIS_HOST: z.string(),
+  REDIS_PORT: z.coerce.number()
 });
 
 export type Env = z.infer<typeof envSchema>

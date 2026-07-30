@@ -1,4 +1,20 @@
 services:
+
+  redis-stack:
+    image: redis/redis-stack-server:latest
+    container_name: redis-stack
+
+    ports:
+      - "6379:6379"
+
+    volumes:
+      - redis-data:/data
+
+    restart: unless-stopped
+
+    networks:
+      - food-delivery-network
+
   backend:
 
     image: food-delivery-backend:v1
@@ -18,8 +34,14 @@ services:
 
     restart: unless-stopped
 
+    depends_on:
+      - redis-stack
+
 
 networks:
   food-delivery-network:
     name: food-delivery-network
     driver: bridge
+
+volumes:
+  redis-data:
