@@ -1,39 +1,59 @@
-import { logger } from "../../config/logger.js"
-import { prisma } from "./prisma.js";
+import { injectable, inject } from "tsyringe";
+import { registerQueryLogger } from "./query-logger.js";
+import { InfrastructureTokens } from "../container/index.js";
+import type { PrismaClient } from "../../../generated/prisma/client.js";
+import type { Logger } from "pino";
 
-export const connectDatabase = async (): Promise<void> => {
-  try {
 
-    logger.info("Connecting to the database");
+@injectable()
+export class DatabaseService {
 
-    await prisma.$connect()
+  constructor(
 
-    logger.info("Connected to the database successfully");
+    @inject(InfrastructureTokens.PrismaClient)
+    private readonly prisma: PrismaClient,
 
-  } catch(error) {
-    logger.fatal({
-      error
-    },
-      "Failed to connect to database"
-    )
+    @inject(InfrastructureTokens.Logger)
+    private readonly logger: Logger
 
-    throw error;
+  ) { }
+
+  connectDatabase = async (): Promise<void> => {
+    try {
+
+      this.logger.info("Connecting to the database");
+
+      registerQueryLogger()
+
+      await this.prisma.$connect()
+
+      this.logger.info("Connected to the database successfully");
+
+    } catch(error) {
+      this.logger.fatal({
+        error
+      },
+        "Failed to connect to database"
+      )
+
+      throw error;
+    }
+
   }
 
-}
+  disconnectDatabase = async (): Promise<void> => {
+    try {
+      this.logger.info("Disconnecting from the database")
 
-export const disconnectDatabase = async (): Promise<void> => {
-  try {
-    logger.info("Disconnecting from the database")
+      await this.prisma.$disconnect()
 
-    await prisma.$disconnect()
-
-    logger.info("Disconnected from the database successfully")
-  } catch (error) {
-    logger.fatal({
-      error
-    },
-      "Failed to disconnect from the database"
-    )
+      this.logger.info("Disconnected from the database successfully")
+    } catch (error) {
+      this.logger.fatal({
+        error
+      },
+        "Failed to disconnect from the database"
+      )
+    }
   }
 }

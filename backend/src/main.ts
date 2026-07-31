@@ -1,3 +1,7 @@
+import "reflect-metadata";
+
+import "./infrastructure/container/container.js"
+
 import { bootstrap } from "./app/bootstrap.js";
 import { createServer } from "./app/server.js";
 import { shutdown } from "./app/shutdown.js";

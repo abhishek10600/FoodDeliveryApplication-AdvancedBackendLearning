@@ -1,32 +1,49 @@
-import { logger } from "../../config/logger.js"
-import redis from "./redis.js";
+import { injectable, inject } from "tsyringe";
+import { InfrastructureTokens } from "../container/index.js";
+import type { Redis } from "ioredis";
+import type { Logger } from "pino";
 
-export const connectRedis = async() => {
-  try {
-    logger.info("Connecting to redis");
+@injectable()
+export class RedisService {
 
-    await redis.connect()
+  constructor(
 
-    logger.info("Connected to redis successfully")
+    @inject(InfrastructureTokens.RedisClient)
+    private readonly redis: Redis,
 
-  } catch (error) {
-    logger.fatal({
-      error
-    }, "Failed to connect to Redis")
+    @inject(InfrastructureTokens.Logger)
+    private readonly logger: Logger
+
+  ){ }
+
+  connectRedis = async () => {
+
+    try {
+      this.logger.info("Connecting to redis");
+
+      await this.redis.connect()
+
+      this.logger.info("Connected to redis successfully")
+
+    } catch (error) {
+      this.logger.fatal({
+        error
+      }, "Failed to connect to Redis")
+    }
   }
-}
 
-export const disconnectRedis = async() => {
-  try {
-    logger.info("Disconnecting from redis")
+  disconnectRedis = async() => {
+    try {
+      this.logger.info("Disconnecting from redis")
 
-    await redis.quit()
+      await this.redis.quit()
 
-    logger.info("Disconnected from redis successfully")
+      this.logger.info("Disconnected from redis successfully")
 
-  } catch (error) {
-    logger.fatal({
-      error
-    }, "Failed to disconnect redis")
+    } catch (error) {
+      this.logger.fatal({
+        error
+      }, "Failed to disconnect redis")
+    }
   }
 }

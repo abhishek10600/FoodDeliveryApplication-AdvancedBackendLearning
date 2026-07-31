@@ -15,7 +15,9 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "isolatedModules": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": ["src", "scripts"],
   "exclude": ["node_modules", "dist"]

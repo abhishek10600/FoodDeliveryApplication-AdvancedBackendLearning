@@ -1,16 +1,17 @@
+import { container } from "tsyringe"
 import { logger } from "../config/logger.js"
-import { connectRedis } from "../infrastructure/cache/redis.service.js"
-import { connectDatabase } from "../infrastructure/database/database.service.js"
-import { registerQueryLogger } from "../infrastructure/database/query-logger.js"
+import { RedisService } from "../infrastructure/cache/redis.service.js"
+import { DatabaseService } from "../infrastructure/database/database.service.js"
 
 export const bootstrap = async (): Promise<void> => {
   logger.info("Bootstrapping application...")
 
-  registerQueryLogger()
+  const databaseService = container.resolve(DatabaseService)
+  const redisService = container.resolve(RedisService)
 
-  await connectDatabase();
+  await databaseService.connectDatabase()
 
-  await connectRedis();
+  await redisService.connectRedis()
 
   logger.info("Application bootstrapped successfully")
 }

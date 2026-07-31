@@ -4,7 +4,7 @@ import { logger } from "../../config/logger.js";
 export const requestLogger = (req: Request, res: Response, next: NextFunction) => {
   const start = process.hrtime.bigint()
 
-  process.on("finish", () => {
+  res.on("finish", () => {
 
     const duration = Number(process.hrtime.bigint() - start) / 1_000_000;
 
