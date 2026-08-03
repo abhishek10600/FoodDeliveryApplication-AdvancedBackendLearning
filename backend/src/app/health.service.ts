@@ -1,5 +1,7 @@
-export const checkApiHealth = () => {
-  return {
-    status: "healthy"
+export class ApiService {
+  checkApiHealth = () => {
+    return {
+      status: "healthy"
+    }
   }
 }

@@ -1,10 +1,10 @@
 import { injectable, inject } from "tsyringe";
 import { InfrastructureTokens } from "../container/index.js";
 import { CacheOperation } from "./cache.enum.js";
-import { cacheMetrics } from "./cache.metrics.js";
+import { CacheMetrics } from "./cache.metrics.js";
 import { cacheSerializer } from "./cache.serailizer.js";
 import type { Redis } from "ioredis";
-import type { Logger } from "pino";
+import type { ILogger } from "../../shared/logger/logger.interface.js";
 
 @injectable()
 export class CacheService {
@@ -15,7 +15,9 @@ export class CacheService {
     private readonly redis: Redis,
 
     @inject(InfrastructureTokens.Logger)
-    private readonly logger: Logger
+    private readonly logger: ILogger,
+
+    private readonly cacheMetrics: CacheMetrics
 
   ) { }
 
@@ -27,26 +29,26 @@ export class CacheService {
       const value = await this.redis.get(key);
 
       if (!value) {
-        cacheMetrics.recordMiss(key)
+        this.cacheMetrics.recordMiss(key)
         return null
       }
 
-      cacheMetrics.recordHit(key)
+      this.cacheMetrics.recordHit(key)
 
       return cacheSerializer.deserialize<T>(value)
 
     } catch (error) {
 
-      cacheMetrics.recordFailure(CacheOperation.GET, key, error)
+      this.cacheMetrics.recordFailure(CacheOperation.GET, key, error)
 
-      this.logger.error({
+      this.logger.error("Failed to get value from cache", {
         error,
         key
-      }, "Failed to get value from cache")
+      })
 
       return null;
     }finally {
-      cacheMetrics.recordLatency(CacheOperation.GET, key, performance.now() - started)
+      this.cacheMetrics.recordLatency(CacheOperation.GET, key, performance.now() - started)
     }
   }
 
@@ -63,20 +65,19 @@ export class CacheService {
         await this.redis.set(key, serialized)
       }
 
-      cacheMetrics.recordSet(key)
+      this.cacheMetrics.recordSet(key)
 
     } catch (error) {
 
-      cacheMetrics.recordFailure(CacheOperation.SET, key, error)
+      this.cacheMetrics.recordFailure(CacheOperation.SET, key, error)
 
-      this.logger.error({
+      this.logger.error("Failed to set value in cache", {
         error,
         key
-      },
-        "Failed to set value in cache"
+      }
       )
     } finally {
-      cacheMetrics.recordLatency(CacheOperation.SET, key, performance.now() - started)
+      this.cacheMetrics.recordLatency(CacheOperation.SET, key, performance.now() - started)
     }
   }
 
@@ -87,18 +88,18 @@ export class CacheService {
     try {
       await this.redis.del(key)
 
-      cacheMetrics.recordDelete(key)
+      this.cacheMetrics.recordDelete(key)
 
     } catch (error) {
 
-      cacheMetrics.recordFailure(CacheOperation.DELETE, key, error)
+      this.cacheMetrics.recordFailure(CacheOperation.DELETE, key, error)
 
-      this.logger.error({
+      this.logger.error("Failed to delete cache key", {
         error,
         key
-      }, "Failed to delete cache key")
+      })
     } finally {
-      cacheMetrics.recordLatency(CacheOperation.DELETE, key, performance.now() - started)
+      this.cacheMetrics.recordLatency(CacheOperation.DELETE, key, performance.now() - started)
     }
   }
 
@@ -110,21 +111,21 @@ export class CacheService {
 
       const exists = await this.redis.exists(key)
 
-      cacheMetrics.recordExists(key)
+      this.cacheMetrics.recordExists(key)
 
       return exists === 1;
     } catch (error) {
 
-      cacheMetrics.recordFailure(CacheOperation.EXISTS, key, error)
+      this.cacheMetrics.recordFailure(CacheOperation.EXISTS, key, error)
 
-      this.logger.error({
+      this.logger.error("Failed to check cache key", {
         error,
         key
-      }, "Failed to check cache key")
+      })
 
       return false
     } finally {
-      cacheMetrics.recordLatency(CacheOperation.EXISTS, key, performance.now() - started)
+      this.cacheMetrics.recordLatency(CacheOperation.EXISTS, key, performance.now() - started)
     }
   }
 
@@ -135,18 +136,18 @@ export class CacheService {
     try {
       await this.redis.expire(key, ttlInSeconds)
 
-      cacheMetrics.recordExpire(key, ttlInSeconds)
+      this.cacheMetrics.recordExpire(key, ttlInSeconds)
 
     } catch (error) {
 
-      cacheMetrics.recordFailure(CacheOperation.EXPIRE, key, error)
+      this.cacheMetrics.recordFailure(CacheOperation.EXPIRE, key, error)
 
-      this.logger.error({
+      this.logger.error( "Failed to update the cache key expiration", {
         error,
         key
-      }, "Failed to update the cache key expiration")
+      })
     } finally {
-      cacheMetrics.recordLatency(CacheOperation.EXPIRE, key, performance.now() - started)
+      this.cacheMetrics.recordLatency(CacheOperation.EXPIRE, key, performance.now() - started)
     }
   }
 
@@ -158,21 +159,21 @@ export class CacheService {
 
       const increamentCache = await this.redis.incr(key)
 
-      cacheMetrics.recordIncreament(key)
+      this.cacheMetrics.recordIncreament(key)
 
       return increamentCache
     } catch (error) {
 
-      cacheMetrics.recordFailure(CacheOperation.INCREMENT, key, error)
+      this.cacheMetrics.recordFailure(CacheOperation.INCREMENT, key, error)
 
-      this.logger.error({
+      this.logger.error("Failed to increament cache key", {
         error,
         key
-      }, "Failed to increament cache key")
+      })
 
       return 0;
     }finally {
-      cacheMetrics.recordLatency(CacheOperation.INCREMENT, key, performance.now() - started)
+      this.cacheMetrics.recordLatency(CacheOperation.INCREMENT, key, performance.now() - started)
     }
   }
 }

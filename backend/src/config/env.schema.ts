@@ -7,6 +7,7 @@ export const envSchema = z.object({
     "production"
   ]),
   PORT: z.coerce.number(),
+  APP_NAME: z.string(),
   FRONTEND_URL: z.url(),
   DATABASE_URL: z.url(),
   REDIS_HOST: z.string(),

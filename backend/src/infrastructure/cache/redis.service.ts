@@ -1,7 +1,7 @@
 import { injectable, inject } from "tsyringe";
 import { InfrastructureTokens } from "../container/index.js";
 import type { Redis } from "ioredis";
-import type { Logger } from "pino";
+import type { ILogger } from "../../shared/logger/logger.interface.js";
 
 @injectable()
 export class RedisService {
@@ -12,7 +12,7 @@ export class RedisService {
     private readonly redis: Redis,
 
     @inject(InfrastructureTokens.Logger)
-    private readonly logger: Logger
+    private readonly logger: ILogger
 
   ){ }
 
@@ -26,9 +26,7 @@ export class RedisService {
       this.logger.info("Connected to redis successfully")
 
     } catch (error) {
-      this.logger.fatal({
-        error
-      }, "Failed to connect to Redis")
+      this.logger.fatal("Failed to connect to Redis", error)
     }
   }
 
@@ -41,9 +39,28 @@ export class RedisService {
       this.logger.info("Disconnected from redis successfully")
 
     } catch (error) {
-      this.logger.fatal({
-        error
-      }, "Failed to disconnect redis")
+      this.logger.fatal("Failed to disconnect redis", error)
+    }
+  }
+
+  checkRedisHealth = async() => {
+    try {
+      const start = process.hrtime.bigint();
+
+      await this.redis.ping()
+
+      const latency = Number(process.hrtime.bigint() - start) / 1_000_000;
+
+      return {
+        status: "healthy",
+        latency
+      }
+    } catch (error) {
+      this.logger.error("Redis health check failed", error)
+
+      return {
+        status: "unhealthy"
+      }
     }
   }
 }
