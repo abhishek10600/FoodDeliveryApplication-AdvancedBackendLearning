@@ -10,9 +10,11 @@ import { HealthService } from "../../observeability/health.service.js"
 import { ApiService } from "../../../app/health.service.js"
 import { LoggerService } from "../../observeability/logger/logger.service.js"
 import { pinoLogger } from "../../observeability/logger/pino.js"
-import { Logger } from "pino"
 import { LoggerFactory } from "../../observeability/logger/logger.factory.js"
 import { HttpLogger } from "../../observeability/logger/http.logger.js"
+import { RequestContextService } from "../../observeability/request-context/request-context.service.js"
+import { RequestContextMiddleware } from "../../observeability/request-context/request-context.middleware.js"
+import { ErrorHandlerMiddleware } from "../../../app/middleware/error-handler.middleware.js"
 
 export const registerInfrastructure = (): void => {
 
@@ -25,12 +27,7 @@ export const registerInfrastructure = (): void => {
 
   container.register(
     InfrastructureTokens.Logger,
-    {
-      useFactory: c =>
-      new LoggerService(
-              c.resolve<Logger>(InfrastructureTokens.PinoLogger)
-      )
-    }
+    LoggerService
   )
 
   container.registerSingleton(LoggerFactory)
@@ -75,5 +72,11 @@ export const registerInfrastructure = (): void => {
       useClass: HealthService
     }
   )
+
+  container.registerSingleton(InfrastructureTokens.RequestContextService, RequestContextService)
+
+  container.registerSingleton(RequestContextMiddleware, RequestContextMiddleware)
+
+  container.registerSingleton(ErrorHandlerMiddleware)
 
 }

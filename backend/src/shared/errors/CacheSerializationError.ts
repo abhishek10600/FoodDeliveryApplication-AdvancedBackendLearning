@@ -2,9 +2,7 @@ import { AppError } from "./AppError.js";
 
 export class CacheSerializationError extends AppError {
   constructor(message: string, cause?: unknown) {
-
-    super(message, 500, "CACHE SERIALIZATION ERROR")
-
+    super(message = "Cache serialization/deserialization failed", 500, "CACHE_SERIALIZATION_ERROR")
     this.cause = cause
   }
 }
