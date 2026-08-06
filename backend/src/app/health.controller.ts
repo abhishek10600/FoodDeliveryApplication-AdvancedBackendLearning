@@ -4,6 +4,7 @@ import { catchAsync } from "../shared/utils/CatchAsync.js";
 import { NextFunction, Request, Response } from "express";
 import type { ILogger } from "../shared/logger/logger.interface.js";
 import { LoggerFactory } from "../infrastructure/observeability/logger/logger.factory.js";
+import { NotFoundError } from "../shared/errors/NotFoundError.js";
 
 @injectable()
 export class HealthController {
@@ -24,8 +25,9 @@ export class HealthController {
     })
   }
 
-    live = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-      return res.status(200).json({
+  live = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
+    return res.status(200).json({
         success: true,
         status: "alive",
         timestamp: new Date().toISOString()
