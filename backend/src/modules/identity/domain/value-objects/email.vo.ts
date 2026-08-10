@@ -31,7 +31,7 @@ export class Email {
     return this.value === other.value
   }
 
-  public toString(): string {
+  public getValue(): string {
     return this.value
   }
 }

@@ -1,4 +1,4 @@
-import { RefreshSessionExpiredError, RefreshSessionRevoked } from "../errors/index.js";
+import { RefreshSessionExpiredError, RefreshSessionRevokedError } from "../errors/index.js";
 
 export class RefreshToken {
 
@@ -44,7 +44,7 @@ export class RefreshToken {
     }
 
     if (this.isRevoked()) {
-      throw new RefreshSessionRevoked()
+      throw new RefreshSessionRevokedError()
     }
   }
 

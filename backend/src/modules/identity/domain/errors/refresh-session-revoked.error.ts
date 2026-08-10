@@ -1,6 +1,6 @@
 import { DomainError } from "./domain.error.js";
 
-export class RefreshSessionRevoked extends DomainError {
+export class RefreshSessionRevokedError extends DomainError {
   constructor() {
     super("Refresh session is revoked.")
   }
