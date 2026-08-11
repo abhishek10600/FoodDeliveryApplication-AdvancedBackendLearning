@@ -84,11 +84,11 @@ export class RefreshSession {
     return this.props.revokedAt
   }
 
-  public getIpAddress(): String | null {
+  public getIpAddress(): string | null {
     return this.props.ipAddress
   }
 
-  public getUserAgent(): String | null {
+  public getUserAgent(): string | null {
     return this.props.userAgent
   }
 

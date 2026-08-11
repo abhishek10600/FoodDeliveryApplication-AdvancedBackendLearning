@@ -17,7 +17,7 @@ export class RefreshSessionMapper {
 
   }
 
-  public static toPersistance(refreshSession: RefreshSession) {
+  public static toPersistence(refreshSession: RefreshSession) {
     return {
       id: refreshSession.getId(),
       userId: refreshSession.getUserId(),
@@ -32,7 +32,7 @@ export class RefreshSessionMapper {
     }
   }
 
-  public static toUpdatePersistance(refreshSession: RefreshSession) {
+  public static toUpdatePersistence(refreshSession: RefreshSession) {
     return {
       expiresAt: refreshSession.getExpiresAt(),
       lastUsedAt: refreshSession.getLastUsedAt(),

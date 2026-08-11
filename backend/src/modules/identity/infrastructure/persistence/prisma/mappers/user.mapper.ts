@@ -18,7 +18,7 @@ export class UserMapper {
     })
   }
 
-  public static toPersistance(user: User) {
+  public static toPersistence(user: User) {
     return {
       id: user.getId(),
       email: user.getEmail(),
