@@ -4,12 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/main.ts",
     "build": "tsc",
     "start": "node dist/main.js",
     "db:generate": "npx prisma generate",
-    "db:migrate": "npx prisma migrate dev --name init"
+    "db:migrate": "npx prisma migrate dev --name init",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:integration": "dotenv -e .env.test -- vitest run tests/integration --no-file-parallelism",
+    "test:integration:watch": "vitest tests/integration",
+
+    "test:db:migrate": "dotenv -e .env.test -- prisma migrate deploy",
+    "test:db:reset": "dotenv -e .env.test -- prisma migrate reset --force"
   },
   "keywords": [],
   "author": "Abhishek Sharma",
@@ -49,6 +55,8 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.1.2",
     "@types/pg": "^8.20.0",
-    "prisma": "^7.9.1"
+    "dotenv-cli": "^11.0.0",
+    "prisma": "^7.9.1",
+    "vitest": "^4.1.10"
   }
 }

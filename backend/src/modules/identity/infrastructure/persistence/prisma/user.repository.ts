@@ -1,6 +1,6 @@
 import { injectable, inject } from "tsyringe";
 import { IUserRepository } from "../../../domain/repositories/user.repository.js";
-import { InfrastructureTokens } from "../../../../../infrastructure/container/index.js";
+import { InfrastructureTokens } from "../../../../../infrastructure/container/tokens/infrastructure.tokens.js";
 import { User } from "../../../domain/entities/index.js";
 import { UserMapper } from "./mappers/user.mapper.js";
 import { PrismaClient } from "../../../../../../generated/prisma/client.js";
