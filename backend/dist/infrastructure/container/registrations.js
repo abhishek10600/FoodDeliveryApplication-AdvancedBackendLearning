@@ -1,0 +1,20 @@
+import { registerAdmin } from "./modules/admin.js";
+import { registerCustomer } from "./modules/customer.js";
+import { registerDelivery } from "./modules/delivery.js";
+import { registerDriver } from "./modules/driver.js";
+import { registerIdentity } from "./modules/identity.js";
+import { registerInfrastructure } from "./modules/infrastructure.js";
+import { registerOrdering } from "./modules/ordering.js";
+import { registerPayment } from "./modules/payment.js";
+import { registerRestaurant } from "./modules/restaurant.js";
+export const registerDependencies = () => {
+    registerInfrastructure();
+    registerIdentity();
+    registerCustomer();
+    registerRestaurant();
+    registerOrdering();
+    registerPayment();
+    registerDelivery();
+    registerDriver();
+    registerAdmin();
+};

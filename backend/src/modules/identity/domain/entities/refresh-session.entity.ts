@@ -25,7 +25,7 @@ export interface CreateRefreshSessinProps {
 export class RefreshSession {
   constructor(
     private readonly id: string,
-    private props: RefreshSessionProps
+    private readonly props: RefreshSessionProps
   ) { }
 
   public static create(props: CreateRefreshSessinProps, id: string): RefreshSession {

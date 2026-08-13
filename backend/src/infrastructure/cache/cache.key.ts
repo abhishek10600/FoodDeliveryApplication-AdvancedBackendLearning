@@ -3,50 +3,34 @@ import { env } from "../../config/env.config.js";
 const CACHE_PREFIX = env.CACHE_PREFIX
 const CACHE_VERSION = env.CACHE_VERSION
 
-const buildCacheKey = (...segments: string[]) => {
-  [CACHE_PREFIX, CACHE_VERSION, segments].join(":")
-}
+const buildCacheKey = (...segments: string[]) =>
+  [CACHE_PREFIX, CACHE_VERSION, ...segments].join(":")
 
 export const cacheKeys = {
   identity: {
-    user: (userId: string) => {
-      buildCacheKey("identity", "user", userId)
-    },
+    user: (userId: string) => buildCacheKey("identity", "user", userId),
 
-    session: (sessionId: string) => {
-      buildCacheKey("identity", "session", sessionId)
-    }
+    session: (sessionId: string) => buildCacheKey("identity", "session", sessionId)
   },
 
   customer: {
-    profile: (customerId: string) => {
-      buildCacheKey("customer", "profile", customerId)
-    },
+    profile: (customerId: string) => buildCacheKey("customer", "profile", customerId),
 
-    address: (customerId: string) => {
-      buildCacheKey("customer", "address", customerId)
-    }
+    address: (customerId: string) => buildCacheKey("customer", "address", customerId)
   },
 
   restaurant: {
-    restaurant: (restaurantId: string) => {
-      buildCacheKey("restaurant", "restaurant", restaurantId)
-    },
+    restaurant: (restaurantId: string) => buildCacheKey("restaurant", "restaurant", restaurantId),
 
-    menu: (restaurantId: string) => {
-      buildCacheKey("restaurant", "menu", restaurantId)
-    }
+    menu: (restaurantId: string) => buildCacheKey("restaurant", "menu", restaurantId)
   },
 
   ordering: {
-    order: (orderId: string) => {
-      buildCacheKey("ordering", "order", orderId)
-    }
+    order: (orderId: string) => buildCacheKey("ordering", "order", orderId)
   },
 
   driver: {
-    driver: (driverId: string) => {
-      buildCacheKey("driver", "driver", driverId)
-    }
+    driver: (driverId: string) => buildCacheKey("driver", "driver", driverId)
   }
 } as const
+

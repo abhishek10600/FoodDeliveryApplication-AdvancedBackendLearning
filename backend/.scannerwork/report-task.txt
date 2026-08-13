@@ -1,0 +1,6 @@
+projectKey=fooddeliveryapplication
+serverUrl=https://devops.alacritysys.com/sonar
+serverVersion=26.8.0.126808
+dashboardUrl=https://devops.alacritysys.com/sonar/dashboard?id=fooddeliveryapplication
+ceTaskId=3d271115-62f3-4e42-8e4d-76fde4dabcc1
+ceTaskUrl=https://devops.alacritysys.com/sonar/api/ce/task?id=3d271115-62f3-4e42-8e4d-76fde4dabcc1

@@ -1,5 +1,5 @@
 export class ApiService {
-  checkApiHealth = () => {
+  checkApiHealth = async () => {
     return {
       status: "healthy"
     }
