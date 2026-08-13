@@ -84,4 +84,8 @@ export class DatabaseService {
       }
     }
   }
+
+  public getClient = (): PrismaClient => {
+    return this.prisma
+  }
 }

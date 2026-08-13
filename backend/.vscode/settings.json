@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "alacrity",
+        "projectKey": "fooddeliveryapplication"
+    }
+}
