@@ -13,7 +13,6 @@
     "test:watch": "vitest",
     "test:integration": "dotenv -e .env.test -- vitest run tests/integration --no-file-parallelism",
     "test:integration:watch": "vitest tests/integration",
-
     "test:db:migrate": "dotenv -e .env.test -- prisma migrate deploy",
     "test:db:reset": "dotenv -e .env.test -- prisma migrate reset --force"
   },
@@ -33,7 +32,7 @@
     "express-rate-limit": "^8.6.2",
     "helmet": "^8.3.0",
     "ioredis": "^5.11.1",
-    "jsonwebtoken": "^9.0.3",
+    "jose": "^6.2.8",
     "pg": "^8.22.0",
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",
@@ -52,7 +51,6 @@
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.6",
     "@types/helmet": "^0.0.48",
-    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.1.2",
     "@types/pg": "^8.20.0",
     "dotenv-cli": "^11.0.0",

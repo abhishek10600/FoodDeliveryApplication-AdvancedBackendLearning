@@ -1,9 +1,9 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "../../../generated/prisma/client.js";
+import { PrismaClient } from "../../generated/prisma/client.js"
 
-import { Role, UserStatus } from "../../../src/modules/identity/domain/enums/index.js";
+import { Role, UserStatus } from "../../src/modules/identity/domain/enums/index.js"
 
 describe("Integration Test Isolation", () => {
   let prisma: PrismaClient;
