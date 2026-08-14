@@ -6,7 +6,7 @@ import { Email, PasswordHash } from "../../../../domain/value-objects/index.js";
 export class UserMapper {
 
   public static toDomain(prismaUser: PrismaUser): User {
-    return new User({
+    return User.rehydrate({
       id: prismaUser.id,
       email: Email.create(prismaUser.email),
       passwordHash: PasswordHash.create(prismaUser.passwordHash),

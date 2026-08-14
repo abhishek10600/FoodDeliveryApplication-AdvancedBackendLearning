@@ -18,5 +18,9 @@ app.use(httpLogger.middleware)
 
 app.use(healthRouter)
 
+import identityRouter from "../modules/identity/presentation/routes/identity.route.js"
+
+app.use("/api/v1/identity", identityRouter)
+
 const errorHandler = container.resolve(ErrorHandlerMiddleware)
 app.use(errorHandler.handle)

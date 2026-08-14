@@ -4,6 +4,9 @@ import { UserRepository } from "../../../modules/identity/infrastructure/persist
 import { RefreshSessionRepository } from "../../../modules/identity/infrastructure/persistence/prisma/refresh-session.repository.js"
 import { BcryptPasswordHasher } from "../../../modules/identity/infrastructure/security/bcrypt-password-hasher.js"
 import { JwtService } from "../../../modules/identity/infrastructure/security/jwt/jwt.service.js"
+import { Sha256TokenHasher } from "../../../modules/identity/infrastructure/security/sha256-token-hasher.js"
+import { IdentityTransaction } from "../../../modules/identity/infrastructure/persistence/prisma/identity.transaction.js"
+import { RegisterUserUseCaseImpl } from "../../../modules/identity/application/use-cases/register-user.use-case.impl.js"
 
 export const registerIdentity = (): void => {
 
@@ -18,5 +21,15 @@ export const registerIdentity = (): void => {
   container.registerSingleton(IdentityTokens.PasswordHasher, BcryptPasswordHasher)
 
   container.registerSingleton(IdentityTokens.JwtService, JwtService)
+
+  container.register(IdentityTokens.TokenHasher, {
+    useClass: Sha256TokenHasher
+  })
+
+  container.register(IdentityTokens.Transaction, {
+    useClass: IdentityTransaction
+  })
+
+  container.registerSingleton(IdentityTokens.RegisterUserUseCase, RegisterUserUseCaseImpl)
 
 }

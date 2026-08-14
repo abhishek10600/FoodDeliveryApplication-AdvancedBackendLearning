@@ -14,7 +14,7 @@ export interface RefreshSessionProps {
 }
 
 
-export interface CreateRefreshSessinProps {
+export interface CreateRefreshSessionProps {
   userId: string;
   tokenHash: string;
   expiresAt: Date;
@@ -28,7 +28,7 @@ export class RefreshSession {
     private props: RefreshSessionProps
   ) { }
 
-  public static create(props: CreateRefreshSessinProps, id: string): RefreshSession {
+  public static create(props: CreateRefreshSessionProps, id: string): RefreshSession {
     const now = new Date();
 
     if (!props.userId) {

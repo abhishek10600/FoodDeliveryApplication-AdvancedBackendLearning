@@ -4,6 +4,8 @@ node_modules
 # Build Output
 dist
 
+test
+
 # Git
 .git
 .gitignore

@@ -1,16 +1,17 @@
 import { injectable, inject } from "tsyringe"
 import { IRefreshSessionRepository } from "../../../domain/repositories/index.js";
 import { InfrastructureTokens } from "../../../../../infrastructure/container/tokens/infrastructure.tokens.js";
-import { PrismaClient } from "../../../../../../generated/prisma/client.js";
+// import { PrismaClient } from "../../../../../../generated/prisma/client.js";
 import { RefreshSession } from "../../../domain/entities/index.js";
 import { RefreshSessionMapper } from "./mappers/refresh-session.mapper.js";
+import type { PrismaExecutor } from "../../../../../infrastructure/database/prisma-client.type.js";
 
 @injectable()
 export class RefreshSessionRepository implements IRefreshSessionRepository {
 
   constructor(
     @inject(InfrastructureTokens.PrismaClient)
-    private readonly prisma: PrismaClient
+    private readonly prisma: PrismaExecutor
   ) { }
 
   async create(refreshSession: RefreshSession): Promise<RefreshSession> {
