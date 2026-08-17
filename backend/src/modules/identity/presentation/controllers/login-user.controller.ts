@@ -1,28 +1,28 @@
-import { injectable, inject} from "tsyringe"
+import { injectable, inject } from "tsyringe"
 import { IdentityTokens } from "../../infrastructure/persistence/tokens/identity.tokens.js";
-import type { RegisterUserUseCase } from "../../application/use-cases/register-user.use-case.js";
-import { NextFunction, Request, Response } from "express";
+import type { LoginUserUseCase } from "../../application/use-cases/login-user.use-case.js";
 import { catchAsync } from "../../../../shared/utils/CatchAsync.js";
+import { NextFunction, Request, Response } from "express";
 import { sendResponse } from "../../../../shared/utils/AppResonse.js";
 import { setRefreshTokenCookie } from "../../../../shared/utils/Cookie.js";
 
 @injectable()
-export class RegisterUserController {
+export class LoginUserController {
   constructor(
 
-    @inject(IdentityTokens.RegisterUserUseCase)
-    private readonly registerUserUseCase: RegisterUserUseCase
+    @inject(IdentityTokens.LoginUserUseCase)
+    private readonly loginUserUseCase: LoginUserUseCase
 
   ) { }
 
   handle = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const result = await this.registerUserUseCase.execute(req.body);
+    const result = await this.loginUserUseCase.execute(req.body)
 
     setRefreshTokenCookie(res, result.refreshToken)
 
-    sendResponse(res, 201, {
+    sendResponse(res, 200, {
       success: true,
-      message: "User registered successfully.",
+      message: "User loggin in successfully",
       data: result
     })
   })

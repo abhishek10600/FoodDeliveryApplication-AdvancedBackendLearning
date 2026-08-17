@@ -7,6 +7,8 @@ import { JwtService } from "../../../modules/identity/infrastructure/security/jw
 import { Sha256TokenHasher } from "../../../modules/identity/infrastructure/security/sha256-token-hasher.js"
 import { IdentityTransaction } from "../../../modules/identity/infrastructure/persistence/prisma/identity.transaction.js"
 import { RegisterUserUseCaseImpl } from "../../../modules/identity/application/use-cases/register-user.use-case.impl.js"
+import { LoginUserUseCaseImpl } from "../../../modules/identity/application/use-cases/login-user.use-case.impl.js"
+import { GetCurrentUserUseCaseImpl } from "../../../modules/identity/application/use-cases/get-current-user.use-case.impl.js"
 
 export const registerIdentity = (): void => {
 
@@ -32,4 +34,7 @@ export const registerIdentity = (): void => {
 
   container.registerSingleton(IdentityTokens.RegisterUserUseCase, RegisterUserUseCaseImpl)
 
+  container.registerSingleton(IdentityTokens.LoginUserUseCase, LoginUserUseCaseImpl)
+
+  container.registerSingleton(IdentityTokens.GetCurrentUserUseCase, GetCurrentUserUseCaseImpl)
 }

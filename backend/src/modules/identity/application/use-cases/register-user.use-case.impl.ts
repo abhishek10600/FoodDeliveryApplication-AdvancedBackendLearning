@@ -42,21 +42,25 @@ export class RegisterUserUseCaseImpl implements RegisterUserUseCase {
       passwordHash,
     })
 
+    const accessTokenIssuedAt = Math.floor(Date.now() / 1000)
+
     const accessToken = await this.jwtService.signAccessToken({
       sub: user.getId(),
       roles: user.getRoles(),
       type: TokenType.ACCESS,
-      iat: Date.now(),
+      iat: accessTokenIssuedAt,
       exp: env.JWT_ACCESS_EXPIRES_IN,
       iss: env.JWT_ISSUER,
       aud: env.JWT_AUDIENCE
     })
 
+     const refreshTokenIssuedAt = Math.floor(Date.now() / 1000)
+
     const refreshToken = await this.jwtService.signRefreshToken({
       sub: user.getId(),
       roles: user.getRoles(),
       type: TokenType.REFRESH,
-      iat: Date.now(),
+      iat: refreshTokenIssuedAt,
       exp: env.JWT_REFRESH_EXPIRES_IN,
       iss: env.JWT_ISSUER,
       aud: env.JWT_AUDIENCE

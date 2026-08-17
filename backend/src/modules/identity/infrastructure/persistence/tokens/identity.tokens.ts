@@ -5,5 +5,7 @@ export const IdentityTokens = {
   JwtService: Symbol.for("Identity.JwtService"),
   TokenHasher: Symbol.for("Identity.TokenHasher"),
   Transaction: Symbol.for("Identity.Transaction"),
-  RegisterUserUseCase: Symbol.for("Identity.RegisterUserUseCase")
+  RegisterUserUseCase: Symbol.for("Identity.RegisterUserUseCase"),
+  LoginUserUseCase: Symbol.for("Identity.LoginUserUseCase"),
+  GetCurrentUserUseCase: Symbol.for("Identity.GetCurrentUserUseCase")
 } as const
