@@ -87,7 +87,7 @@ export class RefreshTokenUseCaseImpl implements RefreshTokenUseCase {
       aud: env.JWT_AUDIENCE
     })
 
-    const newRefreshToken = await this.jwtService.signAccessToken({
+    const newRefreshToken = await this.jwtService.signRefreshToken({
       sub: user.getId(),
       roles: user.getRoles(),
       type: TokenType.REFRESH,

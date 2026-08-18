@@ -17,11 +17,7 @@ export class RefreshTokenController {
 
   handle = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
-    const refreshToken = req.cookies.refreshToken
-
-    console.log({ Cookies: req.cookies })
-
-    console.log({refreshToken})
+    const refreshToken = req.cookies?.refreshToken
 
     if (!refreshToken) {
       return sendResponse(res, 400, {

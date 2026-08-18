@@ -27,4 +27,4 @@ export const helmetMiddleware: RequestHandler = helmet({
   permittedCrossDomainPolicies: false,
   ieNoOpen: true,
   originAgentCluster: true
-})
+});
