@@ -9,7 +9,13 @@ export interface IRefreshSessionRepository {
 
   findByUserId(userId: string): Promise<RefreshSession[]>
 
+  findByFamilyId(familyId: string): Promise<RefreshSession[]>
+
   update(refreshSession: RefreshSession): Promise<RefreshSession>
 
   revoke(id: string, revokedAt: Date): Promise<void>
+
+  revokeFamily(familyId: string, revokedAt: Date): Promise<void>;
+
+  rotate(sessionId: string, replacementSessionId: string, usedAt: Date): Promise<boolean>
 }

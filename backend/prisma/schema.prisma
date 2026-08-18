@@ -45,10 +45,12 @@ model User {
 model RefreshSession{
   id String @id @default(uuid()) @db.Uuid
   userId String @db.Uuid
+  familyId String @default(uuid()) @db.Uuid
   tokenHash String @unique @map("token_hash")
   expiresAt DateTime @map("expires_at")
   lastUsedAt DateTime? @map("last_used_at")
   revokedAt DateTime? @map("revoked_at")
+  replaceBySessionId String? @unique @map("replaced_by_session_id") @db.Uuid
   ipAddress String? @map("ip_address")
   userAgent String? @map("user_agent")
   createdAt DateTime @default(now()) @map("created_at")
@@ -57,9 +59,9 @@ model RefreshSession{
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([userId])
+  @@index([familyId])
   @@index([expiresAt])
   @@index([revokedAt])
-
   @@map("refresh_sessions")
 }
 

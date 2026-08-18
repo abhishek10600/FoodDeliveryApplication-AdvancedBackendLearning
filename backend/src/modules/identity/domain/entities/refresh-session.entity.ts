@@ -3,10 +3,12 @@ import { RefreshSessionExpiredError, RefreshSessionRevokedError } from "../error
 
 export interface RefreshSessionProps {
   userId: string;
+  familyId: string;
   tokenHash: string;
   expiresAt: Date;
   lastUsedAt: Date | null;
   revokedAt: Date | null;
+  replacedBySessionId: string | null;
   ipAddress: string | null;
   userAgent: string | null;
   createdAt: Date;
@@ -16,6 +18,7 @@ export interface RefreshSessionProps {
 
 export interface CreateRefreshSessionProps {
   userId: string;
+  familyId: string;
   tokenHash: string;
   expiresAt: Date;
   ipAddress?: string | null;
@@ -35,6 +38,10 @@ export class RefreshSession {
       throw new AppError("Refresh session must belong to a user", 400, "USER_NOT_PROVIDED")
     }
 
+    if (!props.familyId) {
+      throw new AppError("Refresh session must belong to a token family", 400, "TOKEN_FAMILY_ID_NOT_PROVIDED")
+    }
+
     if (!props.tokenHash) {
       throw new AppError("Token hash missing", 400, "TOKEN_HASH_NOT_PROVIDED")
     }
@@ -45,10 +52,12 @@ export class RefreshSession {
 
     return new RefreshSession(id, {
       userId: props.userId,
+      familyId: props.familyId,
       tokenHash: props.tokenHash,
       expiresAt: props.expiresAt,
       lastUsedAt: null,
       revokedAt: null,
+      replacedBySessionId: null,
       ipAddress: props.ipAddress ?? null,
       userAgent: props.userAgent ?? null,
       createdAt: now,
@@ -68,6 +77,10 @@ export class RefreshSession {
     return this.props.userId
   }
 
+  public getFamilyId(): string {
+    return this.props.familyId
+  }
+
   public getTokenHash(): string {
     return this.props.tokenHash
   }
@@ -82,6 +95,10 @@ export class RefreshSession {
 
   public getRevokedAt(): Date | null {
     return this.props.revokedAt
+  }
+
+  public getReplacedBySessionId(): string | null {
+    return this.props.replacedBySessionId;
   }
 
   public getIpAddress(): string | null {
@@ -108,6 +125,10 @@ export class RefreshSession {
     return this.props.revokedAt !== null
   }
 
+  public isRotated(): boolean {
+    return this.props.replacedBySessionId !== null
+  }
+
   public isActive(now: Date = new Date()): boolean {
     return !this.isExpired(now) && !this.isRevoked()
   }
@@ -132,6 +153,21 @@ export class RefreshSession {
 
     this.props.revokedAt = now
     this.props.updatedAt = now
+  }
+
+  public replaceWith(replacementSessionId: string, now: Date = new Date()): void {
+    if (this.isRevoked()) {
+      throw new RefreshSessionRevokedError()
+    }
+
+    if (this.isExpired(now)) {
+      throw new RefreshSessionExpiredError()
+    }
+
+    this.props.revokedAt = now;
+    this.props.replacedBySessionId = replacementSessionId;
+    this.props.lastUsedAt = now;
+    this.props.updatedAt = now;
   }
 
 }

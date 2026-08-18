@@ -9,6 +9,8 @@ import { IdentityTransaction } from "../../../modules/identity/infrastructure/pe
 import { RegisterUserUseCaseImpl } from "../../../modules/identity/application/use-cases/register-user.use-case.impl.js"
 import { LoginUserUseCaseImpl } from "../../../modules/identity/application/use-cases/login-user.use-case.impl.js"
 import { GetCurrentUserUseCaseImpl } from "../../../modules/identity/application/use-cases/get-current-user.use-case.impl.js"
+import { AuthorizationService } from "../../../modules/identity/domain/authorization/authorization.service.js"
+import { RefreshTokenUseCaseImpl } from "../../../modules/identity/application/use-cases/refresh-token.use-case.impl.js"
 
 export const registerIdentity = (): void => {
 
@@ -32,9 +34,13 @@ export const registerIdentity = (): void => {
     useClass: IdentityTransaction
   })
 
+  container.registerSingleton(IdentityTokens.AuthorizationService, AuthorizationService)
+
   container.registerSingleton(IdentityTokens.RegisterUserUseCase, RegisterUserUseCaseImpl)
 
   container.registerSingleton(IdentityTokens.LoginUserUseCase, LoginUserUseCaseImpl)
 
   container.registerSingleton(IdentityTokens.GetCurrentUserUseCase, GetCurrentUserUseCaseImpl)
+
+  container.registerSingleton(IdentityTokens.RefreshTokenUseCase, RefreshTokenUseCaseImpl)
 }

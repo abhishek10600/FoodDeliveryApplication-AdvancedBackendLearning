@@ -81,6 +81,7 @@ export class LoginUserUseCaseImpl implements LoginUserUseCase {
 
     const refreshSession = RefreshSession.create({
       userId: user.getId(),
+      familyId: crypto.randomUUID(),
       tokenHash: hashedRefreshToken,
       expiresAt: refreshSessionExpiresAt,
       ipAddress: null,

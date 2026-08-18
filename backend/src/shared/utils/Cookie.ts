@@ -5,7 +5,7 @@ export const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
 
   const refreshTokenMaxAge = env.JWT_REFRESH_EXPIRES_IN * 1000;
 
-  res.cookie("refresh-token", refreshToken, {
+  res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     secure: env.NODE_ENV === "production",
     sameSite: "lax",

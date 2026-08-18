@@ -21,10 +21,12 @@ export class RefreshSessionRepository implements IRefreshSessionRepository {
       data: {
         id: data.id,
         userId: data.userId,
+        familyId: data.familyId,
         tokenHash: data.tokenHash,
         expiresAt: data.expiresAt,
         lastUsedAt: data.lastUsedAt,
         revokedAt: data.revokedAt,
+        replaceBySessionId: data.replacedSessionId,
         ipAddress: data.ipAddress,
         userAgent: data.userAgent,
         createdAt: data.createdAt,
@@ -76,6 +78,19 @@ export class RefreshSessionRepository implements IRefreshSessionRepository {
     return refreshSessions.map(RefreshSessionMapper.toDomain)
   }
 
+  async findByFamilyId(familyId: string): Promise<RefreshSession[]> {
+    const refreshSession = await this.prisma.refreshSession.findMany({
+      where: {
+        familyId
+      },
+      orderBy: {
+        createdAt: "desc"
+      }
+    })
+
+    return refreshSession.map(RefreshSessionMapper.toDomain)
+  }
+
   async update(refreshSession: RefreshSession): Promise<RefreshSession> {
     const data = RefreshSessionMapper.toUpdatePersistence(refreshSession);
 
@@ -98,6 +113,38 @@ export class RefreshSessionRepository implements IRefreshSessionRepository {
         revokedAt
       }
     })
+  }
+
+  async revokeFamily(familyId: string, revokedAt: Date): Promise<void> {
+    await this.prisma.refreshSession.updateMany({
+      where: {
+        familyId,
+        revokedAt: null
+      },
+      data: {
+        revokedAt
+      }
+    })
+  }
+
+  async rotate(sessionId: string, replacementSessionId: string, usedAt: Date): Promise<boolean> {
+    const result = await this.prisma.refreshSession.updateMany({
+      where: {
+        id: sessionId,
+        revokedAt: null,
+        expiresAt: {
+          gt: usedAt,
+        },
+        replaceBySessionId: null,
+      },
+      data: {
+        revokedAt: usedAt,
+        lastUsedAt: usedAt,
+        replaceBySessionId: replacementSessionId
+      }
+    })
+
+    return result.count === 1;
   }
 
 }
