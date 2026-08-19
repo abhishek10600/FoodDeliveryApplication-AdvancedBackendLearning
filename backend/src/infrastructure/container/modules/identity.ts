@@ -11,6 +11,8 @@ import { LoginUserUseCaseImpl } from "../../../modules/identity/application/use-
 import { GetCurrentUserUseCaseImpl } from "../../../modules/identity/application/use-cases/get-current-user.use-case.impl.js"
 import { AuthorizationService } from "../../../modules/identity/domain/authorization/authorization.service.js"
 import { RefreshTokenUseCaseImpl } from "../../../modules/identity/application/use-cases/refresh-token.use-case.impl.js"
+import { LogoutUserUseCaseImpl } from "../../../modules/identity/application/use-cases/logout.user.use-case.impl.js"
+import { ChangePasswordUseCaseImpl } from "../../../modules/identity/application/use-cases/change-password.use-case.impl.js"
 
 export const registerIdentity = (): void => {
 
@@ -43,4 +45,8 @@ export const registerIdentity = (): void => {
   container.registerSingleton(IdentityTokens.GetCurrentUserUseCase, GetCurrentUserUseCaseImpl)
 
   container.registerSingleton(IdentityTokens.RefreshTokenUseCase, RefreshTokenUseCaseImpl)
+
+  container.registerSingleton(IdentityTokens.LogoutUserUseCase, LogoutUserUseCaseImpl)
+
+  container.registerSingleton(IdentityTokens.ChangePasswordUseCase, ChangePasswordUseCaseImpl)
 }

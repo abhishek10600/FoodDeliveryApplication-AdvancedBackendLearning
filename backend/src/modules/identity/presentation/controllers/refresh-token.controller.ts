@@ -3,7 +3,7 @@ import { IdentityTokens } from "../../infrastructure/persistence/tokens/identity
 import type { RefreshTokenUseCase } from "../../application/use-cases/refresh-token.use-case.js";
 import { catchAsync } from "../../../../shared/utils/CatchAsync.js";
 import { NextFunction, Request, Response } from "express";
-import { setRefreshTokenCookie } from "../../../../shared/utils/Cookie.js";
+import { clearCookies, setRefreshTokenCookie } from "../../../../shared/utils/Cookie.js";
 import { sendResponse } from "../../../../shared/utils/AppResonse.js";
 
 @injectable()
@@ -20,7 +20,10 @@ export class RefreshTokenController {
     const refreshToken = req.cookies?.refreshToken
 
     if (!refreshToken) {
-      return sendResponse(res, 400, {
+
+      clearCookies(res, "refreshToken")
+
+      sendResponse(res, 400, {
         success: false,
         message: "Refresh token not found"
       })

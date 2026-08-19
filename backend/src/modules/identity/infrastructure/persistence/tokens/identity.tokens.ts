@@ -9,5 +9,7 @@ export const IdentityTokens = {
   RegisterUserUseCase: Symbol.for("Identity.RegisterUserUseCase"),
   LoginUserUseCase: Symbol.for("Identity.LoginUserUseCase"),
   GetCurrentUserUseCase: Symbol.for("Identity.GetCurrentUserUseCase"),
-  RefreshTokenUseCase: Symbol.for("Identity.RefreshTokenUseCase")
+  RefreshTokenUseCase: Symbol.for("Identity.RefreshTokenUseCase"),
+  LogoutUserUseCase: Symbol.for("Identity.LogoutUserUseCase"),
+  ChangePasswordUseCase: Symbol.for("Identity.ChangePasswordUseCase")
 } as const

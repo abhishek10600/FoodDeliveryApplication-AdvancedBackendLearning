@@ -127,6 +127,33 @@ export class RefreshSessionRepository implements IRefreshSessionRepository {
     })
   }
 
+  async revokeByTokenHash(tokenHash: string, revokedAt: Date): Promise<void> {
+    await this.prisma.refreshSession.update({
+      where: {
+        tokenHash,
+        revokedAt: null,
+        expiresAt: {
+          gt: revokedAt
+        }
+      },
+      data: {
+        revokedAt
+      }
+    })
+  }
+
+  async revokeAllByUserId(userId: string, revokedAt: Date): Promise<void> {
+    await this.prisma.refreshSession.updateMany({
+      where: {
+        userId,
+        revokedAt: null
+      },
+      data: {
+        revokedAt
+      }
+    })
+  }
+
   async rotate(sessionId: string, replacementSessionId: string, usedAt: Date): Promise<boolean> {
     const result = await this.prisma.refreshSession.updateMany({
       where: {

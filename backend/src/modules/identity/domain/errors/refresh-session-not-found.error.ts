@@ -1,6 +1,6 @@
-import { DomainError } from "./domain.error.js";
+import { AuthenticationError } from "../../../../shared/errors/AuthenticationError.js";
 
-export class RefreshSessionNotFound extends DomainError {
+export class RefreshSessionNotFound extends AuthenticationError {
   constructor() {
     super("Refresh session not found.")
   }

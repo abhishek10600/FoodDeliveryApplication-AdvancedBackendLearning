@@ -12,3 +12,11 @@ export const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
     maxAge: refreshTokenMaxAge
   })
 }
+
+export const clearCookies = (res: Response, cookieName: string) => {
+  res.clearCookie(`${cookieName}`, {
+    httpOnly: true,
+    secure: env.NODE_ENV === "production",
+    sameSite: "lax"
+  })
+}

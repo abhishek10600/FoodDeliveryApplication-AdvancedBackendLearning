@@ -17,5 +17,9 @@ export interface IRefreshSessionRepository {
 
   revokeFamily(familyId: string, revokedAt: Date): Promise<void>;
 
+  revokeByTokenHash(tokenHash: string, revokedAt: Date): Promise<void>;
+
+  revokeAllByUserId(userId: string, revokedAt: Date): Promise<void>;
+
   rotate(sessionId: string, replacementSessionId: string, usedAt: Date): Promise<boolean>
 }

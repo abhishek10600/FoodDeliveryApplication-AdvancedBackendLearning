@@ -2,6 +2,6 @@ import { AuthenticationError } from "../../../../shared/errors/AuthenticationErr
 
 export class InvalidRefreshTokenError extends AuthenticationError {
   constructor() {
-    super("invalid refresh token.")
+    super("Invalid refresh token.")
   }
 }
