@@ -19,6 +19,8 @@ export const InfrastructureTokens = {
 
   HealthService: Symbol.for("Infrastructure.HealthService"),
 
-  RequestContextService: Symbol.for("Infrastructure.RequestContextService")
+  RequestContextService: Symbol.for("Infrastructure.RequestContextService"),
+
+  EmailService: Symbol.for("Infrastructure.EmailService")
 
 } as const

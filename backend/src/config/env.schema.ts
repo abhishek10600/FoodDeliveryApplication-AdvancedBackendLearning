@@ -24,7 +24,13 @@ export const envSchema = z.object({
   JWT_ACCESS_EXPIRES_IN: z.coerce.number(),
   JWT_REFRESH_EXPIRES_IN: z.coerce.number(),
   JWT_ISSUER: z.string(),
-  JWT_AUDIENCE: z.string()
+  JWT_AUDIENCE: z.string(),
+  SMTP_HOST: z.string(),
+  SMTP_PORT: z.coerce.number(),
+  SMTP_USER: z.string(),
+  SMTP_PASSWORD: z.string(),
+  SMTP_FROM: z.string(),
+  EMAIL_VERIFICATION_URL: z.url()
 });
 
 export type Env = z.infer<typeof envSchema>

@@ -13,6 +13,8 @@ import { AuthorizationService } from "../../../modules/identity/domain/authoriza
 import { RefreshTokenUseCaseImpl } from "../../../modules/identity/application/use-cases/refresh-token.use-case.impl.js"
 import { LogoutUserUseCaseImpl } from "../../../modules/identity/application/use-cases/logout.user.use-case.impl.js"
 import { ChangePasswordUseCaseImpl } from "../../../modules/identity/application/use-cases/change-password.use-case.impl.js"
+import { VerifyEmailUseCaseImpl } from "../../../modules/identity/application/use-cases/verify-email.use-case.impl.js"
+import { VerifyEmailRespository } from "../../../modules/identity/infrastructure/persistence/prisma/verify-email.repository.js"
 
 export const registerIdentity = (): void => {
 
@@ -23,6 +25,8 @@ export const registerIdentity = (): void => {
   container.register(IdentityTokens.RefreshSessionRepository, {
     useClass: RefreshSessionRepository
   })
+
+  container.register(IdentityTokens.VerifyEmailRepository, VerifyEmailRespository)
 
   container.registerSingleton(IdentityTokens.PasswordHasher, BcryptPasswordHasher)
 
@@ -49,4 +53,6 @@ export const registerIdentity = (): void => {
   container.registerSingleton(IdentityTokens.LogoutUserUseCase, LogoutUserUseCaseImpl)
 
   container.registerSingleton(IdentityTokens.ChangePasswordUseCase, ChangePasswordUseCaseImpl)
+
+  container.registerSingleton(IdentityTokens.VerifyEmailUseCase, VerifyEmailUseCaseImpl)
 }

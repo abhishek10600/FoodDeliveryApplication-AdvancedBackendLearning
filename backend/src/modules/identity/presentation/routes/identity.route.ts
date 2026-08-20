@@ -11,6 +11,8 @@ import { RefreshTokenController } from "../controllers/refresh-token.controller.
 import { LogoutController } from "../controllers/logout-user.controller.js"
 import { changePasswordSchema } from "../../validators/change-password.validator.js"
 import { ChangePasswordController } from "../controllers/change-password.controller.js"
+import { verifyEmailSchema } from "../../validators/verify-email.validator.js"
+import { VerifyEmailController } from "../controllers/verify-email.controller.js"
 
 const router = express.Router()
 
@@ -21,6 +23,7 @@ const getCurrentUserController = container.resolve(GetCurrentUserController)
 const refreshTokenController = container.resolve(RefreshTokenController)
 const logoutController = container.resolve(LogoutController)
 const changePasswordController = container.resolve(ChangePasswordController)
+const verifyEmailController = container.resolve(VerifyEmailController)
 
 router.route("/register").post(validate({ body: registerUserSchema }), registerController.handle.bind(registerController))
 
@@ -32,6 +35,8 @@ router.route("/me").get(authenticationMiddleware.authenticate, getCurrentUserCon
 
 router.route("/logout").post(authenticationMiddleware.authenticate, logoutController.handle.bind(logoutController))
 
-router.route("/change-password").patch(authenticationMiddleware.authenticate, validate({body: changePasswordSchema}), changePasswordController.handle.bind(changePasswordController))
+router.route("/change-password").patch(authenticationMiddleware.authenticate, validate({ body: changePasswordSchema }), changePasswordController.handle.bind(changePasswordController))
+
+router.route("/verify-email/:token").get(authenticationMiddleware.authenticate, validate({params: verifyEmailSchema}), verifyEmailController.handle.bind(verifyEmailController))
 
 export default router;

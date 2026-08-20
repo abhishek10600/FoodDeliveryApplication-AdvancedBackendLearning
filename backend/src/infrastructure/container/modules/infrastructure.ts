@@ -15,6 +15,7 @@ import { HttpLogger } from "../../observeability/logger/http.logger.js"
 import { RequestContextService } from "../../observeability/request-context/request-context.service.js"
 import { RequestContextMiddleware } from "../../observeability/request-context/request-context.middleware.js"
 import { ErrorHandlerMiddleware } from "../../../app/middleware/error-handler.middleware.js"
+import { SmtpService } from "../../email/smtp.email.service.js"
 
 export const registerInfrastructure = (): void => {
 
@@ -78,5 +79,9 @@ export const registerInfrastructure = (): void => {
   container.registerSingleton(RequestContextMiddleware, RequestContextMiddleware)
 
   container.registerSingleton(ErrorHandlerMiddleware)
+
+  container.register(InfrastructureTokens.EmailService, {
+    useClass: SmtpService
+  })
 
 }
