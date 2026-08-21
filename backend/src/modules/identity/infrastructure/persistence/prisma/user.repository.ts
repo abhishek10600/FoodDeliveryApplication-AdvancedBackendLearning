@@ -3,7 +3,6 @@ import { IUserRepository } from "../../../domain/repositories/user.repository.js
 import { InfrastructureTokens } from "../../../../../infrastructure/container/tokens/infrastructure.tokens.js";
 import { User } from "../../../domain/entities/index.js";
 import { UserMapper } from "./mappers/user.mapper.js";
-// import { PrismaClient } from "../../../../../../generated/prisma/client.js";
 import { Email } from "../../../domain/value-objects/email.vo.js";
 import type { PrismaExecutor } from "../../../../../infrastructure/database/prisma-client.type.js";
 

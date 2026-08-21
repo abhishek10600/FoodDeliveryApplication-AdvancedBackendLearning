@@ -15,6 +15,9 @@ import { LogoutUserUseCaseImpl } from "../../../modules/identity/application/use
 import { ChangePasswordUseCaseImpl } from "../../../modules/identity/application/use-cases/change-password.use-case.impl.js"
 import { VerifyEmailUseCaseImpl } from "../../../modules/identity/application/use-cases/verify-email.use-case.impl.js"
 import { VerifyEmailRespository } from "../../../modules/identity/infrastructure/persistence/prisma/verify-email.repository.js"
+import { PasswordResetRepository } from "../../../modules/identity/infrastructure/persistence/prisma/password-reset.repository.js"
+import { ForgotPasswordUseCaseImpl } from "../../../modules/identity/application/use-cases/forgot-password.use-case.impl.js"
+import { ResetPasswordUseCaseImpl } from "../../../modules/identity/application/use-cases/reset-password.use-case.impl.js"
 
 export const registerIdentity = (): void => {
 
@@ -26,7 +29,13 @@ export const registerIdentity = (): void => {
     useClass: RefreshSessionRepository
   })
 
-  container.register(IdentityTokens.VerifyEmailRepository, VerifyEmailRespository)
+  container.register(IdentityTokens.VerifyEmailRepository, {
+    useClass: VerifyEmailRespository
+  })
+
+  container.register(IdentityTokens.PasswordResetRepository, {
+    useClass: PasswordResetRepository
+  })
 
   container.registerSingleton(IdentityTokens.PasswordHasher, BcryptPasswordHasher)
 
@@ -53,6 +62,10 @@ export const registerIdentity = (): void => {
   container.registerSingleton(IdentityTokens.LogoutUserUseCase, LogoutUserUseCaseImpl)
 
   container.registerSingleton(IdentityTokens.ChangePasswordUseCase, ChangePasswordUseCaseImpl)
+
+  container.registerSingleton(IdentityTokens.ForgotPasswordUseCase, ForgotPasswordUseCaseImpl)
+
+  container.registerSingleton(IdentityTokens.ResetPasswordUseCase, ResetPasswordUseCaseImpl)
 
   container.registerSingleton(IdentityTokens.VerifyEmailUseCase, VerifyEmailUseCaseImpl)
 }
