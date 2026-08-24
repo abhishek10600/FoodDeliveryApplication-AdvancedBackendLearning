@@ -6,4 +6,6 @@ export interface IPasswordResetRepository {
 
   findByTokenHash(tokenHash: string): Promise<ResetPasswordEntity | null>
 
+  update(resetPassword: ResetPasswordEntity): Promise<ResetPasswordEntity>
+
 }

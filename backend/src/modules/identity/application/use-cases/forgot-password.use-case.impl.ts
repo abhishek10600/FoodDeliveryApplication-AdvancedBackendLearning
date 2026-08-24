@@ -10,8 +10,7 @@ import type { ITokenHasher } from "../../domain/services/token-hasher.js";
 import { env } from "../../../../config/env.config.js";
 import { ResetPasswordEntity } from "../../domain/entities/reset-password.entity.js";
 import type { IPasswordResetRepository } from "../../domain/repositories/password-reset.repository.js";
-import { InfrastructureTokens } from "../../../../infrastructure/container/index.js";
-import type { EmailService } from "../../../../infrastructure/email/email.service.js";
+import type { IEmailJobQueue } from "../services/email-job-queue.js";
 
 @injectable()
 export class ForgotPasswordUseCaseImpl implements ForgotPasswordUseCase {
@@ -26,8 +25,8 @@ export class ForgotPasswordUseCaseImpl implements ForgotPasswordUseCase {
     @inject(IdentityTokens.TokenHasher)
     private readonly tokenHasher: ITokenHasher,
 
-    @inject(InfrastructureTokens.EmailService)
-    private readonly emailService: EmailService
+    @inject(IdentityTokens.EmailJobQueue)
+    private readonly emailJobQueue: IEmailJobQueue
 
   ) { }
 
@@ -58,8 +57,11 @@ export class ForgotPasswordUseCaseImpl implements ForgotPasswordUseCase {
       resetPasswordUrl
     })
 
-    // make this a background job - later
-    await this.emailService.sendResetPasswordEmail(user.getEmail().getValue(), resetPasswordUrl)
+    await this.emailJobQueue.enqueResetPasswordEmail({
+      userId: user.getId(),
+      email: user.getEmail().getValue(),
+      resetPasswordUrl
+    })
 
   }
 }

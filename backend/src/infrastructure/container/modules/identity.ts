@@ -18,6 +18,7 @@ import { VerifyEmailRespository } from "../../../modules/identity/infrastructure
 import { PasswordResetRepository } from "../../../modules/identity/infrastructure/persistence/prisma/password-reset.repository.js"
 import { ForgotPasswordUseCaseImpl } from "../../../modules/identity/application/use-cases/forgot-password.use-case.impl.js"
 import { ResetPasswordUseCaseImpl } from "../../../modules/identity/application/use-cases/reset-password.use-case.impl.js"
+import { BullMQEmailJobQueue } from "../../queue/queues/bullmq-email-job.queue.js"
 
 export const registerIdentity = (): void => {
 
@@ -48,6 +49,12 @@ export const registerIdentity = (): void => {
   container.register(IdentityTokens.Transaction, {
     useClass: IdentityTransaction
   })
+
+  container.register(IdentityTokens.EmailJobQueue,
+    {
+      useClass: BullMQEmailJobQueue
+    }
+  )
 
   container.registerSingleton(IdentityTokens.AuthorizationService, AuthorizationService)
 

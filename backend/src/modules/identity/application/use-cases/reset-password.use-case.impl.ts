@@ -37,6 +37,10 @@ export class ResetPasswordUseCaseImpl implements ResetPasswordUseCase {
 
     const now = new Date()
 
+    if (resetPasswordEntity.getUsedAt()) {
+      throw new AuthenticationError("Invalid token or token expired.")
+    }
+
     if (resetPasswordEntity.getExpiresAt() < now) {
       throw new AuthenticationError("Invalid token or token expired.")
     }
@@ -50,6 +54,12 @@ export class ResetPasswordUseCaseImpl implements ResetPasswordUseCase {
     const newPasswordHash = await this.passwordHasher.hashPassword(input.newPassword)
 
     user.changePassword(newPasswordHash)
+
+    const resetPasswordUpdatedAt = new Date()
+
+    resetPasswordEntity.updateUsedAt(resetPasswordUpdatedAt)
+
+    await this.passwordResetRepo.update(resetPasswordEntity)
 
     await this.userRepo.update(user)
   }

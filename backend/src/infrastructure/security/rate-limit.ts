@@ -4,7 +4,7 @@ import { env } from "../../config/env.config.js"
 const baseOptions = {
   standardHeaders: true,
   legacyHeaders: false,
-  skipSuccessfullRequests: false,
+  skipSuccessfulRequests: false,
   skipFailedRequests: false
   } as const
 

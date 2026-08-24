@@ -1,3 +1,3 @@
-import { registerDependencies } from "./registrations.js";
+import { container } from "tsyringe";
 
-registerDependencies()
+export { container }

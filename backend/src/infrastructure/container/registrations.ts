@@ -9,6 +9,7 @@ import { registerPayment } from "./modules/payment.js";
 import { registerRestaurant } from "./modules/restaurant.js";
 
 export const registerDependencies = (): void => {
+
   registerInfrastructure();
 
   registerIdentity()

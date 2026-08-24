@@ -2,7 +2,7 @@ import { container } from "tsyringe"
 import { InfrastructureTokens } from "../tokens/infrastructure.tokens.js"
 import { env } from "../../../config/env.config.js"
 import { prisma } from "../../database/prisma.js"
-import redis from "../../cache/redis.js"
+import redis from "../../../config/redis.js"
 import { DatabaseService } from "../../database/database.service.js"
 import { RedisService } from "../../cache/redis.service.js"
 import { CacheService } from "../../cache/cache.service.js"
@@ -16,6 +16,7 @@ import { RequestContextService } from "../../observeability/request-context/requ
 import { RequestContextMiddleware } from "../../observeability/request-context/request-context.middleware.js"
 import { ErrorHandlerMiddleware } from "../../../app/middleware/error-handler.middleware.js"
 import { SmtpService } from "../../email/smtp.email.service.js"
+import { EmailJobProcessor } from "../../queue/jobs/email/email.job.processor.js"
 
 export const registerInfrastructure = (): void => {
 
@@ -82,6 +83,10 @@ export const registerInfrastructure = (): void => {
 
   container.register(InfrastructureTokens.EmailService, {
     useClass: SmtpService
+  })
+
+  container.register(InfrastructureTokens.EmailJobProcessor, {
+    useClass: EmailJobProcessor
   })
 
 }

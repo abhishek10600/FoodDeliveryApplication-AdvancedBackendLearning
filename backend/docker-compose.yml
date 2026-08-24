@@ -37,6 +37,22 @@ services:
     depends_on:
       - redis-stack
 
+  email-worker:
+    image: food-delivery-backend:v1
+
+    env_file:
+      - .env
+
+    command: ["node", "dist/workers/email-worker.main.js"]
+
+    networks:
+      - food-delivery-network
+
+    restart: unless-stopped
+
+    depends_on:
+      - redis-stack
+
 
 networks:
   food-delivery-network:

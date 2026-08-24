@@ -21,6 +21,8 @@ export const InfrastructureTokens = {
 
   RequestContextService: Symbol.for("Infrastructure.RequestContextService"),
 
+  EmailJobProcessor: Symbol.for("Infrastructure.EmailJobProcessor"),
+
   EmailService: Symbol.for("Infrastructure.EmailService")
 
 } as const

@@ -1,3 +1,2 @@
-export * from "./container.js"
-export * from "./registrations.js"
-export * from "./tokens/index.js"
+export { container } from "./container.js";
+export { InfrastructureTokens } from "./tokens/infrastructure.tokens.js";

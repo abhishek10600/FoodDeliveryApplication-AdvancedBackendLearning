@@ -23,8 +23,8 @@ export class ResetPasswordEntity {
     this.tokenHash = params.tokenHash
     this.expiresAt = params.expiresAt
     this.usedAt = params.usedAt ?? null
-    this.createdAt = params.createdAt ?? Date.now()
-    this.updatedAt = params.updatedAt ?? Date.now()
+    this.createdAt = params.createdAt ?? new Date
+    this.updatedAt = params.updatedAt ?? new Date
   }
 
   public static create(params: {

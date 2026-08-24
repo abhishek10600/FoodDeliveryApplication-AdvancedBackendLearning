@@ -1,1 +1,1 @@
-export  * from "./infrastructure.tokens.js"
+export { InfrastructureTokens } from "./infrastructure.tokens.js";

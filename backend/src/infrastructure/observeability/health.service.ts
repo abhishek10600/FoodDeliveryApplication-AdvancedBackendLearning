@@ -1,5 +1,5 @@
 import { injectable, inject } from "tsyringe";
-import { InfrastructureTokens } from "../container/index.js";
+import { InfrastructureTokens } from "../container/tokens/infrastructure.tokens.js";
 import { DatabaseService } from "../database/database.service.js";
 import { RedisService } from "../cache/redis.service.js";
 import { ApiService } from "../../app/health.service.js";
