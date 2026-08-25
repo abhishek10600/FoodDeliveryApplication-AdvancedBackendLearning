@@ -17,6 +17,7 @@ import { RequestContextMiddleware } from "../../observeability/request-context/r
 import { ErrorHandlerMiddleware } from "../../../app/middleware/error-handler.middleware.js"
 import { SmtpService } from "../../email/smtp.email.service.js"
 import { EmailJobProcessor } from "../../queue/jobs/email/email.job.processor.js"
+import { RateLimitService } from "../../security/rate-limit.service.js"
 
 export const registerInfrastructure = (): void => {
 
@@ -80,6 +81,8 @@ export const registerInfrastructure = (): void => {
   container.registerSingleton(RequestContextMiddleware, RequestContextMiddleware)
 
   container.registerSingleton(ErrorHandlerMiddleware)
+
+  container.registerSingleton(InfrastructureTokens.RateLimitService, RateLimitService)
 
   container.register(InfrastructureTokens.EmailService, {
     useClass: SmtpService

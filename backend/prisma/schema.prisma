@@ -38,8 +38,26 @@ model User {
   refreshSessions RefreshSession[]
   emailVerifications EmailVerification[]
   passwordResets PasswordReset[]
+  customer Customer?
 
   @@map("users")
+}
+
+model Customer {
+  id String @id @default(uuid()) @db.Uuid
+  userId String @unique @db.Uuid
+  firstName String @map("first_name")
+  lastName String @map("last_name")
+  phone String
+  preferences Json?
+  avatarUrl String? @map("avatar_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([userId])
+  @@map("customers")
 }
 
 model RefreshSession{

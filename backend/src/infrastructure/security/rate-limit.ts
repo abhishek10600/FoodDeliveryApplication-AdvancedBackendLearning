@@ -1,5 +1,5 @@
 import rateLimit, { type RateLimitRequestHandler} from "express-rate-limit"
-import { env } from "../../config/env.config.js"
+import { RateLimitPolicies } from "../../config/rate-limit.config.js"
 
 const baseOptions = {
   standardHeaders: true,
@@ -10,8 +10,8 @@ const baseOptions = {
 
 export const globalRateLimiter: RateLimitRequestHandler = rateLimit({
   ...baseOptions,
-  windowMs: env.GLOBAL_RATE_LIMIT_WINDOW * 60 * 1000,
-  max: env.GLOBAL_RATE_LIMIT_MAX,
+  windowMs: RateLimitPolicies.Global.windowMs,
+  max: RateLimitPolicies.Global.max,
   message: {
     success: false,
     error: {

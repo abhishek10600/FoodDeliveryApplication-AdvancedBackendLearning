@@ -23,6 +23,8 @@ export const InfrastructureTokens = {
 
   EmailJobProcessor: Symbol.for("Infrastructure.EmailJobProcessor"),
 
-  EmailService: Symbol.for("Infrastructure.EmailService")
+  EmailService: Symbol.for("Infrastructure.EmailService"),
+
+  RateLimitService: Symbol.for("Infrastructure.RateLimitService")
 
 } as const

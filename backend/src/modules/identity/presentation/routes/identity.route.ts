@@ -17,6 +17,7 @@ import { forgotPasswordSchema } from "../../validators/forgot-password.validator
 import { ForgotPasswordController } from "../controllers/forgot-password.controller.js"
 import { resetPasswordBodySchema, resetPasswordParamSchema } from "../../validators/reset-password.validator.js"
 import { ResetPasswordController } from "../controllers/reset-password.controller.js"
+import { IdentityRateLimitMiddleware } from "../middleware/identity-rate-limit.middleware.js"
 
 const router = express.Router()
 
@@ -30,12 +31,13 @@ const changePasswordController = container.resolve(ChangePasswordController)
 const verifyEmailController = container.resolve(VerifyEmailController)
 const forgotPasswordController = container.resolve(ForgotPasswordController)
 const resetPasswordController = container.resolve(ResetPasswordController)
+const identityRateLimitMiddleware = container.resolve(IdentityRateLimitMiddleware)
 
-router.route("/register").post(validate({ body: registerUserSchema }), registerController.handle.bind(registerController))
+router.route("/register").post(identityRateLimitMiddleware.register, validate({ body: registerUserSchema }), registerController.handle.bind(registerController))
 
-router.route("/login").post(validate({ body: loginUserSchema }), loginController.handle.bind(loginController))
+router.route("/login").post(identityRateLimitMiddleware.login, validate({ body: loginUserSchema }), loginController.handle.bind(loginController))
 
-router.route("/refresh").post(refreshTokenController.handle.bind(refreshTokenController))
+router.route("/refresh").post(identityRateLimitMiddleware.refreshToken, refreshTokenController.handle.bind(refreshTokenController))
 
 router.route("/me").get(authenticationMiddleware.authenticate, getCurrentUserController.handle.bind(getCurrentUserController))
 
@@ -43,10 +45,10 @@ router.route("/logout").post(authenticationMiddleware.authenticate, logoutContro
 
 router.route("/change-password").patch(authenticationMiddleware.authenticate, validate({ body: changePasswordSchema }), changePasswordController.handle.bind(changePasswordController))
 
-router.route("/verify-email/:token").get(authenticationMiddleware.authenticate, validate({ params: verifyEmailSchema }), verifyEmailController.handle.bind(verifyEmailController))
+router.route("/verify-email/:token").get(identityRateLimitMiddleware.verifyEmail, authenticationMiddleware.authenticate, validate({ params: verifyEmailSchema }), verifyEmailController.handle.bind(verifyEmailController))
 
-router.route("/forgot-password").post(validate({ body: forgotPasswordSchema }), forgotPasswordController.handle.bind(forgotPasswordController))
+router.route("/forgot-password").post(identityRateLimitMiddleware.forgotPassword, validate({ body: forgotPasswordSchema }), forgotPasswordController.handle.bind(forgotPasswordController))
 
-router.route("/reset-password/:token").put(validate({params: resetPasswordParamSchema, body: resetPasswordBodySchema}), resetPasswordController.handle.bind(resetPasswordController))
+router.route("/reset-password/:token").put(identityRateLimitMiddleware.resetPassword, validate({params: resetPasswordParamSchema, body: resetPasswordBodySchema}), resetPasswordController.handle.bind(resetPasswordController))
 
 export default router;
