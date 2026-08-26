@@ -1,0 +1,5 @@
+export * from "./customer-avatar.vo.js"
+export * from "./customer-first-name.vo.js"
+export * from "./customer-last-name.vo.js"
+export * from "./customer-phone.vo.js"
+export * from "./customer-preferences.vo.js"
