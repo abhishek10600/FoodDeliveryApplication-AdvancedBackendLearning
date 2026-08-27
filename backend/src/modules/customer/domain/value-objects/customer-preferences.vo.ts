@@ -28,7 +28,30 @@ export class CustomerPreferences {
     this.marketing = Object.freeze({...props.marketing})
   }
 
-  private static create(props: ICustomerPreferenceProps) { }
+  public static create(props: ICustomerPreferenceProps): CustomerPreferences {
+
+    const normalizedProps = CustomerPreferences.normalize(props)
+
+    CustomerPreferences.validate(normalizedProps)
+
+    return new CustomerPreferences(normalizedProps)
+
+  }
+
+  public static default(): CustomerPreferences {
+
+    return CustomerPreferences.create({
+      language: "en",
+      notifications: {
+        push: true,
+        sms: true,
+        email: true
+      },
+      marketing: {
+        enabled: true
+      }
+    })
+  }
 
   private static normalize(props: ICustomerPreferenceProps): ICustomerPreferenceProps {
 
@@ -44,7 +67,7 @@ export class CustomerPreferences {
         email: props.notifications?.email
       },
       marketing: {
-        enabled: props.marketing.enabled
+        enabled: props.marketing?.enabled
       }
     }
 
@@ -104,8 +127,8 @@ export class CustomerPreferences {
     }
   }
 
-  public withLanguage(language: string): ICustomerPreferenceProps {
-    return {
+  public withLanguage(language: string): CustomerPreferences {
+    return CustomerPreferences.create({
       language,
       notifications: {
         ...this.notifications
@@ -113,11 +136,11 @@ export class CustomerPreferences {
       marketing: {
         ...this.marketing
       }
-    }
+    })
   }
 
-  public withNotifications(notifications: ICustomerNotificationPreferencesProps): ICustomerPreferenceProps {
-    return {
+  public withNotifications(notifications: ICustomerNotificationPreferencesProps): CustomerPreferences {
+    return CustomerPreferences.create({
       language: this.language,
       notifications: {
         ...notifications
@@ -125,11 +148,11 @@ export class CustomerPreferences {
       marketing: {
         ...this.marketing
       }
-    }
+    })
   }
 
-  public withMarketing(marketing: ICustomerMarketingPreferenceProps): ICustomerPreferenceProps {
-    return {
+  public withMarketing(marketing: ICustomerMarketingPreferenceProps): CustomerPreferences {
+    return CustomerPreferences.create({
       language: this.language,
       notifications: {
         ...this.notifications
@@ -137,7 +160,7 @@ export class CustomerPreferences {
       marketing: {
         ...marketing
       }
-    }
+    })
   }
 
   public equals(other: ICustomerPreferenceProps): boolean {
