@@ -77,7 +77,7 @@ export class Customer {
     return this.lastName
   }
 
-  public getPhone(): CustomerPhoneNumber | null {
+  public getPhone(): CustomerPhoneNumber{
     return this.phone
   }
 

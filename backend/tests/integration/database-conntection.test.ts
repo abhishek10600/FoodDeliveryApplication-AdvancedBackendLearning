@@ -1,22 +1,34 @@
-import { describe, expect, it, afterAll, beforeAll } from "vitest"
-import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "../../generated/prisma/client.js"
-import { env } from "../../src/config/env.config.js"
+import {
+  describe,
+  expect,
+  it,
+  afterAll,
+  beforeAll,
+} from "vitest";
 
-const connectionString = `${env.DATABASE_URL}`
+import { PrismaClient } from "../../generated/prisma/client.js";
 
-const adapter = new PrismaPg({ connectionString })
+import { createTestPrisma } from "../helpers/test-prisma.js";
 
-const prisma = new PrismaClient({adapter})
+describe("Test PostgreSQL", () => {
+  let prisma: PrismaClient;
 
-describe("Test Postgresql", () => {
+  beforeAll(async () => {
+    prisma = createTestPrisma();
+
+    await prisma.$connect();
+  });
+
   it("should connect to the test database", async () => {
-    const result = await prisma.$queryRaw<Array<{ result: number }>>`SELECT 1 AS result`;
+    const result =
+      await prisma.$queryRaw<
+        Array<{ result: number }>
+      >`SELECT 1 AS result`;
 
     expect(result[0]?.result).toBe(1);
-  })
+  });
 
   afterAll(async () => {
-    await prisma.$disconnect()
-  })
-})
+    await prisma.$disconnect();
+  });
+});

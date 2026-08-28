@@ -5,6 +5,7 @@ import { RefreshSession } from "../../src/modules/identity/domain/entities/index
 export type CreateTestRefreshSessionOptions = Partial<{
   id: string;
   tokenHash: string;
+  familyId: string;
   expiresAt: Date;
   lastUsedAt: Date | null;
   revokedAt: Date | null;
@@ -20,7 +21,7 @@ export const buildTestRefreshSession = (
     RefreshSession.create(
       {
         userId,
-
+        familyId: overrides.familyId ?? crypto.randomUUID(),
         tokenHash:
           overrides.tokenHash ??
           `test-token-hash-${crypto.randomUUID()}`,

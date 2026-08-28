@@ -42,7 +42,7 @@ export class RefreshSessionMapper {
       expiresAt: refreshSession.getExpiresAt(),
       lastUsedAt: refreshSession.getLastUsedAt(),
       revokedAt: refreshSession.getRevokedAt(),
-      replacedBySessionId: refreshSession.getReplacedBySessionId(),
+      replaceBySessionId: refreshSession.getReplacedBySessionId(),
       ipAddress: refreshSession.getIpAddress(),
       userAgent: refreshSession.getUserAgent(),
       updatedAt: refreshSession.getUpdatedAt()

@@ -3,8 +3,6 @@ import { Customer } from "../../../../domain/entities/index.js";
 import { InvalidCustomerPreferencesError } from "../../../../domain/errors/invalid-customer-preferences.error.js";
 import { CustomerAvatarUrl, CustomerFirstName, CustomerLastName, CustomerPhoneNumber, CustomerPreferences} from "../../../../domain/value-objects/index.js";
 
-
-
 export class CustomerMapper {
 
   private static parsePreferences(value: Prisma.JsonValue): {
@@ -83,6 +81,30 @@ export class CustomerMapper {
       },
       createdAt: primitives.createdAt,
       updatedAt: primitives.updatedAt,
+    }
+  }
+
+  public static toUpdatePersistence(customer: Customer): Prisma.CustomerUpdateInput {
+    const primitives = customer.toPrimitives()
+
+    return {
+      firstName: primitives.firstName,
+      lastName: primitives.lastName,
+      phone: primitives.phone,
+      preferences: {
+        language: primitives.preferences.language,
+        notifications: {
+          push: primitives.preferences.notifications.push,
+          sms: primitives.preferences.notifications.sms,
+          email: primitives.preferences.notifications.email
+        },
+        marketing: {
+          enabled: primitives.preferences.marketing.enabled
+        }
+      },
+      avatarUrl: primitives.avatarUrl,
+      updatedAt: primitives.updatedAt
+
     }
   }
 

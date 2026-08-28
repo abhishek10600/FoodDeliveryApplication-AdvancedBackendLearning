@@ -1,7 +1,8 @@
 import "reflect-metadata";
 
-import { beforeAll, afterAll } from "vitest"
+import { beforeAll, afterAll } from "vitest";
+// import "../src/config/env.config.js";
 
-beforeAll(async () => { })
+beforeAll(async () => {});
 
-afterAll(async () => { })
+afterAll(async () => {});

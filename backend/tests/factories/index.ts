@@ -15,3 +15,5 @@ export {
 export type {
   CreateTestRefreshSessionOptions,
 } from "./refresh-session.factory.js";
+
+export * from "./customer.factory.js"
