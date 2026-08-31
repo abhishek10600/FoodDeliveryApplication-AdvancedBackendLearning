@@ -4,6 +4,7 @@ import { InfrastructureTokens } from "../../../../../infrastructure/container/in
 import { UserRepository } from "./user.repository.js";
 import { RefreshSessionRepository } from "./refresh-session.repository.js";
 import { PrismaClient } from "../../../../../../generated/prisma/client.js";
+import { CustomerRepository } from "../../../../customer/infrastructure/persistence/prisma/customer.respository.js";
 
 @injectable()
 export class IdentityTransaction implements IIdentityTransaction {
@@ -19,10 +20,12 @@ export class IdentityTransaction implements IIdentityTransaction {
     return this.prisma.$transaction(async (tx) => {
       const userRepository = new UserRepository(tx)
       const refreshSessionRepository = new RefreshSessionRepository(tx)
+      const customerRepository = new CustomerRepository(tx)
 
       return operation({
         userRepository,
-        refreshSessionRepository
+        refreshSessionRepository,
+        customerRepository
       })
     })
   }

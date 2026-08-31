@@ -32,7 +32,7 @@ export class CustomerPhoneNumber {
 
     const hasPlusPrefix = trimmedValue.startsWith("+")
 
-    const digits = trimmedValue.replace(/\D/g, " ")
+    const digits = trimmedValue.replace(/\D/g, "")
 
     return hasPlusPrefix ? `+${digits}` : digits
   }
