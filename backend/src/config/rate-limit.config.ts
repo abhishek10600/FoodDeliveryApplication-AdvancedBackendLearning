@@ -24,7 +24,7 @@ export const RateLimitPolicies = {
 
   ResetPassword: {
     windowMs: env.RESET_PASSWORD_RATE_LIMIT_WINDOW * 60 * 1000,
-    max: env.FORGOT_PASSWORD_RATE_LIMIT_MAX
+    max: env.RESET_PASSWORD_RATE_LIMIT_MAX
   },
 
   RefreshToken: {
