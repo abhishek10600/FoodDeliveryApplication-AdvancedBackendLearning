@@ -157,6 +157,7 @@ export class Customer {
   public updateMarketingPreference(marketing: {
     enabled: boolean;
   }): void {
+
     this.preferences = this.preferences.withMarketing(marketing)
 
     this.touch()
