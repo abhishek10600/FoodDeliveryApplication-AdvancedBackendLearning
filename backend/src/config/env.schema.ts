@@ -43,7 +43,13 @@ export const envSchema = z.object({
   SMTP_PASSWORD: z.string(),
   SMTP_FROM: z.string(),
   EMAIL_VERIFICATION_URL: z.url(),
-  RESET_PASSWORD_TOKEN_EXPIRY: z.coerce.number()
+  RESET_PASSWORD_TOKEN_EXPIRY: z.coerce.number(),
+  R2_ACCOUNT_ID: z.string(),
+  R2_ACCESS_KEY_ID: z.string(),
+  R2_SECRET_ACCESS_KEY: z.string(),
+  S3_API: z.string(),
+  R2_BUCKET_NAME: z.string(),
+  R2_PUBLIC_URL: z.string()
 });
 
 export type Env = z.infer<typeof envSchema>

@@ -39,6 +39,8 @@ export const ROLE_PERMISSIONS: Readonly<Record<Role, readonly Permission[]>> = {
 
     Permission.CUSTOMER_PROFILE_READ,
     Permission.CUSTOMER_PROFILE_UPDATE,
+    Permission.CUSTOMER_AVATAR_UPLOAD,
+    Permission.CUSTOMER_AVATAR_REMOVE,
 
     Permission.RESTAURANT_READ,
     Permission.MENU_READ,

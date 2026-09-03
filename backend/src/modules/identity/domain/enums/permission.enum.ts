@@ -8,6 +8,8 @@ USER_DELETE = "user:delete",
 // Customer
 CUSTOMER_PROFILE_READ = "customer:read",
 CUSTOMER_PROFILE_UPDATE = "customer:update",
+CUSTOMER_AVATAR_UPLOAD = "customer:avatarupdate",
+CUSTOMER_AVATAR_REMOVE = "customer:avatarremove",
 
 // Restaurants
 RESTAURANT_CREATE = "restaurant:create",

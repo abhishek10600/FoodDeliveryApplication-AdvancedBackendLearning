@@ -3,6 +3,8 @@ export const CustomerTokens = {
   CustomerProfileCreationUseCase: Symbol.for("Customer.CustomerProfileCreationUseCase"),
   GetCustomerProfileUseCase: Symbol.for("Customer.GetCustomerProfileUseCase"),
   CustomerProfileUpdateUseCase: Symbol.for("Customer.CustomerProfileUpdateUseCase"),
-  CustomerPreferencesUpdateUseCase: Symbol.for("Customer.CustomerPreferencesUpdateUseCase")
+  CustomerPreferencesUpdateUseCase: Symbol.for("Customer.CustomerPreferencesUpdateUseCase"),
+  CustomerAvatarUploadUseCase: Symbol.for("Customer.CustomerAvatarUploadUseCase"),
+  CustomerAvatarRemoveUseCase: Symbol.for("Customer.CustomerAvatarRemoveUseCase")
 
 } as const

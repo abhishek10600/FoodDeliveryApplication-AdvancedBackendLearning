@@ -18,6 +18,7 @@ import { ErrorHandlerMiddleware } from "../../../app/middleware/error-handler.mi
 import { SmtpService } from "../../email/smtp.email.service.js"
 import { EmailJobProcessor } from "../../queue/jobs/email/email.job.processor.js"
 import { RateLimitService } from "../../security/rate-limit.service.js"
+import { R2FileStorage } from "../../storage/r2/r2.file-storage.js"
 
 export const registerInfrastructure = (): void => {
 
@@ -83,6 +84,8 @@ export const registerInfrastructure = (): void => {
   container.registerSingleton(ErrorHandlerMiddleware)
 
   container.registerSingleton(InfrastructureTokens.RateLimitService, RateLimitService)
+
+  container.registerSingleton(InfrastructureTokens.FileStorage, R2FileStorage)
 
   container.register(InfrastructureTokens.EmailService, {
     useClass: SmtpService

@@ -26,6 +26,8 @@ export class ErrorHandlerMiddleware {
       return;
     }
 
+    console.error(error)
+
     const appError = mapError(error, this.env.NODE_ENV === "production");
 
     if (appError.isOperational) {
@@ -42,6 +44,8 @@ export class ErrorHandlerMiddleware {
         operation: "handle"
       })
     }
+
+    console.error(error)
 
     res.status(appError.statusCode).json(ErrorSerializer.serialize(appError))
   }

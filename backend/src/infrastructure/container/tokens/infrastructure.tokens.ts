@@ -25,6 +25,8 @@ export const InfrastructureTokens = {
 
   EmailService: Symbol.for("Infrastructure.EmailService"),
 
-  RateLimitService: Symbol.for("Infrastructure.RateLimitService")
+  RateLimitService: Symbol.for("Infrastructure.RateLimitService"),
+
+  FileStorage: Symbol.for("Infrastructure.FileStorage")
 
 } as const
