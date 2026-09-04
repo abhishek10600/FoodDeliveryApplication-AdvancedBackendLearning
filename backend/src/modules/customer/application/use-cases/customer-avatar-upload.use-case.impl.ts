@@ -48,7 +48,7 @@ export class CustomerAvatarUploadUseCaseImpl implements CustomerAvatarUploadUseC
       throw new CustomerNotFoundError()
     }
 
-    const oldAvatarUrl = customer.getAvatarUrl()?.getValue();
+    const oldAvatarUrl = customer.getAvatarUrl()
 
     const extension = this.getExtension(input.file.originalname)
 
@@ -58,7 +58,7 @@ export class CustomerAvatarUploadUseCaseImpl implements CustomerAvatarUploadUseC
 
     try {
 
-      // create the multipart upload
+      // create the multipart upload and get the uploadId
       const multipartUpload = await this.fileStorage.createMultipartUpload({
         key,
         contentType: input.file.mimetype
@@ -120,6 +120,8 @@ export class CustomerAvatarUploadUseCaseImpl implements CustomerAvatarUploadUseC
         parts: completedParts
       })
 
+      customer.removeAvatarUrl()
+
       customer.changeAvatarUrl(
         CustomerAvatarUrl.create(storedFile.url)
       )
@@ -128,11 +130,23 @@ export class CustomerAvatarUploadUseCaseImpl implements CustomerAvatarUploadUseC
       await this.customerRepo.update(customer)
 
       // delete the old avatar
-      if (oldAvatarUrl) {
-        const oldKey = this.extractStorageKey(oldAvatarUrl)
+      if (!oldAvatarUrl) {
+        return;
+      }
 
-        if (oldKey) {
-          await this.safeDelete(oldKey)
+      const oldAvatarUrlValue = oldAvatarUrl.getValue()
+
+      if (!oldAvatarUrlValue) {
+        return;
+      }
+
+      const oldAvatarKey = this.extractStorageKey(oldAvatarUrlValue)
+
+      if (oldAvatarKey) {
+        try {
+          await this.fileStorage.delete(oldAvatarKey)
+        } catch {
+
         }
       }
 
@@ -183,14 +197,6 @@ export class CustomerAvatarUploadUseCaseImpl implements CustomerAvatarUploadUseC
     }
     catch {
       return null
-    }
-  }
-
-  private async safeDelete(key: string): Promise<void> {
-    try {
-      await this.fileStorage.delete(key)
-    } catch {
-
     }
   }
 

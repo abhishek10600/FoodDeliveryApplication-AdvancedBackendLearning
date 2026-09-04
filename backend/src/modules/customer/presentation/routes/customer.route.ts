@@ -12,6 +12,7 @@ import { updateCustomerPreferencesSchema } from "../../validators/update-custome
 import { CustomerAvatarUploadController } from "../controllers/customer-avatar-upload.controller.js"
 import { CustomerAvatarRemoveController } from "../controllers/customer-avatar-remove.controller.js"
 import { customerAvatarUpload } from "../middleware/customer-avatar-upload.middleware.js"
+import { CustomerAvatarUploadWithoutStreamController } from "../controllers/customer-avatar-upload-without-stream.controller.js"
 
 const router = express.Router()
 
@@ -20,6 +21,7 @@ const updateCustomerProfileController = container.resolve(UpdateCustomerProfileC
 const updateCustomerPreferencesController = container.resolve(UpdateCustomerPreferencesController)
 const customerAvatarUploadController = container.resolve(CustomerAvatarUploadController)
 const customerAvatarRemoveController = container.resolve(CustomerAvatarRemoveController)
+const customerAvatarUploadWithoutStreamController = container.resolve(CustomerAvatarUploadWithoutStreamController)
 const authenticationMiddleware = container.resolve(AuthenticationMiddleware)
 const authorizationMiddleware = container.resolve(AuthorizationMiddleware)
 
@@ -31,8 +33,10 @@ router.route("/me/update-preferences").patch(authenticationMiddleware.authentica
 
 router.route("/me/avatar").post(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.CUSTOMER_AVATAR_UPLOAD), customerAvatarUpload.single("avatar"), customerAvatarUploadController.handle.bind(customerAvatarUploadController))
 
+router.route("/me/avatar/no-stream").post(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.CUSTOMER_AVATAR_UPLOAD), customerAvatarUpload.single("avatar"), customerAvatarUploadWithoutStreamController.handle.bind(customerAvatarUploadWithoutStreamController))
+
 router.route("/me/avatar").delete(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.CUSTOMER_AVATAR_REMOVE),
-customerAvatarUploadController.handle.bind(customerAvatarRemoveController))
+customerAvatarRemoveController.handle.bind(customerAvatarRemoveController))
 
 
 export default router;
