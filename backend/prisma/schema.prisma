@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -39,6 +34,7 @@ model User {
   emailVerifications EmailVerification[]
   passwordResets PasswordReset[]
   customer Customer?
+  restaurants Restaurant[]
 
   @@map("users")
 }
@@ -117,4 +113,65 @@ model PasswordReset{
   @@index([usedAt])
 
   @@map("password_resets")
+}
+
+enum RestaurantStatus {
+  PENDING
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  CLOSED
+}
+
+model Restaurant{
+  id String @id @default(uuid()) @db.Uuid
+  ownerId String @db.Uuid
+  name String @map("restaurant_name")
+  description String @map("restaurant_description")
+  status RestaurantStatus @default(PENDING)
+  phone String
+  email String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  cuisines RestaurantCuisines[]
+  openingHours RestaurantOpeningHours[]
+
+  @@index([ownerId])
+  @@index([status])
+  @@map("restaurants")
+}
+
+
+model RestaurantCuisines{
+  id String @id @default(uuid()) @db.Uuid
+  restaurantId String @db.Uuid
+  cuisineName String @map("cuisine_name")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([restaurantId, cuisineName])
+  @@index([restaurantId])
+  @@index([cuisineName])
+  @@map("restaurant_cuisines")
+}
+
+model RestaurantOpeningHours {
+  id String @id @default(uuid()) @db.Uuid
+  restaurantId String @db.Uuid
+  dayOfWeek Int @map("day_of_week")
+  opensAt String @map("opens_at")
+  closesAt String @map("closes_at")
+  isClosed Boolean @default(false) @map("is_closed")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([restaurantId, dayOfWeek])
+  @@index([restaurantId])
+  @@map("restaurant_opening_hours")
 }
