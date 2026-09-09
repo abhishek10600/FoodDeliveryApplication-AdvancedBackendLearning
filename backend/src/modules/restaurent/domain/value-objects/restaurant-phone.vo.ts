@@ -57,7 +57,7 @@ export class RestaurantPhone {
     return value === this.value
   }
 
-  public toString(value: string): string {
+  public toString(): string {
     return this.value
   }
 

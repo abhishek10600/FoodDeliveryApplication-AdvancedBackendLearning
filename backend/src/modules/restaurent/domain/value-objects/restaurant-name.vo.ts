@@ -16,7 +16,7 @@ export class RestaurantName {
 
     this.validate(normalizedValue)
 
-    return new RestaurantName(value)
+    return new RestaurantName(normalizedValue)
   }
 
   private static normalize(value: string): string {

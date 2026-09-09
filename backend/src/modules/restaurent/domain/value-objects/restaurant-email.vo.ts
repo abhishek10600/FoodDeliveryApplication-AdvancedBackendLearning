@@ -1,6 +1,6 @@
 import { InvalidRestaurantEmailError } from "../errors/invalid-restaurant-email.error.js";
 
-export class RestuarantEmail {
+export class RestaurantEmail {
 
   private static readonly EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -10,14 +10,14 @@ export class RestuarantEmail {
     this.value = value
   }
 
-  public static create(value: string): RestuarantEmail {
-    const normalizedValue = RestuarantEmail.normalize(value)
+  public static create(value: string): RestaurantEmail {
+    const normalizedValue = RestaurantEmail.normalize(value)
 
-    if (!RestuarantEmail.isValid(normalizedValue)) {
+    if (!RestaurantEmail.isValid(normalizedValue)) {
       throw new InvalidRestaurantEmailError("Invalid email format")
     }
 
-    return new RestuarantEmail(normalizedValue)
+    return new RestaurantEmail(normalizedValue)
   }
 
   private static normalize(value: string): string {
@@ -25,7 +25,7 @@ export class RestuarantEmail {
   }
 
   private static isValid(value: string): boolean {
-    return RestuarantEmail.EMAIL_REGEX.test(value)
+    return RestaurantEmail.EMAIL_REGEX.test(value)
   }
 
   public getValue(value: string): string {
@@ -36,7 +36,7 @@ export class RestuarantEmail {
     return value === this.value
   }
 
-  public toString(value: string): string {
+  public toString(): string {
     return this.value
   }
 

@@ -163,8 +163,8 @@ model RestaurantOpeningHours {
   id String @id @default(uuid()) @db.Uuid
   restaurantId String @db.Uuid
   dayOfWeek Int @map("day_of_week")
-  opensAt String @map("opens_at")
-  closesAt String @map("closes_at")
+  opensAt String? @map("opens_at")
+  closesAt String? @map("closes_at")
   isClosed Boolean @default(false) @map("is_closed")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
