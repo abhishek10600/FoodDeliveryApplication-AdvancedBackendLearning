@@ -1,7 +1,8 @@
 import { RestaurantStatus } from "../enums/restaurant-status.enum.js";
 import { DayOfWeek } from "../enums/restaurnat-opening-hours.enum.js";
 import { RestaurantDomainError } from "../errors/restaurant-domain.error.js";
-import { RestaurantCuisine } from "../value-objects/restaurant-cuisine.vo.js";
+// import { RestaurantCuisine } from "../value-objects/restaurant-cuisine.vo.js";
+import { RestaurantCuisine } from "./restaurant-cuisine.entity.js";
 import { RestaurantDescription } from "../value-objects/restaurant-description.vo.js";
 import { RestaurantEmail } from "../value-objects/restaurant-email.vo.js";
 import { RestaurantName } from "../value-objects/restaurant-name.vo.js";
@@ -156,22 +157,28 @@ export class Restaurant {
     this.touch()
   }
 
-  public addCuisine(cuisine: RestaurantCuisine): void {
-    const alreadyExists = this.cuisines.some((existingCuisine) => existingCuisine.equals(cuisine))
+  public addCuisine(cuisineId: string): void {
+    const alreadyExists = this.cuisines.some((cuisine) => cuisine.getCuisineId() === cuisineId)
 
     if (alreadyExists) {
-      throw new RestaurantDomainError(`Cuisine "${cuisine.getValue()}" already exists for this restaurant`)
+      throw new RestaurantDomainError(`Cuisine "${cuisineId}" already exists for this restaurant`)
     }
 
-    this.cuisines.push(cuisine)
+    const restaurantCuisine = RestaurantCuisine.create({
+      restaurantId: this.id,
+      cuisineId
+    })
+
+    this.cuisines.push(restaurantCuisine)
+
     this.touch()
   }
 
-  public removeCuisine(cuisine: RestaurantCuisine): void {
-    const index = this.cuisines.findIndex((existingCuisine) => existingCuisine.equals(cuisine))
+  public removeCuisine(cuisineId: string): void {
+    const index = this.cuisines.findIndex((cuisine) => cuisine.getCuisineId() === cuisineId)
 
     if (index === -1) {
-      throw new RestaurantDomainError(`Cuisine "${cuisine.getValue()}" does not exists for this restaurant`)
+      throw new RestaurantDomainError(`Cuisine "${cuisineId}" does not exists for this restaurant`)
     }
 
     this.cuisines.splice(index, 1)

@@ -143,19 +143,39 @@ model Restaurant{
   @@map("restaurants")
 }
 
+enum CuisineStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Cuisine {
+  id String @id @default(uuid()) @db.Uuid
+  name String @unique
+  slug String @unique
+  status CuisineStatus @default(ACTIVE) @map("cuisine_status")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt
+
+  restaurants RestaurantCuisines[]
+
+  @@index([slug])
+  @@map("cuisines")
+}
+
 
 model RestaurantCuisines{
   id String @id @default(uuid()) @db.Uuid
   restaurantId String @db.Uuid
-  cuisineName String @map("cuisine_name")
+  cuisineId String @db.Uuid
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  cuisine Cuisine @relation(fields: [cuisineId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
-  @@unique([restaurantId, cuisineName])
+  @@unique([restaurantId, cuisineId])
   @@index([restaurantId])
-  @@index([cuisineName])
+  @@index([cuisineId])
   @@map("restaurant_cuisines")
 }
 
