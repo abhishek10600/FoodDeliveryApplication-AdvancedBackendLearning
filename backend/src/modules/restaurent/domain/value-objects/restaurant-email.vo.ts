@@ -28,7 +28,7 @@ export class RestaurantEmail {
     return RestaurantEmail.EMAIL_REGEX.test(value)
   }
 
-  public getValue(value: string): string {
+  public getValue(): string {
     return this.value
   }
 

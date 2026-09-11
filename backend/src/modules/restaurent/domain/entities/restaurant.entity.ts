@@ -312,7 +312,7 @@ export class Restaurant {
     return [...this.openingHours]
   }
 
-  public getCretedAt(): Date {
+  public getCreatedAt(): Date {
     return this.createdAt
   }
 
