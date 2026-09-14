@@ -2,6 +2,7 @@ import { Prisma } from "../../../../../../../generated/prisma/index.js"
 import { Restaurant, RestaurantCuisine } from "../../../../domain/entities/index.js";
 import { RestaurantStatus } from "../../../../domain/enums/restaurant-status.enum.js";
 import { DayOfWeek } from "../../../../domain/enums/restaurnat-opening-hours.enum.js";
+import { RestaurantAddress, type RestaurantAddressProps } from "../../../../domain/value-objects/restaurant-address.vo.js";
 import { RestaurantDescription } from "../../../../domain/value-objects/restaurant-description.vo.js";
 import { RestaurantEmail } from "../../../../domain/value-objects/restaurant-email.vo.js";
 import { RestaurantName } from "../../../../domain/value-objects/restaurant-name.vo.js";
@@ -41,6 +42,7 @@ export class RestaurantMapper {
       description: RestaurantDescription.create(data.description),
       phone: RestaurantPhone.create(data.phone),
       email: RestaurantEmail.create(data.email),
+      address: RestaurantAddress.create(RestaurantMapper.toAddressProps(data.address)),
       status: data.status as RestaurantStatus,
       cuisines,
       openingHours,
@@ -48,6 +50,32 @@ export class RestaurantMapper {
       updatedAt: data.updatedAt
     })
 
+  }
+
+  private static toAddressProps(value: Prisma.JsonValue): RestaurantAddressProps {
+    if (typeof value !== "object" || value === null || Array.isArray(value)) {
+      throw new Error("Invalid restaurant address")
+    }
+
+    const address = value as Record<string, unknown>
+
+    if (typeof address.line1 !== "string" ||
+          typeof address.landmark !== "string" ||
+          typeof address.city !== "string" ||
+          typeof address.state !== "string" ||
+          typeof address.country !== "string" ||
+      typeof address.postalCode !== "string") {
+      throw new Error("Invalid restaurant address")
+    }
+
+    return {
+      line1: address.line1,
+      landmark: address.landmark,
+      city: address.city,
+      state: address.state,
+      country: address.country,
+      postalCode: address.postalCode,
+    }
   }
 
   public static toPersistence(restaurant: Restaurant): Prisma.RestaurantCreateInput {
@@ -62,6 +90,14 @@ export class RestaurantMapper {
       description: restaurant.getDescription().getValue(),
       phone: restaurant.getPhone().getValue(),
       email: restaurant.getEmail().getValue(),
+      address: {
+        line: restaurant.getAddress().getLine1(),
+        landMark: restaurant.getAddress().getLandMark(),
+        city: restaurant.getAddress().getCity(),
+        state: restaurant.getAddress().getState(),
+        country: restaurant.getAddress().getCountry(),
+        postalCode: restaurant.getAddress().getPostalCode()
+      },
       status: restaurant.getStatus(),
       cuisines: {
         create: restaurant.getCuisines().map((cuisine) => ({

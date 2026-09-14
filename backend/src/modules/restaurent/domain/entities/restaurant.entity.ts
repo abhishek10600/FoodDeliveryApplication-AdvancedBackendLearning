@@ -1,13 +1,13 @@
 import { RestaurantStatus } from "../enums/restaurant-status.enum.js";
 import { DayOfWeek } from "../enums/restaurnat-opening-hours.enum.js";
 import { RestaurantDomainError } from "../errors/restaurant-domain.error.js";
-// import { RestaurantCuisine } from "../value-objects/restaurant-cuisine.vo.js";
 import { RestaurantCuisine } from "./restaurant-cuisine.entity.js";
 import { RestaurantDescription } from "../value-objects/restaurant-description.vo.js";
 import { RestaurantEmail } from "../value-objects/restaurant-email.vo.js";
 import { RestaurantName } from "../value-objects/restaurant-name.vo.js";
 import { RestaurantPhone } from "../value-objects/restaurant-phone.vo.js";
 import { RestaurantOpeningHours } from "../value-objects/restaurnat-opening-hours.vo.js";
+import { RestaurantAddress } from "../value-objects/restaurant-address.vo.js";
 
 export interface IRestaurantProps {
   id: string;
@@ -16,6 +16,7 @@ export interface IRestaurantProps {
   description: RestaurantDescription;
   phone: RestaurantPhone;
   email: RestaurantEmail;
+  address: RestaurantAddress;
   status: RestaurantStatus;
   cuisines: RestaurantCuisine[]
   openingHours: RestaurantOpeningHours[];
@@ -29,6 +30,9 @@ export interface ICreateRestaurantProps {
   description: RestaurantDescription;
   phone: RestaurantPhone;
   email: RestaurantEmail;
+  address: RestaurantAddress;
+  cuisines?: RestaurantCuisine[];
+  openingHours?: RestaurantOpeningHours[];
 }
 
 export interface IUpdateRestaurantProfileProps {
@@ -46,6 +50,7 @@ export class Restaurant {
   private description: RestaurantDescription;
   private phone: RestaurantPhone;
   private email: RestaurantEmail;
+  private address: RestaurantAddress;
   private status: RestaurantStatus;
   private cuisines: RestaurantCuisine[];
   private openingHours: RestaurantOpeningHours[];
@@ -59,6 +64,7 @@ export class Restaurant {
     this.description = props.description
     this.phone = props.phone
     this.email = props.email
+    this.address = props.address
     this.status = props.status
     this.cuisines = [...props.cuisines]
     this.openingHours = [...props.openingHours]
@@ -76,9 +82,10 @@ export class Restaurant {
       description: props.description,
       phone: props.phone,
       email: props.email,
+      address: props.address,
       status: RestaurantStatus.PENDING,
-      cuisines: [],
-      openingHours: [],
+      cuisines: props.cuisines ?? [],
+      openingHours: props.openingHours ?? [],
       createdAt: now,
       updatedAt: now
     })
@@ -298,6 +305,10 @@ export class Restaurant {
 
   public getEmail(): RestaurantEmail {
     return this.email
+  }
+
+  public getAddress(): RestaurantAddress {
+    return this.address
   }
 
   public getStatus(): RestaurantStatus {

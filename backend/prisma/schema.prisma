@@ -131,6 +131,7 @@ model Restaurant{
   status RestaurantStatus @default(PENDING)
   phone String
   email String
+  address Json
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
