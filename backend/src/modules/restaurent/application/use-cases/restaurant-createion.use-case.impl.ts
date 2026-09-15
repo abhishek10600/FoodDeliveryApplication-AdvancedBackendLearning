@@ -20,7 +20,7 @@ export class RestaurantCreationUseCaseImpl implements RestaurantCreationUseCase 
   constructor(
 
     @inject(RestaurantTokens.RestaurantRepository)
-    private readonly restaurantRepo: IRestaurantRepository
+    private readonly restaurantRepo: IRestaurantRepository,
 
     @inject(RestaurantTokens.CuisineRepository)
     private readonly cuisineRepo: ICuisineRepository

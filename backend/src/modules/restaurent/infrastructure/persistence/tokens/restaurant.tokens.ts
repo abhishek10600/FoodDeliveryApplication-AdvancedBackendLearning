@@ -1,5 +1,6 @@
 export const RestaurantTokens = {
   RestaurantRepository: Symbol.for("Restaurant.RestaurantRepository"),
   CuisineRepository: Symbol.for("Restaurant.CuisineRepository"),
+  RestaurantOwnerRegisterUseCase: Symbol.for("Restaurant.RestaurantOwnerRegisterUseCase"),
   RestaurantCreationUseCase: Symbol.for("Restaurant.RestaurantCreationUseCase")
 } as const

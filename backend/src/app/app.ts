@@ -20,9 +20,11 @@ app.use(healthRouter)
 
 import identityRouter from "../modules/identity/presentation/routes/identity.route.js"
 import customersRouter from "../modules/customer/presentation/routes/customer.route.js"
+import restaurantsRoute from "../modules/restaurent/presentation/routes/restaurant.route.js"
 
 app.use("/api/v1/identity", identityRouter)
 app.use("/api/v1/customers", customersRouter)
+app.use("/api/v1/restaurants", restaurantsRoute)
 
 const errorHandler = container.resolve(ErrorHandlerMiddleware)
 app.use(errorHandler.handle)

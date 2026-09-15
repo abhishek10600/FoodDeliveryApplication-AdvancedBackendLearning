@@ -3,6 +3,7 @@ import { RestaurantTokens } from "../../../modules/restaurent/infrastructure/per
 import { RestaurantRepository } from "../../../modules/restaurent/infrastructure/persistence/prisma/restaurant.repository.js"
 import { CuisineRepositopry } from "../../../modules/restaurent/infrastructure/persistence/prisma/cuisine.repository.js"
 import { RestaurantCreationUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-createion.use-case.impl.js"
+import { RestaurantOwnerRegisterUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-owner-register.use-case.impl.js"
 
 export const registerRestaurant = (): void => {
 
@@ -13,6 +14,8 @@ export const registerRestaurant = (): void => {
   container.register(RestaurantTokens.CuisineRepository, {
     useClass: CuisineRepositopry
   })
+
+  container.registerSingleton(RestaurantTokens.RestaurantOwnerRegisterUseCase, RestaurantOwnerRegisterUseCaseImpl)
 
   container.registerSingleton(RestaurantTokens.RestaurantCreationUseCase, RestaurantCreationUseCaseImpl)
 

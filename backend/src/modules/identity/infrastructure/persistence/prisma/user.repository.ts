@@ -5,6 +5,8 @@ import { User } from "../../../domain/entities/index.js";
 import { UserMapper } from "./mappers/user.mapper.js";
 import { Email } from "../../../domain/value-objects/email.vo.js";
 import type { PrismaExecutor } from "../../../../../infrastructure/database/prisma-client.type.js";
+import { RestaurantOwner } from "../../../../restaurent/domain/entities/restaurant-owner.entity.js";
+import { RestaurantOwnerMapper } from "../../../../restaurent/infrastructure/persistence/prisma/mappers/restaurant-owner.mapper.js";
 
 @injectable()
 export class UserRepository implements IUserRepository {
@@ -96,5 +98,24 @@ export class UserRepository implements IUserRepository {
     })
 
     return UserMapper.toDomain(updatedUser)
+  }
+
+  async createRestaurantOwner(restaurantOwner: RestaurantOwner): Promise<RestaurantOwner> {
+    const data = RestaurantOwnerMapper.toPersistence(restaurantOwner)
+
+    const createdRestaurantOwner = await this.prisma.user.create({
+      data: {
+        id: data.id,
+        email: data.email.getValue(),
+        passwordHash: data.passwordHash.getValue(),
+        roles: data.roles,
+        status: data.status,
+        emailVerified: data.emailVerified,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt
+      }
+    })
+
+    return RestaurantOwnerMapper.toDomain(createdRestaurantOwner)
   }
 }
