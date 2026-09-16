@@ -2,8 +2,8 @@ import { injectable, inject } from "tsyringe";
 import { catchAsync } from "../../../../shared/utils/CatchAsync.js";
 import { NextFunction, Request, Response } from "express";
 import { RestaurantTokens } from "../../infrastructure/persistence/tokens/restaurant.tokens.js";
-import type { RestaurantCreationUseCase } from "../../application/use-cases/restaurant-creation.use-case.js";
 import { sendResponse } from "../../../../shared/utils/AppResonse.js";
+import type { RestaurantCreationUseCase } from "../../application/use-cases/restaurant-creation.use-case.js";
 
 @injectable()
 export class CreateRestaurantController {
