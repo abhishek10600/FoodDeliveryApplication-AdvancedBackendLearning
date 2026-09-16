@@ -1,6 +1,6 @@
 export interface RestaurantAddressInput {
   line1: string,
-  landmark: string,
+  landMark: string,
   city: string,
   state: string,
   country: string,

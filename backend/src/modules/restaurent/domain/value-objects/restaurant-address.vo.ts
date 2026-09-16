@@ -2,7 +2,7 @@ import { InvalidRestaurantAddressError } from "../errors/invalid-restaurant-addr
 
 export interface RestaurantAddressProps {
   line1: string;
-  landmark: string;
+  landMark: string;
   city: string;
   state: string;
   country: string;
@@ -11,7 +11,7 @@ export interface RestaurantAddressProps {
 
 export class RestaurantAddress {
   private readonly line1: string;
-  private readonly landmark: string;
+  private readonly landMark: string;
   private readonly city: string;
   private readonly state: string;
   private readonly country: string;
@@ -19,14 +19,14 @@ export class RestaurantAddress {
 
   constructor(props: {
     line1: string;
-    landmark: string;
+    landMark: string;
     city: string;
     state: string;
     country: string;
     postalCode: string;
   }) {
     this.line1 = props.line1
-    this.landmark = props.landmark
+    this.landMark = props.landMark
     this.city = props.city
     this.state = props.state
     this.country = props.country
@@ -44,7 +44,7 @@ export class RestaurantAddress {
   private static normalize(value: RestaurantAddressProps): RestaurantAddressProps {
     return {
       line1: value.line1.trim().toLowerCase(),
-      landmark: value.landmark.trim().toLowerCase(),
+      landMark: value.landMark.trim().toLowerCase(),
       city: value.city.trim().toLowerCase(),
       state: value.state.trim().toLowerCase(),
       country: value.country.trim().toLowerCase(),
@@ -57,7 +57,7 @@ export class RestaurantAddress {
       throw new InvalidRestaurantAddressError()
     }
 
-    if (typeof (value.landmark) !== "string") {
+    if (typeof (value.landMark) !== "string") {
       throw new InvalidRestaurantAddressError()
     }
 
@@ -82,8 +82,8 @@ export class RestaurantAddress {
     return this.line1
   }
 
-  public getLandMark(): string {
-    return this.landmark
+  public getlandMark(): string {
+    return this.landMark
   }
 
   public getCity(): string {
@@ -105,7 +105,7 @@ export class RestaurantAddress {
   public equals(other: RestaurantAddressProps): boolean {
     return (
       this.line1 === other.line1 &&
-      this.landmark === other.landmark &&
+      this.landMark === other.landMark &&
       this.city === other.city &&
       this.state === other.state &&
       this.country === other.country &&

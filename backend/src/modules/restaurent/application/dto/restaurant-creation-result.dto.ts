@@ -10,7 +10,7 @@ export interface RestaurantCreationResult {
   email: string;
   address: {
     line1: string;
-    landmark: string;
+    landMark: string;
     city: string;
     state: string;
     country: string;

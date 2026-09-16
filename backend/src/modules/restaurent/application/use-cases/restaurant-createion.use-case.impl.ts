@@ -45,7 +45,7 @@ export class RestaurantCreationUseCaseImpl implements RestaurantCreationUseCase 
     }
 
     const openingHours = input.openingHours.map((openingHour) => RestaurantOpeningHours.create({
-      dayOfWeek: openingHour.DayOfWeek,
+      dayOfWeek: openingHour.dayOfWeek,
       opensAt: openingHour.opensAt ?? undefined,
       closesAt: openingHour.closesAt ?? undefined,
       isClosed: openingHour.isClosed
@@ -86,7 +86,7 @@ export class RestaurantCreationUseCaseImpl implements RestaurantCreationUseCase 
       email: newRestaurant.getEmail().getValue(),
       address: {
         line1: newRestaurant.getAddress().getLine1(),
-        landmark: newRestaurant.getAddress().getLandMark(),
+        landMark: newRestaurant.getAddress().getlandMark(),
         city: newRestaurant.getAddress().getCity(),
         state: newRestaurant.getAddress().getState(),
         country: newRestaurant.getAddress().getCountry(),
