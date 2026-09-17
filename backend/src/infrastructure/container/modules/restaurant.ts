@@ -5,6 +5,7 @@ import { CuisineRepositopry } from "../../../modules/restaurent/infrastructure/p
 import { RestaurantOwnerRegisterUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-owner-register.use-case.impl.js"
 import { RestaurantCreationUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-creation.use-case.impl.js"
 import { RestaurantProfileUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-profile.use-case.impl.js"
+import { RestaurantByOwnerUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-by-owner.use-case.impl.js"
 
 
 export const registerRestaurant = (): void => {
@@ -22,5 +23,7 @@ export const registerRestaurant = (): void => {
   container.registerSingleton(RestaurantTokens.RestaurantCreationUseCase, RestaurantCreationUseCaseImpl)
 
   container.registerSingleton(RestaurantTokens.RestaurantProfileUseCase, RestaurantProfileUseCaseImpl)
+
+  container.registerSingleton(RestaurantTokens.RestaurantByOwnerUseCase, RestaurantByOwnerUseCaseImpl)
 
 }
