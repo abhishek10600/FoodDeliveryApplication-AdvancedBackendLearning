@@ -59,16 +59,6 @@ export class RestaurantMapper {
 
     const address = value as Record<string, unknown>
 
-    console.log({ toAdressPropsConsole: address })
-
-    console.log({ addressLine1DataType: typeof (address.line1) })
-    console.log({ addresslandMarkDataType: typeof (address.landMark) })
-    // console.log({ addressLine1DataType: typeof (address.line1) })
-    // console.log({ addressLine1DataType: typeof (address.line1) })
-    // console.log({ addressLine1DataType: typeof (address.line1) })
-    // console.log({ addressLine1DataType: typeof (address.line1) })
-    // console.log({addressLine1DataType: typeof (address.line1)})
-
     if (typeof address.line1 !== "string" ||
           typeof address.landMark !== "string" ||
           typeof address.city !== "string" ||
@@ -143,6 +133,14 @@ export class RestaurantMapper {
       description: restaurant.getDescription().getValue(),
       email: restaurant.getEmail().getValue(),
       phone: restaurant.getPhone().getValue(),
+      address: {
+        line1: restaurant.getAddress().getLine1(),
+        landMark: restaurant.getAddress().getlandMark(),
+        city: restaurant.getAddress().getCity(),
+        state: restaurant.getAddress().getState(),
+        country: restaurant.getAddress().getCountry(),
+        postalCode: restaurant.getAddress().getPostalCode()
+      },
       status: restaurant.getStatus(),
       cuisines: {
         deleteMany: {},

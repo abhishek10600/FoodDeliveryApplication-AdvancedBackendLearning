@@ -10,6 +10,8 @@ import { createRestaurantSchema } from "../../validators/restaurant-creation.val
 import { Permission } from "../../../identity/domain/enums/permission.enum.js"
 import { RestaurantProfileController } from "../controllers/restaurant-profile.controller.js"
 import { RestaurantByOwnerController } from "../controllers/restaurant-by-owner.controller.js"
+import { RestaurantProfileUpdateController } from "../controllers/restaurant-profile-update.controller.js"
+import { restaurantProfileUpdateParamsSchema, restaurantProfileUpdateSchema } from "../../validators/restaurant-profile-update.validator.js"
 
 const router = express.Router()
 
@@ -17,6 +19,7 @@ const registerRestaurantOwnerController = container.resolve(RegisterRestaurantOw
 const restaurantProfileController = container.resolve(RestaurantProfileController)
 const createRestaurantController = container.resolve(CreateRestaurantController)
 const restaurantByOwnerController = container.resolve(RestaurantByOwnerController)
+const restaurantProfileUpdateController = container.resolve(RestaurantProfileUpdateController)
 const authenticationMiddleware = container.resolve(AuthenticationMiddleware)
 const authorizationMiddleware = container.resolve(AuthorizationMiddleware)
 
@@ -27,5 +30,7 @@ router.route("/create").post(authenticationMiddleware.authenticate, authorizatio
 router.route("/owner").get(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_READ), restaurantByOwnerController.handle.bind(restaurantByOwnerController))
 
 router.route("/:restaurantId").get(restaurantProfileController.handle.bind(restaurantProfileController))
+
+router.route("/:restaurantId").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_UPDATE), validate({ body: restaurantProfileUpdateSchema }), validate({params:  restaurantProfileUpdateParamsSchema}),  restaurantProfileUpdateController.handle.bind(restaurantProfileUpdateController))
 
 export default router

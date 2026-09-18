@@ -40,6 +40,7 @@ export interface IUpdateRestaurantProfileProps {
   description?: RestaurantDescription;
   phone?: RestaurantPhone;
   email?: RestaurantEmail;
+  address?: RestaurantAddress
 }
 
 export class Restaurant {
@@ -159,6 +160,10 @@ export class Restaurant {
 
     if (props.email !== undefined) {
       this.email = props.email
+    }
+
+    if (props.address !== undefined) {
+      this.address = props.address
     }
 
     this.touch()
