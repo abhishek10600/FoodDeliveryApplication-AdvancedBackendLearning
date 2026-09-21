@@ -97,12 +97,14 @@ export class Restaurant {
   }
 
   public activate(): void {
-    if (this.status !== RestaurantStatus.PENDING && this.status !== RestaurantStatus.INACTIVE) {
-      throw new RestaurantDomainError(`Restaurant statuc cannot be activated from ${this.status} status`)
+    if (this.status === RestaurantStatus.PENDING || this.status === RestaurantStatus.INACTIVE) {
+      this.status = RestaurantStatus.ACTIVE
+      this.touch()
+
+      return;
     }
 
-    this.status = RestaurantStatus.ACTIVE
-    this.touch()
+    throw new RestaurantDomainError(`Restaurant statuc cannot be activated from ${this.status} status`)
   }
 
   public deactivate(): void {
@@ -133,12 +135,11 @@ export class Restaurant {
   }
 
   public reopen(): void {
-    if (this.status !== RestaurantStatus.INACTIVE && this.status !== RestaurantStatus.SUSPENDED) {
+    if (this.status === RestaurantStatus.SUSPENDED || this.status === RestaurantStatus.ACTIVE) {
       throw new RestaurantDomainError(`Restaurant cannot be reopened from ${this.status} status`)
     }
-
-    this.status = RestaurantStatus.ACTIVE
-    this.touch()
+      this.status = RestaurantStatus.ACTIVE
+      this.touch()
   }
 
   public updateProfile(props: IUpdateRestaurantProfileProps): void {

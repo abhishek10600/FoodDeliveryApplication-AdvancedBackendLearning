@@ -15,6 +15,7 @@ CUSTOMER_AVATAR_REMOVE = "customer:avatarremove",
 RESTAURANT_CREATE = "restaurant:create",
 RESTAURANT_READ = "restaurant:read",
 RESTAURANT_UPDATE = "restaurant:update",
+RESTAURANT_STATUS_UPDATE = "restaurant:status_update",
 RESTAURANT_DELETE = "restaurant:delete",
 
 // Menu

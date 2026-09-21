@@ -7,6 +7,8 @@ import { RestaurantCreationUseCaseImpl } from "../../../modules/restaurent/appli
 import { RestaurantProfileUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-profile.use-case.impl.js"
 import { RestaurantByOwnerUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-by-owner.use-case.impl.js"
 import { RestaurantProfileUpdateUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-profile-update.use-case.impl.js"
+import { RestaurantStatusUpdateUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-status-update.use-case.impl.js"
+import { RestaurantStatusCloseUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-status-close.use-case.impl.js"
 
 
 export const registerRestaurant = (): void => {
@@ -28,5 +30,9 @@ export const registerRestaurant = (): void => {
   container.registerSingleton(RestaurantTokens.RestaurantByOwnerUseCase, RestaurantByOwnerUseCaseImpl)
 
   container.registerSingleton(RestaurantTokens.RestaurantProfileUpdateUseCase, RestaurantProfileUpdateUseCaseImpl)
+
+  container.registerSingleton(RestaurantTokens.RestaurantStatusUpdateUseCase, RestaurantStatusUpdateUseCaseImpl)
+
+  container.registerSingleton(RestaurantTokens.RestaurantStatusCloseUseCase, RestaurantStatusCloseUseCaseImpl)
 
 }

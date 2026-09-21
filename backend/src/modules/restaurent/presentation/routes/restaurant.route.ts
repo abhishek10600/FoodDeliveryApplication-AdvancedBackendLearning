@@ -12,6 +12,9 @@ import { RestaurantProfileController } from "../controllers/restaurant-profile.c
 import { RestaurantByOwnerController } from "../controllers/restaurant-by-owner.controller.js"
 import { RestaurantProfileUpdateController } from "../controllers/restaurant-profile-update.controller.js"
 import { restaurantProfileUpdateParamsSchema, restaurantProfileUpdateSchema } from "../../validators/restaurant-profile-update.validator.js"
+import { restaurantStatusUpdateParamsSchema } from "../../validators/restaurant-status-update.validator.js"
+import { RestaurantStatusUpdateController } from "../controllers/restaurant-status-update.controller.js"
+import { RestaurantStatusCloseController } from "../controllers/restaurant-status-close.controller.js"
 
 const router = express.Router()
 
@@ -20,6 +23,8 @@ const restaurantProfileController = container.resolve(RestaurantProfileControlle
 const createRestaurantController = container.resolve(CreateRestaurantController)
 const restaurantByOwnerController = container.resolve(RestaurantByOwnerController)
 const restaurantProfileUpdateController = container.resolve(RestaurantProfileUpdateController)
+const restaurantStatusUpdateController = container.resolve(RestaurantStatusUpdateController)
+const restaurantStatusCloseController = container.resolve(RestaurantStatusCloseController)
 const authenticationMiddleware = container.resolve(AuthenticationMiddleware)
 const authorizationMiddleware = container.resolve(AuthorizationMiddleware)
 
@@ -31,6 +36,11 @@ router.route("/owner").get(authenticationMiddleware.authenticate, authorizationM
 
 router.route("/:restaurantId").get(restaurantProfileController.handle.bind(restaurantProfileController))
 
-router.route("/:restaurantId").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_UPDATE), validate({ body: restaurantProfileUpdateSchema }), validate({params:  restaurantProfileUpdateParamsSchema}),  restaurantProfileUpdateController.handle.bind(restaurantProfileUpdateController))
+router.route("/:restaurantId").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_UPDATE), validate({ body: restaurantProfileUpdateSchema }), validate({ params: restaurantProfileUpdateParamsSchema }), restaurantProfileUpdateController.handle.bind(restaurantProfileUpdateController))
+
+router.route("/:restaurantId/update-status").put(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_STATUS_UPDATE), validate({ params: restaurantStatusUpdateParamsSchema }), restaurantStatusUpdateController.handle.bind(restaurantStatusUpdateController))
+
+router.route("/:restaurantId/close").put(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_STATUS_UPDATE), validate({ params: restaurantStatusUpdateParamsSchema }), restaurantStatusCloseController.handle.bind(restaurantStatusCloseController))
+
 
 export default router
