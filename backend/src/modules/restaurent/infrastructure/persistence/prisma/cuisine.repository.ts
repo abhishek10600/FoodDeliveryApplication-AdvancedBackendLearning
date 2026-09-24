@@ -41,4 +41,14 @@ export class CuisineRepositopry implements ICuisineRepository {
     return CuisineMapper.toDomain(cuisine)
   }
 
+  async create(cuisine: Cuisine): Promise<Cuisine> {
+    const data = CuisineMapper.toPersistence(cuisine)
+
+    const newCuisine = await this.prisma.cuisine.create({
+      data
+    })
+
+    return CuisineMapper.toDomain(newCuisine)
+  }
+
 }

@@ -8,5 +8,8 @@ export const RestaurantTokens = {
   RestaurantProfileUpdateUseCase: Symbol.for("Restaurant.RestaurantProfileUpdateUseCase"),
   RestaurantStatusUpdateUseCase: Symbol.for("Restaurant.RestaurantStatusUpdateUseCase"),
   RestaurantStatusCloseUseCase: Symbol.for("Restaurant.RestaurantStatusClose"),
-  RestaurantOpeningHoursUpdateUseCase: Symbol.for("Restaurant.RestaurantOpeningHoursUpdateUseCase")
+  RestaurantOpeningHoursUpdateUseCase: Symbol.for("Restaurant.RestaurantOpeningHoursUpdateUseCase"),
+  RestaurantCuisineCreationUseCase: Symbol.for("Restaurant.RestaurantCuisineCreationUseCase"),
+
+  Transaction: Symbol.for("Restaurant.Transaction"),
 } as const

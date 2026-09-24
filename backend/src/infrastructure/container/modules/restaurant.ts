@@ -10,6 +10,8 @@ import { RestaurantProfileUpdateUseCaseImpl } from "../../../modules/restaurent/
 import { RestaurantStatusUpdateUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-status-update.use-case.impl.js"
 import { RestaurantStatusCloseUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-status-close.use-case.impl.js"
 import { RestaurantOpeningHoursUpdateUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-opening-hours-update.use-case.impl.js"
+import { RestaurantTransaction } from "../../../modules/restaurent/infrastructure/persistence/prisma/restaurant.transaction.js"
+import { RestaurantCuisineCreationUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-cuisine-creation.use-case.impl.js"
 
 
 export const registerRestaurant = (): void => {
@@ -20,6 +22,10 @@ export const registerRestaurant = (): void => {
 
   container.register(RestaurantTokens.CuisineRepository, {
     useClass: CuisineRepositopry
+  })
+
+  container.register(RestaurantTokens.Transaction, {
+    useClass: RestaurantTransaction
   })
 
   container.registerSingleton(RestaurantTokens.RestaurantOwnerRegisterUseCase, RestaurantOwnerRegisterUseCaseImpl)
@@ -37,5 +43,7 @@ export const registerRestaurant = (): void => {
   container.registerSingleton(RestaurantTokens.RestaurantStatusCloseUseCase, RestaurantStatusCloseUseCaseImpl)
 
   container.registerSingleton(RestaurantTokens.RestaurantOpeningHoursUpdateUseCase, RestaurantOpeningHoursUpdateUseCaseImpl)
+
+  container.registerSingleton(RestaurantTokens.RestaurantCuisineCreationUseCase, RestaurantCuisineCreationUseCaseImpl)
 
 }

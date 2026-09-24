@@ -4,6 +4,8 @@ import { InfrastructureTokens } from "../../../../../infrastructure/container/in
 import type { PrismaExecutor } from "../../../../../infrastructure/database/prisma-client.type.js";
 import { Restaurant } from "../../../domain/entities/restaurant.entity.js";
 import { RestaurantMapper } from "./mappers/restaurant.mapper.js";
+import { RestaurantCuisine } from "../../../domain/entities/restaurant-cuisine.entity.js";
+import { RestaurantCuisineMapper } from "./mappers/restaurant-cuisine.mapper.js";
 
 @injectable()
 export class RestaurantRepository implements IRestaurantRepository {
@@ -75,5 +77,15 @@ export class RestaurantRepository implements IRestaurantRepository {
       },
       data
     })
+  }
+
+  async createRestaurantCuisine(restaurantCuisine: RestaurantCuisine): Promise<RestaurantCuisine> {
+    const data = RestaurantCuisineMapper.toPersistence(restaurantCuisine)
+
+    const newRestaurantCuisine = await this.prisma.restaurantCuisines.create({
+      data
+    })
+
+    return RestaurantCuisineMapper.toDomain(newRestaurantCuisine)
   }
 }

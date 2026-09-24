@@ -15,4 +15,15 @@ export class CuisineMapper {
       updatedAt: data.updatedAt
     })
   }
+
+  public static toPersistence(cuisine: Cuisine): Prisma.CuisineCreateInput {
+    return {
+      id: cuisine.getId(),
+      name: cuisine.getName().getValue(),
+      slug: cuisine.getSlug().getValue(),
+      status: cuisine.getStatus(),
+      createdAt: cuisine.getCreatedAt(),
+      updatedAt: cuisine.getUpdatedAt()
+    }
+  }
 }

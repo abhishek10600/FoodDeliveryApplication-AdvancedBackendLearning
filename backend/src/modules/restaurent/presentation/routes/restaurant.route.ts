@@ -17,6 +17,8 @@ import { RestaurantStatusUpdateController } from "../controllers/restaurant-stat
 import { RestaurantStatusCloseController } from "../controllers/restaurant-status-close.controller.js"
 import { restaurantOpeningHoursUpdateParamsSchema, restaurantOpeningHoursUpdateSchema } from "../../validators/restaurant-opening-hours-update.validator.js"
 import { RestaurantOpeningHoursUpdateController } from "../controllers/restaurant-opening-hours-update.controller.js"
+import { CreateRestaurantCuisineController } from "../controllers/create-restaurant-cuisine.controller.js"
+import { restaurantCuisineCreationParamsSchema, restaurantCuisineCreationSchema } from "../../validators/restaurant-cuisine-creation.validator.js"
 
 const router = express.Router()
 
@@ -28,6 +30,7 @@ const restaurantProfileUpdateController = container.resolve(RestaurantProfileUpd
 const restaurantStatusUpdateController = container.resolve(RestaurantStatusUpdateController)
 const restaurantStatusCloseController = container.resolve(RestaurantStatusCloseController)
 const restaurantOpeningHoursUpdateController = container.resolve(RestaurantOpeningHoursUpdateController)
+const createRestaurantCuisineController = container.resolve(CreateRestaurantCuisineController)
 const authenticationMiddleware = container.resolve(AuthenticationMiddleware)
 const authorizationMiddleware = container.resolve(AuthorizationMiddleware)
 
@@ -45,7 +48,9 @@ router.route("/:restaurantId/update-status").put(authenticationMiddleware.authen
 
 router.route("/:restaurantId/close").put(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_STATUS_UPDATE), validate({ params: restaurantStatusUpdateParamsSchema }), restaurantStatusCloseController.handle.bind(restaurantStatusCloseController))
 
-router.route("/:restaurantId/opening-hours/update").put(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_UPDATE), validate({ params: restaurantOpeningHoursUpdateParamsSchema }) , validate({ body: restaurantOpeningHoursUpdateSchema }), restaurantOpeningHoursUpdateController.handle.bind(restaurantOpeningHoursUpdateController))
+router.route("/:restaurantId/opening-hours/update").put(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_UPDATE), validate({ params: restaurantOpeningHoursUpdateParamsSchema }), validate({ body: restaurantOpeningHoursUpdateSchema }), restaurantOpeningHoursUpdateController.handle.bind(restaurantOpeningHoursUpdateController))
+
+router.route("/:restaurantId/cuisine/create").post(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_UPDATE), validate({ params: restaurantCuisineCreationParamsSchema }), validate({ body: restaurantCuisineCreationSchema }), createRestaurantCuisineController.handle.bind(createRestaurantCuisineController))
 
 
 export default router
