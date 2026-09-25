@@ -51,4 +51,23 @@ export class CuisineRepositopry implements ICuisineRepository {
     return CuisineMapper.toDomain(newCuisine)
   }
 
+  async update(cuisine: Cuisine): Promise<void> {
+    const data = CuisineMapper.toUpdatePersistence(cuisine)
+
+    await this.prisma.cuisine.update({
+      where: {
+        id: cuisine.getId()
+      },
+      data
+    })
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.prisma.cuisine.delete({
+      where: {
+        id
+      }
+    })
+  }
+
 }

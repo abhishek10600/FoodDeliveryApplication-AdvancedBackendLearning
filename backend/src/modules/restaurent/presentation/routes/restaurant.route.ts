@@ -19,6 +19,12 @@ import { restaurantOpeningHoursUpdateParamsSchema, restaurantOpeningHoursUpdateS
 import { RestaurantOpeningHoursUpdateController } from "../controllers/restaurant-opening-hours-update.controller.js"
 import { CreateRestaurantCuisineController } from "../controllers/create-restaurant-cuisine.controller.js"
 import { restaurantCuisineCreationParamsSchema, restaurantCuisineCreationSchema } from "../../validators/restaurant-cuisine-creation.validator.js"
+import { RestaurantCuisineUpdateController } from "../controllers/restaurant-cuisine-update.controller.js"
+import { restaurantCuisineUpdatePramsSchema, restaurantCuisineUpdateSchema } from "../../validators/restaurant-cuisine-update.validator.js"
+import { RestaurantCuisineStatusUpdateController } from "../controllers/restaurant-cuisine-status-update.controller.js"
+import { restaurantCuisineStatusUpdateParamsSchema } from "../../validators/restaurant-cuisine-status-update.validator.js"
+import { DeleteRestaurantCuisineController } from "../controllers/delete-restaurant-cuisine.controller.js"
+import { restaurantCuisineDeletionSchema } from "../../validators/restaurant-cuisine-deletion.validator.js"
 
 const router = express.Router()
 
@@ -31,6 +37,10 @@ const restaurantStatusUpdateController = container.resolve(RestaurantStatusUpdat
 const restaurantStatusCloseController = container.resolve(RestaurantStatusCloseController)
 const restaurantOpeningHoursUpdateController = container.resolve(RestaurantOpeningHoursUpdateController)
 const createRestaurantCuisineController = container.resolve(CreateRestaurantCuisineController)
+const restaurantCuisineUpdateController = container.resolve(RestaurantCuisineUpdateController)
+const restaurantCuisineStatusUpdateController = container.resolve(RestaurantCuisineStatusUpdateController)
+const deleteRestaurantCuisineController = container.resolve(DeleteRestaurantCuisineController)
+
 const authenticationMiddleware = container.resolve(AuthenticationMiddleware)
 const authorizationMiddleware = container.resolve(AuthorizationMiddleware)
 
@@ -50,7 +60,14 @@ router.route("/:restaurantId/close").put(authenticationMiddleware.authenticate, 
 
 router.route("/:restaurantId/opening-hours/update").put(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_UPDATE), validate({ params: restaurantOpeningHoursUpdateParamsSchema }), validate({ body: restaurantOpeningHoursUpdateSchema }), restaurantOpeningHoursUpdateController.handle.bind(restaurantOpeningHoursUpdateController))
 
-router.route("/:restaurantId/cuisine/create").post(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_UPDATE), validate({ params: restaurantCuisineCreationParamsSchema }), validate({ body: restaurantCuisineCreationSchema }), createRestaurantCuisineController.handle.bind(createRestaurantCuisineController))
+router.route("/:restaurantId/cuisines/create").post(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_UPDATE), validate({ params: restaurantCuisineCreationParamsSchema }), validate({ body: restaurantCuisineCreationSchema }), createRestaurantCuisineController.handle.bind(createRestaurantCuisineController))
+
+router.route("/:restaurantId/cuisines/:cuisineId").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_UPDATE), validate({ params: restaurantCuisineUpdatePramsSchema }), validate({ body: restaurantCuisineUpdateSchema }),
+  restaurantCuisineUpdateController.handle.bind(restaurantCuisineUpdateController))
+
+router.route("/:restaurantId/cuisines/:cuisineId/status-update").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_UPDATE), validate({ params: restaurantCuisineStatusUpdateParamsSchema }), restaurantCuisineStatusUpdateController.handle.bind(restaurantCuisineStatusUpdateController))
+
+router.route("/:restaurantId/cuisines/:cuisineId").delete(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_UPDATE), validate({ params: restaurantCuisineDeletionSchema }), deleteRestaurantCuisineController.handle.bind(deleteRestaurantCuisineController))
 
 
 export default router

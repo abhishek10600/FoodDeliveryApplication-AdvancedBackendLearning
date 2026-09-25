@@ -1,5 +1,6 @@
 import { EmailAlreadyRegisteredError } from "../../modules/identity/domain/errors/email-already-register.error.js";
 import { InvalidCredentialsError } from "../../modules/identity/domain/errors/invalid-credentials.error.js";
+import { RestaurantDomainError } from "../../modules/restaurent/domain/errors/restaurant-domain.error.js";
 import { AppError } from "./AppError.js"
 import { AuthenticationError } from "./AuthenticationError.js";
 import { ConflictError } from "./ConflictError.js";
@@ -22,6 +23,10 @@ export const mapError = (error: Error, isProduction: boolean): AppError => {
 
   if (error instanceof AuthenticationError) {
     return new AuthenticationError(error.message)
+  }
+
+  if (error instanceof RestaurantDomainError) {
+    return new RestaurantDomainError(error.message, 500)
   }
 
   return new InternalServerError(isProduction ? "An unexpected error occurred" : error.message)

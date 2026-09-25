@@ -29,11 +29,11 @@ export class RestaurantProfileUpdateUseCaseImpl implements RestaurantProfileUpda
     console.log({restaurant})
 
     if (!restaurant) {
-      throw new RestaurantDomainError("Restaurant not found")
+      throw new RestaurantDomainError("Restaurant not found", 404)
     }
 
     if (restaurant.getOwnerId() !== ownerId) {
-      throw new RestaurantDomainError("You are not authorized to perform this action")
+      throw new RestaurantDomainError("You are not authorized to perform this action", 403)
     }
 
     restaurant.updateProfile({

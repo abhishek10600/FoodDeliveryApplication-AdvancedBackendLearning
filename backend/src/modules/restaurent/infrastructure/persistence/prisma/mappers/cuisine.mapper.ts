@@ -26,4 +26,12 @@ export class CuisineMapper {
       updatedAt: cuisine.getUpdatedAt()
     }
   }
+
+  public static toUpdatePersistence(cuisine: Cuisine): Prisma.CuisineUpdateInput {
+    return {
+      name: cuisine.getName().getValue(),
+      status: cuisine.getStatus(),
+      updatedAt: cuisine.getUpdatedAt()
+    }
+  }
 }

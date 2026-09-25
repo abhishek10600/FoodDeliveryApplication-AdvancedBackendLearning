@@ -25,11 +25,11 @@ export class RestaurantCuisineCreationUseCaseImpl implements RestaurantCuisineCr
     const restaurant = await this.restaurantRepo.findById(input.restaurantId)
 
     if (!restaurant) {
-      throw new RestaurantDomainError("Restaurant not found")
+      throw new RestaurantDomainError("Restaurant not found", 404)
     }
 
     if (input.ownerId !== restaurant.getOwnerId()) {
-      throw new RestaurantDomainError("You are not allowed to perform this action")
+      throw new RestaurantDomainError("You are not allowed to perform this action", 403)
     }
 
 

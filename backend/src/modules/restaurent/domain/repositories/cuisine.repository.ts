@@ -4,4 +4,6 @@ export interface ICuisineRepository {
   findByIds(ids: string[]): Promise<Cuisine[]>
   findById(id: string): Promise<Cuisine | null>
   create(cuisine: Cuisine): Promise<Cuisine>
+  update(cuisine: Cuisine): Promise<void>
+  delete(id: string): Promise<void>
 }

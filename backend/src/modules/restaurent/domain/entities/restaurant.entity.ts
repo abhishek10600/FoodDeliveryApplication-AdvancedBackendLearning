@@ -104,12 +104,12 @@ export class Restaurant {
       return;
     }
 
-    throw new RestaurantDomainError(`Restaurant statuc cannot be activated from ${this.status} status`)
+    throw new RestaurantDomainError(`Restaurant statuc cannot be activated from ${this.status} status`, 400)
   }
 
   public deactivate(): void {
     if (this.status !== RestaurantStatus.ACTIVE) {
-      throw new RestaurantDomainError(`Restaurant status cannot be deactivate from ${this.status}`)
+      throw new RestaurantDomainError(`Restaurant status cannot be deactivate from ${this.status}`, 400)
     }
 
     this.status = RestaurantStatus.INACTIVE;
@@ -118,7 +118,7 @@ export class Restaurant {
 
   public suspend(): void {
     if (this.status !== RestaurantStatus.ACTIVE && this.status !== RestaurantStatus.INACTIVE) {
-      throw new RestaurantDomainError(`Restaurant cannot be suspended from ${this.status} status`)
+      throw new RestaurantDomainError(`Restaurant cannot be suspended from ${this.status} status`, 400)
     }
 
     this.status = RestaurantStatus.SUSPENDED
@@ -127,7 +127,7 @@ export class Restaurant {
 
   public close(): void {
     if (this.status !== RestaurantStatus.ACTIVE && this.status !== RestaurantStatus.INACTIVE && this.status !== RestaurantStatus.SUSPENDED) {
-      throw new RestaurantDomainError(`Restaurant cannot be closed from ${this.status} status`)
+      throw new RestaurantDomainError(`Restaurant cannot be closed from ${this.status} status`, 400)
     }
 
     this.status = RestaurantStatus.CLOSED
@@ -136,7 +136,7 @@ export class Restaurant {
 
   public reopen(): void {
     if (this.status === RestaurantStatus.SUSPENDED || this.status === RestaurantStatus.ACTIVE) {
-      throw new RestaurantDomainError(`Restaurant cannot be reopened from ${this.status} status`)
+      throw new RestaurantDomainError(`Restaurant cannot be reopened from ${this.status} status`, 400)
     }
       this.status = RestaurantStatus.ACTIVE
       this.touch()
@@ -144,7 +144,7 @@ export class Restaurant {
 
   public updateProfile(props: IUpdateRestaurantProfileProps): void {
     if (this.status === RestaurantStatus.CLOSED) {
-      throw new RestaurantDomainError("Closed restaurant profile cannot be updated")
+      throw new RestaurantDomainError("Closed restaurant profile cannot be updated", 400)
     }
 
     if (props.name !== undefined) {
@@ -174,7 +174,7 @@ export class Restaurant {
     const alreadyExists = this.cuisines.some((cuisine) => cuisine.getCuisineId() === cuisineId)
 
     if (alreadyExists) {
-      throw new RestaurantDomainError(`Cuisine "${cuisineId}" already exists for this restaurant`)
+      throw new RestaurantDomainError(`Cuisine "${cuisineId}" already exists for this restaurant`, 400)
     }
 
     const restaurantCuisine = RestaurantCuisine.create({
@@ -191,7 +191,7 @@ export class Restaurant {
     const index = this.cuisines.findIndex((cuisine) => cuisine.getCuisineId() === cuisineId)
 
     if (index === -1) {
-      throw new RestaurantDomainError(`Cuisine "${cuisineId}" does not exists for this restaurant`)
+      throw new RestaurantDomainError(`Cuisine "${cuisineId}" does not exists for this restaurant`, 400)
     }
 
     this.cuisines.splice(index, 1)
@@ -216,7 +216,7 @@ export class Restaurant {
     const index = this.openingHours.findIndex((hours) => hours.getDayOfWeek() === dayOfWeek)
 
     if (index === -1) {
-      throw new RestaurantDomainError(`Opening hours for day ${dayOfWeek} do not exist`)
+      throw new RestaurantDomainError(`Opening hours for day ${dayOfWeek} do not exist`, 400)
     }
 
     this.openingHours.splice(index, 1)
@@ -225,13 +225,13 @@ export class Restaurant {
 
   public setOpeningHours(openingHours: RestaurantOpeningHours[]): void {
     if (openingHours.length !== 7) {
-      throw new RestaurantDomainError("Restaurant opening hours must contain exactly 7 days")
+      throw new RestaurantDomainError("Restaurant opening hours must contain exactly 7 days", 400)
     }
 
     const days = new Set(openingHours.map((hours) => hours.getDayOfWeek()))
 
     if (days.size !== 7) {
-      throw new RestaurantDomainError("Restaurant opening hours cannot contain duplicate days")
+      throw new RestaurantDomainError("Restaurant opening hours cannot contain duplicate days", 400)
     }
 
     this.openingHours = [...openingHours]

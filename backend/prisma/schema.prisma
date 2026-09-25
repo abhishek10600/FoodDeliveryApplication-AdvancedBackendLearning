@@ -172,7 +172,7 @@ model RestaurantCuisines{
   updatedAt DateTime @updatedAt @map("updated_at")
 
   restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  cuisine Cuisine @relation(fields: [cuisineId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  cuisine Cuisine @relation(fields: [cuisineId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([restaurantId, cuisineId])
   @@index([restaurantId])

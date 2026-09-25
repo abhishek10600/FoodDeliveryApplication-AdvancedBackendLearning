@@ -1,4 +1,5 @@
 import { CuisineStatus } from "../enums/cusine-status.enum.js";
+import { RestaurantDomainError } from "../errors/restaurant-domain.error.js";
 import { CuisineName } from "../value-objects/cuisine-name.vo.js";
 import { CuisineSlug } from "../value-objects/cuisine-slug.vo.js";
 
@@ -80,7 +81,7 @@ export class Cuisine {
 
   public activate(): void {
     if (this.status === CuisineStatus.ACTIVE) {
-      return
+      throw new RestaurantDomainError("Cuisine status cannot be activated if it already active", 400)
     }
 
     this.status = CuisineStatus.ACTIVE
@@ -90,7 +91,7 @@ export class Cuisine {
 
   public deactivate(): void {
     if (this.status === CuisineStatus.INACTIVE) {
-      return
+      throw new RestaurantDomainError("Cuisine status cannot be deactivated if it already inactive", 400)
     }
 
     this.status = CuisineStatus.INACTIVE

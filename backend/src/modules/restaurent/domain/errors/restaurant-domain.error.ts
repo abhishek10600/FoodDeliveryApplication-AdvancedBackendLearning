@@ -1,9 +1,7 @@
-export class RestaurantDomainError extends Error {
-  constructor(message: string) {
-    super(message)
+import { AppError } from "../../../../shared/errors/AppError.js"
 
-    this.name = "RestaurantDomainError"
-
-    Object.setPrototypeOf(this, new.target.prototype)
+export class RestaurantDomainError extends AppError {
+  constructor(message: string, statusCode: number) {
+    super(message, statusCode, "RESTAURANT_DOMAIN_ERROR", true)
   }
 }

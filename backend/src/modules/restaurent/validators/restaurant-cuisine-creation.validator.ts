@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 export const restaurantCuisineCreationSchema = z.object({
-  cuisineName: z.string().min(1, "Cuisine name is required").max(100, "Cuisine name cannot contain more than 100 characters").trim()
+  cuisineName: z.string().min(1, "Cuisine name is required").max(100, "Cuisine name cannot contain more than 100 characters").trim().toLowerCase()
 }).strict()
 
 export const restaurantCuisineCreationParamsSchema = z.object({
