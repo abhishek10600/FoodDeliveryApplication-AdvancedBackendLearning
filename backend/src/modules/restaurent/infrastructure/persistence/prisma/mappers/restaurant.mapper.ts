@@ -43,6 +43,7 @@ export class RestaurantMapper {
       phone: RestaurantPhone.create(data.phone),
       email: RestaurantEmail.create(data.email),
       address: RestaurantAddress.create(RestaurantMapper.toAddressProps(data.address)),
+      city: data.city,
       status: data.status as RestaurantStatus,
       cuisines,
       openingHours,
@@ -98,6 +99,7 @@ export class RestaurantMapper {
         country: restaurant.getAddress().getCountry(),
         postalCode: restaurant.getAddress().getPostalCode()
       },
+      city: restaurant.getCity() ,
       status: restaurant.getStatus(),
       cuisines: {
         create: restaurant.getCuisines().map((cuisine) => ({

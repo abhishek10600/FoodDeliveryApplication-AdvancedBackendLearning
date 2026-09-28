@@ -17,6 +17,7 @@ export interface IRestaurantProps {
   phone: RestaurantPhone;
   email: RestaurantEmail;
   address: RestaurantAddress;
+  city: string;
   status: RestaurantStatus;
   cuisines: RestaurantCuisine[]
   openingHours: RestaurantOpeningHours[];
@@ -31,6 +32,7 @@ export interface ICreateRestaurantProps {
   phone: RestaurantPhone;
   email: RestaurantEmail;
   address: RestaurantAddress;
+  city: string;
   cuisines?: RestaurantCuisine[];
   openingHours?: RestaurantOpeningHours[];
 }
@@ -52,6 +54,7 @@ export class Restaurant {
   private phone: RestaurantPhone;
   private email: RestaurantEmail;
   private address: RestaurantAddress;
+  private city: string;
   private status: RestaurantStatus;
   private cuisines: RestaurantCuisine[];
   private openingHours: RestaurantOpeningHours[];
@@ -66,6 +69,7 @@ export class Restaurant {
     this.phone = props.phone
     this.email = props.email
     this.address = props.address
+    this.city = props.city
     this.status = props.status
     this.cuisines = [...props.cuisines]
     this.openingHours = [...props.openingHours]
@@ -84,6 +88,7 @@ export class Restaurant {
       phone: props.phone,
       email: props.email,
       address: props.address,
+      city: props.address.getCity(),
       status: RestaurantStatus.PENDING,
       cuisines: props.cuisines ?? [],
       openingHours: props.openingHours ?? [],
@@ -315,6 +320,10 @@ export class Restaurant {
 
   public getAddress(): RestaurantAddress {
     return this.address
+  }
+
+  public getCity(): string {
+    return this.city
   }
 
   public getStatus(): RestaurantStatus {

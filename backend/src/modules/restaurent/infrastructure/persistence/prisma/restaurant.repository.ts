@@ -6,6 +6,10 @@ import { Restaurant } from "../../../domain/entities/restaurant.entity.js";
 import { RestaurantMapper } from "./mappers/restaurant.mapper.js";
 import { RestaurantCuisine } from "../../../domain/entities/restaurant-cuisine.entity.js";
 import { RestaurantCuisineMapper } from "./mappers/restaurant-cuisine.mapper.js";
+import { RestaurantListFilterInput } from "../../../application/dto/resruarant-list.dto.js";
+import { Prisma } from "../../../../../../generated/prisma/client.js";
+import { decodeRestaurantCursor, encodeRestaurantCursor } from "../../../../../shared/pagination/restaurant-cursor.js";
+import { RestaurantListResult } from "../../../application/dto/restaurant-list-response.dto.js";
 
 @injectable()
 export class RestaurantRepository implements IRestaurantRepository {
@@ -30,6 +34,115 @@ export class RestaurantRepository implements IRestaurantRepository {
 
     return RestaurantMapper.toDomain(newRestaurant)
 
+  }
+
+  async get(filters: RestaurantListFilterInput): Promise<RestaurantListResult> {
+
+    const { cuisine, city, sortBy, limit: requestedLimit, cursor } = filters
+
+    const limit = requestedLimit ?? 10;
+
+    const where: Prisma.RestaurantWhereInput = {
+      status: "ACTIVE"
+    }
+
+    // filter by cuisine
+    if (cuisine) {
+      where.cuisines = {
+        some: {
+          cuisine: {
+            slug: {
+              equals: cuisine.toLowerCase(),
+              mode: "insensitive"
+            }
+          }
+        }
+      }
+    }
+
+    if (city) {
+      where.city = {
+        equals: city,
+        mode: "insensitive"
+      }
+    }
+
+    // cursor pagination
+
+    if (cursor) {
+      const decodedCursor = decodeRestaurantCursor(cursor)
+
+      where.AND = [
+        {
+          OR: [
+            {
+              name: {
+                gt: decodedCursor.name
+              }
+            },
+
+            {
+              AND: [
+                {
+                  name: {
+                    equals: decodedCursor.name
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+
+    // sorting
+    //
+    const orderBy: Prisma.RestaurantOrderByWithRelationInput[] = [];
+
+    if (sortBy === "name") {
+      orderBy.push(
+      {
+        name: "asc"
+      },
+      {
+        id: "asc"
+      }
+      )
+    }
+
+    const restaurants = await this.prisma.restaurant.findMany({
+      where,
+      orderBy,
+      take: limit + 1,
+      include: {
+        cuisines: true,
+        openingHours: true
+      }
+    })
+
+    const hasNextPage = restaurants.length > limit;
+
+    const items = hasNextPage ? restaurants.slice(0, limit) : restaurants
+
+    let nextCursor: string | null = null
+
+    if (hasNextPage) {
+      const lastRestaurant = items[items.length - 1]
+
+      nextCursor = encodeRestaurantCursor({
+        name: lastRestaurant.name,
+        id: lastRestaurant.id
+      })
+    }
+
+    const domainRestaurants = items.map(restaurant => RestaurantMapper.toDomain(restaurant))
+
+
+    return {
+      items: domainRestaurants,
+      nextCursor,
+      hasNextPage
+    }
   }
 
   async findById(id: string): Promise<Restaurant | null> {

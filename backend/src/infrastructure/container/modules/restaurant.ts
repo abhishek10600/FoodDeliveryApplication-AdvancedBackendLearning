@@ -15,6 +15,7 @@ import { RestaurantCuisineCreationUseCaseImpl } from "../../../modules/restauren
 import { RestaurantCuisineUpdateUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-cuisine-update.use-case.impl.js"
 import { RestaurantCuisineStatusUpdateUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-cuisine-status-update.use-case.impl.js"
 import { RestaurantCuisineDeletionUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-cuisine-deletion.use-case.impl.js"
+import { RestaurantListUseCaseImpl } from "../../../modules/restaurent/application/use-cases/restaurant-list.use-case.impl.js"
 
 
 export const registerRestaurant = (): void => {
@@ -54,5 +55,7 @@ export const registerRestaurant = (): void => {
   container.registerSingleton(RestaurantTokens.RestaurantCuisineStatusUpdateUseCase, RestaurantCuisineStatusUpdateUseCaseImpl)
 
   container.registerSingleton(RestaurantTokens.RestaurantCuisineDeletionUseCase, RestaurantCuisineDeletionUseCaseImpl)
+
+  container.registerSingleton(RestaurantTokens.RestaurantListUseCase, RestaurantListUseCaseImpl)
 
 }

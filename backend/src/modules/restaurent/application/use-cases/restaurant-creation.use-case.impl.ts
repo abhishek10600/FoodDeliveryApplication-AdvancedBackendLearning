@@ -58,6 +58,7 @@ export class RestaurantCreationUseCaseImpl implements RestaurantCreationUseCase 
       phone: RestaurantPhone.create(input.phone),
       email: RestaurantEmail.create(input.email),
       address: RestaurantAddress.create(input.address),
+      city: input.address.city
     })
 
     for (const cuisineId of uniqueCuisineIds) {

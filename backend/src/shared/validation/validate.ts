@@ -35,7 +35,7 @@ export const validate = (schema: ValidationSchema): RequestHandler => {
     }
 
     if (schema.query) {
-      const result = schema.query.safeParse(req.params)
+      const result = schema.query.safeParse(req.query)
 
       if (!result.success) {
         return next(
@@ -45,7 +45,7 @@ export const validate = (schema: ValidationSchema): RequestHandler => {
         )
       }
 
-      req.query = result.data as Request["query"]
+      Object.assign(req.query, result.data);
     }
 
     next()

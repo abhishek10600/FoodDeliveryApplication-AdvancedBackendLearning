@@ -25,6 +25,8 @@ import { RestaurantCuisineStatusUpdateController } from "../controllers/restaura
 import { restaurantCuisineStatusUpdateParamsSchema } from "../../validators/restaurant-cuisine-status-update.validator.js"
 import { DeleteRestaurantCuisineController } from "../controllers/delete-restaurant-cuisine.controller.js"
 import { restaurantCuisineDeletionSchema } from "../../validators/restaurant-cuisine-deletion.validator.js"
+import { RestaurantListController } from "../controllers/restaurant-list.controller.js"
+import { restaurantListQuerySchema } from "../../validators/restaurant-list.validator.js"
 
 const router = express.Router()
 
@@ -40,11 +42,14 @@ const createRestaurantCuisineController = container.resolve(CreateRestaurantCuis
 const restaurantCuisineUpdateController = container.resolve(RestaurantCuisineUpdateController)
 const restaurantCuisineStatusUpdateController = container.resolve(RestaurantCuisineStatusUpdateController)
 const deleteRestaurantCuisineController = container.resolve(DeleteRestaurantCuisineController)
+const restauarantListController = container.resolve(RestaurantListController)
 
 const authenticationMiddleware = container.resolve(AuthenticationMiddleware)
 const authorizationMiddleware = container.resolve(AuthorizationMiddleware)
 
 router.route("/owner/register").post(validate({ body: registerRestaurantOwnerSchema }), registerRestaurantOwnerController.handle.bind(registerRestaurantOwnerController))
+
+router.route("/").get(validate({ query: restaurantListQuerySchema }), restauarantListController.handle.bind(restauarantListController))
 
 router.route("/create").post(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.RESTAURANT_CREATE), validate({ body: createRestaurantSchema }), createRestaurantController.handle.bind(createRestaurantController))
 
