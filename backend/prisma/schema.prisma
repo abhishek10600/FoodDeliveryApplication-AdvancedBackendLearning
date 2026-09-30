@@ -139,6 +139,7 @@ model Restaurant{
   owner User @relation(fields: [ownerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   cuisines RestaurantCuisines[]
   openingHours RestaurantOpeningHours[]
+  menu Menu[]
 
   @@index([ownerId])
   @@index([status])
@@ -197,4 +198,132 @@ model RestaurantOpeningHours {
   @@unique([restaurantId, dayOfWeek])
   @@index([restaurantId])
   @@map("restaurant_opening_hours")
+}
+
+enum MenuStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Menu {
+  id String @id @default(uuid()) @db.Uuid
+  restaurantId String @db.Uuid
+  name String @map("menu_name")
+  status MenuStatus @default(ACTIVE) @map("menu_status")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  categories MenuCategory[]
+
+  @@index([status])
+  @@map("menus")
+}
+
+enum MenuCategoryStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model MenuCategory{
+  id String @id @default(uuid()) @db.Uuid
+  menuId String @db.Uuid
+  name String @map("menu_category_name")
+  description String? @map("menu_category_description")
+  displayOrder Int @default(0) @map("menu_category_display_order")
+  status MenuCategoryStatus @default(ACTIVE) @map("menu_category_status")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  menu Menu @relation(fields: [menuId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  menuItems MenuItem[]
+
+  @@index([menuId])
+  @@index([menuId, status])
+  @@index([menuId, displayOrder])
+  @@map("menu_categories")
+
+}
+
+enum MenuItemStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model MenuItem {
+  id String @id @default(uuid()) @db.Uuid
+  menuCategoryId String @db.Uuid
+  name String @map("menu_item_name")
+  description String? @map("menu_item_description")
+  imageUrl String? @map("menu_item_image_url")
+  price Int @map("menu_item_price")
+  currency String @default("INR") @db.VarChar(3) @map("menu_item_currency")
+  status MenuItemStatus @default(ACTIVE) @map("menu_item_status")
+  isAvailable Boolean @default(false) @map("menu_item_isAvailable")
+  displayOrder Int @default(0) @map("menu_item_display_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt
+
+  category MenuCategory @relation(fields: [menuCategoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  menuAddOnGroups MenuAddOnGroup[]
+
+  @@index([menuCategoryId])
+  @@index([menuCategoryId, status])
+  @@index([menuCategoryId, isAvailable])
+  @@index([menuCategoryId, displayOrder])
+  @@map("menu_items")
+
+}
+
+enum ModelAddOnGroupStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model MenuAddOnGroup {
+  id String @id @default(uuid()) @db.Uuid
+  menuItemId String @db.Uuid
+  name String @map("menu_add_on_group_name")
+  minSelections Int @default(0) @map("menu_add_on_group_min_selections")
+  maxSelections Int @default(1) @map("menu_add_on_group_max_selections")
+  status ModelAddOnGroupStatus @default(ACTIVE) @map("menu_add_on_group_status")
+  displayOrder Int @default(0) @map("menu_add_on_group_display_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  menuAddOns MenuAddOn[]
+
+  @@index([menuItemId])
+  @@index([menuItemId, status])
+  @@index([menuItemId, displayOrder])
+  @@map("menu_add_on_groups")
+
+}
+
+enum MenuAddOnStatus{
+  ACTIVE
+  INACTIVE
+}
+
+model MenuAddOn{
+  id String @id @default(uuid()) @db.Uuid
+  menuAddOnGroupId String @db.Uuid
+  name String @map("menu_add_on_name")
+  price Int @map("menu_add_on_price")
+  currency String @default("INR") @db.VarChar(3) @map("menu_add_on_currency")
+  displayOrder Int @default(0) @map("menu_add_on_display_order")
+  status MenuAddOnStatus @default(ACTIVE) @map("menu_add_on_status")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  addOnGroup MenuAddOnGroup @relation(fields: [menuAddOnGroupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([menuAddOnGroupId])
+  @@index([menuAddOnGroupId, displayOrder])
+  @@index([menuAddOnGroupId, status])
+  @@map("menu_add_ons")
 }
