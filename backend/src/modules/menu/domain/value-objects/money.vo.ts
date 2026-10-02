@@ -38,6 +38,10 @@ export class Money {
     return this.amount
   }
 
+  public getCurrency(): string {
+    return this.currency
+  }
+
   public add(value: Money): Money {
     this.ensureSameCurrency(value)
 

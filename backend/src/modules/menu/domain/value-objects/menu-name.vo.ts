@@ -5,7 +5,7 @@ export class MenuName {
   private static readonly MENU_NAME_MIN: number = 1
   private static readonly MENU_NAME_MAX: number = 100
 
-  private readonly value: string
+  private value: string
 
   constructor(value: string) {
     this.value = value

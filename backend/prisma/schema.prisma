@@ -261,7 +261,7 @@ model MenuItem {
   price Int @map("menu_item_price")
   currency String @default("INR") @db.VarChar(3) @map("menu_item_currency")
   status MenuItemStatus @default(ACTIVE) @map("menu_item_status")
-  isAvailable Boolean @default(false) @map("menu_item_isAvailable")
+  isAvailable Boolean @default(true) @map("menu_item_isAvailable")
   displayOrder Int @default(0) @map("menu_item_display_order")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt
