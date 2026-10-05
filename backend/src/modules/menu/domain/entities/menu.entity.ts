@@ -48,14 +48,7 @@ export class Menu {
   }
 
   public static rehydrate(props: IMenuProps): Menu {
-    return new Menu({
-      id: props.id,
-      restaurantId: props.restaurantId,
-      name: props.name,
-      status: props.status,
-      createdAt: props.createdAt,
-      updatedAt: props.updatedAt
-    })
+    return new Menu(props)
   }
 
   public updateMenuName(name: MenuName): void {
