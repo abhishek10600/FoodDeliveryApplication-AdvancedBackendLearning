@@ -181,6 +181,10 @@ export class MenuItem {
     return this.displayOrder
   }
 
+  public getIsAvailable(): boolean {
+    return this.isAvailable
+  }
+
   public getCreatedAt(): Date {
     return this.createdAt
   }

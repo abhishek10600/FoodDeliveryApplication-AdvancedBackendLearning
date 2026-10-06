@@ -218,6 +218,7 @@ model Menu {
   categories MenuCategory[]
 
   @@index([status])
+  @@unique([restaurantId, name])
   @@map("menus")
 }
 
@@ -243,6 +244,7 @@ model MenuCategory{
   @@index([menuId])
   @@index([menuId, status])
   @@index([menuId, displayOrder])
+  @@unique([menuId, name])
   @@map("menu_categories")
 
 }
@@ -273,6 +275,7 @@ model MenuItem {
   @@index([menuCategoryId, status])
   @@index([menuCategoryId, isAvailable])
   @@index([menuCategoryId, displayOrder])
+  @@unique([menuCategoryId, name])
   @@map("menu_items")
 
 }
