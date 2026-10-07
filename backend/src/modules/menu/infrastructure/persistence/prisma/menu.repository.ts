@@ -28,14 +28,18 @@ export class MenuRepository implements IMenuRepository {
     return MenuMapper.toDomain(menu)
   }
 
-  async findByRestaurantId(restaurantId: string): Promise<Menu[]> {
-    const menus = await this.prisma.menu.findMany({
+  async findByRestaurantId(restaurantId: string): Promise<Menu | null> {
+    const menu = await this.prisma.menu.findUnique({
       where: {
         restaurantId
       }
     })
 
-    return menus.map((menu) => MenuMapper.toDomain(menu))
+    if (!menu) {
+      return null
+    }
+
+    return MenuMapper.toDomain(menu)
   }
 
   async findByName(name: string, restaurantId: string): Promise<Menu | null> {
@@ -53,10 +57,9 @@ export class MenuRepository implements IMenuRepository {
     return MenuMapper.toDomain(menu)
   }
 
-  async existsForRestaurant(id: string, restaurantId: string): Promise<Boolean> {
+  async existsForRestaurant(restaurantId: string): Promise<Boolean> {
     const menu = await this.prisma.menu.findUnique({
       where: {
-        id,
         restaurantId
       }
     })

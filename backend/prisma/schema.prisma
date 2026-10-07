@@ -207,7 +207,7 @@ enum MenuStatus {
 
 model Menu {
   id String @id @default(uuid()) @db.Uuid
-  restaurantId String @db.Uuid
+  restaurantId String @db.Uuid @unique
   name String @map("menu_name")
   status MenuStatus @default(ACTIVE) @map("menu_status")
   createdAt DateTime @default(now()) @map("created_at")
@@ -323,10 +323,11 @@ model MenuAddOn{
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  addOnGroup MenuAddOnGroup @relation(fields: [menuAddOnGroupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  menuAddOnGroup MenuAddOnGroup @relation(fields: [menuAddOnGroupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([menuAddOnGroupId])
   @@index([menuAddOnGroupId, displayOrder])
   @@index([menuAddOnGroupId, status])
+  @@unique([menuAddOnGroupId, name])
   @@map("menu_add_ons")
 }

@@ -1,10 +1,11 @@
 import { MenuAddOnStatus } from "../enums/menu-add-on-status.enum.js"
 import { MenuDomainError } from "../errors/menu-domain.error.js"
+import { MenuAddOnName } from "../value-objects/menu-add-on-name.vo.js"
 
 export interface IMenuAddOn {
   id: string
   menuAddOnGroupId: string
-  name: string
+  name: MenuAddOnName,
   price: number
   currency: string
   displayOrder: number
@@ -15,7 +16,7 @@ export interface IMenuAddOn {
 
 export interface IMenuAddOnCreate {
   menuAddOnGroupId: string
-  name: string
+  name: MenuAddOnName
   price: number
   currency: string
   displayOrder?: number
@@ -25,7 +26,7 @@ export class MenuAddOn {
 
   private readonly id: string
   private readonly menuAddOnGroupId: string
-  private name: string
+  private name: MenuAddOnName
   private price: number
   private currency: string
   private displayOrder: number
@@ -73,7 +74,7 @@ export class MenuAddOn {
     return new MenuAddOn(props)
   }
 
-  public updateName(name: string): void {
+  public updateName(name: MenuAddOnName): void {
     this.name = name
 
     this.touch()
@@ -123,7 +124,7 @@ export class MenuAddOn {
     return this.menuAddOnGroupId
   }
 
-  public getName(): string {
+  public getName(): MenuAddOnName {
     return this.name
   }
 

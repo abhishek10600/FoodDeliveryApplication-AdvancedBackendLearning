@@ -1,10 +1,11 @@
 import { MenuAddOnGroupStatus } from "../enums/menu-add-on-group-status.enum.js"
 import { MenuDomainError } from "../errors/menu-domain.error.js"
+import { MenuAddOnGroupName } from "../value-objects/menu-add-on-group-name.vo.js"
 
 export interface IMenuAddOnGroup {
   id: string
   menuItemId: string
-  name: string
+  name: MenuAddOnGroupName,
   minSelections: number
   maxSelections: number
   status: MenuAddOnGroupStatus
@@ -15,14 +16,14 @@ export interface IMenuAddOnGroup {
 
 export interface IMenuAddOnGroupCreate {
   menuItemId: string
-  name: string
+  name: MenuAddOnGroupName,
   minSelections?: number
   maxSelections?: number
   displayOrder?: number
 }
 
 export interface IMenuAddOnGroupUpdate {
-  name?: string
+  name?: MenuAddOnGroupName,
   minSelection?: number
   maxSelections?: number
 }
@@ -34,7 +35,7 @@ export class MenuAddOnGroup {
 
   private readonly id: string
   private readonly menuItemId: string
-  private name: string
+  private name: MenuAddOnGroupName
   private minSelections: number
   private maxSelections: number
   private status: MenuAddOnGroupStatus
@@ -137,7 +138,7 @@ export class MenuAddOnGroup {
     return this.menuItemId
   }
 
-  public getName(): string {
+  public getName(): MenuAddOnGroupName {
     return this.name
   }
 
@@ -147,6 +148,10 @@ export class MenuAddOnGroup {
 
   public getMaxSelections(): number {
     return this.maxSelections
+  }
+
+  public getStatus(): MenuAddOnGroupStatus {
+    return this.status
   }
 
   public getDisplayOrder(): number {

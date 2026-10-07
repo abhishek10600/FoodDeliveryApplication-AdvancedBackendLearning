@@ -38,21 +38,6 @@ export class MenuItemRepository implements IMenuItemRepository {
     return menuItems.map((menuItem) => MenuItemMapper.toDomain(menuItem))
   }
 
-  async findByName(menuCategoryId: string, name: string): Promise<MenuItem | null> {
-    const menuItem = await this.prisma.menuItem.findFirst({
-      where: {
-        menuCategoryId,
-        name
-      }
-    })
-
-    if (!menuItem) {
-      return null
-    }
-
-    return MenuItemMapper.toDomain(menuItem)
-  }
-
   async existsByName(menuCategoryId: string, name: string): Promise<Boolean> {
     const menuItem = await this.prisma.menuItem.findFirst({
       where: {

@@ -38,21 +38,6 @@ export class MenuCategoryRepository implements IMenuCategoryRepository {
     return menuCategories.map((menuCategory) => MenuCategoryMapper.toDomain(menuCategory))
   }
 
-  async findByName(menuId: string, name: string): Promise<MenuCategory | null> {
-    const menuCategory = await this.prisma.menuCategory.findFirst({
-      where: {
-        menuId,
-        name
-      }
-    })
-
-    if (!menuCategory) {
-      return null
-    }
-
-    return MenuCategoryMapper.toDomain(menuCategory)
-  }
-
   async existsByName(menuId: string, name: string): Promise<Boolean> {
     const menuCategory = await this.prisma.menuCategory.findFirst({
       where: {
