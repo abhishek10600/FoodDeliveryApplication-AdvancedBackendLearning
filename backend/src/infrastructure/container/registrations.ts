@@ -4,6 +4,7 @@ import { registerDelivery } from "./modules/delivery.js";
 import { registerDriver } from "./modules/driver.js";
 import { registerIdentity } from "./modules/identity.js";
 import { registerInfrastructure } from "./modules/infrastructure.js"
+import { registerMenu } from "./modules/menu.js";
 import { registerOrdering } from "./modules/ordering.js";
 import { registerPayment } from "./modules/payment.js";
 import { registerRestaurant } from "./modules/restaurant.js";
@@ -15,6 +16,7 @@ export const registerDependencies = (): void => {
   registerIdentity()
   registerCustomer()
   registerRestaurant()
+  registerMenu()
   registerOrdering()
   registerPayment()
   registerDelivery()
