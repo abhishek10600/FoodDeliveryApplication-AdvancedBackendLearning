@@ -10,7 +10,7 @@ export class MenuMapper {
   ) {
     return Menu.rehydrate({
       id: data.id,
-      restaurantId: data.id,
+      restaurantId: data.restaurantId,
       name: MenuName.create(data.name),
       status: data.status as MenuStatus,
       createdAt: data.createdAt,
