@@ -10,5 +10,10 @@ export const MenuTokens = {
   MenuUpdationUseCase: Symbol.for("Menu.MenuUpdationUseCase"),
   MenuActivateUseCase: Symbol.for("Menu.MenuActivateUseCase"),
   MenuDeactivateUseCase: Symbol.for("Menu.MenuDeactivateUseCase"),
-  MenuDeletioUseCase: Symbol.for("Menu.MenuDeletionUseCase")
+  MenuDeletioUseCase: Symbol.for("Menu.MenuDeletionUseCase"),
+  MenuByRestaurantIdUseCase: Symbol.for("Menu.MenuByRestaurantIdUseCase"),
+
+  MenuCategoryCreationUseCase: Symbol.for("Menu.MenuCategoryCreationUseCase"),
+  MenuCategoryListUseCase: Symbol.for("Menu.MenuCategoryListUseCase"),
+  MenuCategoryByIdUseCase: Symbol.for("Menu.MenuCategoryByIdUseCase")
 } as const
