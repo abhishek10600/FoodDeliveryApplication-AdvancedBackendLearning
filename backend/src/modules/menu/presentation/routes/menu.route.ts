@@ -20,6 +20,13 @@ import { restaurantByIdParamsSchema } from "../../../restaurent/validators/resta
 import { MenuCategoryListController } from "../controllers/menu-category-list.controller.js"
 import { menuCategoryByIdParamsSchema } from "../../validators/menu-category-by-id.validator.js"
 import { MenuCategoryByIdController } from "../controllers/menu-category-by-id.controller.js"
+import { updateMenuCategoryNameSchema } from "../../validators/update-menu-category-name.validator.js"
+import { MenuCategoryNameUpdateController } from "../controllers/menu-category-name-update.controller.js"
+import { updateMenuCategoryParamsSchema } from "../../validators/update-menu-category.validator.js"
+import { MenuCategoryDescriptionUpdateController } from "../controllers/menu-category-description-update.controller.js"
+import { updateMenuCategoryDescriptionSchema } from "../../validators/update-menu-category-description.validator.js"
+import { MenuCategoryDisplayOrderUpdateController } from "../controllers/menu-category-display-order-update.controller.js"
+import { updateMenuCategoryDisplayOrderSchema } from "../../validators/update-menu-category-display-order.validator.js"
 
 const router = express.Router()
 
@@ -34,6 +41,9 @@ const menuByRestaurantIdController = container.resolve(MenuByRestaurantIdControl
 const menuCategoryCreationController = container.resolve(MenuCategoryCreationController)
 const menuCategoryListController = container.resolve(MenuCategoryListController)
 const menuCategoryByIdController = container.resolve(MenuCategoryByIdController)
+const menuCategoryNameUpdateController = container.resolve(MenuCategoryNameUpdateController)
+const menuCategoryDescriptionUpdateController = container.resolve(MenuCategoryDescriptionUpdateController)
+const menuCategoryDisplayOrderUpdateController = container.resolve(MenuCategoryDisplayOrderUpdateController)
 
 const authenticationMiddleware = container.resolve(AuthenticationMiddleware)
 const authorizationMiddleware = container.resolve(AuthorizationMiddleware)
@@ -60,6 +70,12 @@ router.route("/category/:menuId/create").post(authenticationMiddleware.authentic
 
 router.route("/category/:menuId").get(validate({ params: menuByIdParamSchema }), menuCategoryListController.handle.bind(menuCategoryListController))
 
-router.route("/category/cid/:categoryId").get(validate({params: menuCategoryByIdParamsSchema }), menuCategoryByIdController.handle.bind(menuCategoryByIdController))
+router.route("/category/cid/:categoryId").get(validate({ params: menuCategoryByIdParamsSchema }), menuCategoryByIdController.handle.bind(menuCategoryByIdController))
+
+router.route("/restaurant/:restaurantId/category/:categoryId/update-name").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuCategoryParamsSchema }), validate({ body: updateMenuCategoryNameSchema }), menuCategoryNameUpdateController.handle.bind(menuCategoryNameUpdateController))
+
+router.route("/restaurant/:restaurantId/category/:categoryId/update-description").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuCategoryParamsSchema }), validate({ body: updateMenuCategoryDescriptionSchema }), menuCategoryDescriptionUpdateController.handle.bind(menuCategoryDescriptionUpdateController))
+
+router.route("/restaurant/:restaurantId/category/:categoryId/update-display-order").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuCategoryParamsSchema }), validate({ body: updateMenuCategoryDisplayOrderSchema }), menuCategoryDisplayOrderUpdateController.handle.bind(menuCategoryDisplayOrderUpdateController))
 
 export default router;

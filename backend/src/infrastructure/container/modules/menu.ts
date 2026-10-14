@@ -15,6 +15,9 @@ import { MenuCategoryCreationUseCaseImpl } from "../../../modules/menu/applicati
 import { MenuByRestaurantIdUseCaseImpl } from "../../../modules/menu/application/use-cases/menu/menu-by-restaurant-id.use-case.impl.js"
 import { MenuCategoryListUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-category/menu-category-list.use-case.impl.js"
 import { MenuCategoryByIdUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-category/menu-category-by-id.use-case.impl.js"
+import { MenuCategoryNameUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-category/menu-category-name-update.use-case.impl.js"
+import { MenuCategoryDescriptionUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-category/menu-category-description-update.use-case.impl.js"
+import { MenuCategoryDisplayOrderUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-category/menu-category-display-order-update.use-case.impl.js"
 
 export const registerMenu = (): void => {
   container.register(MenuTokens.MenuRepository, {
@@ -56,4 +59,10 @@ export const registerMenu = (): void => {
   container.registerSingleton(MenuTokens.MenuCategoryListUseCase, MenuCategoryListUseCaseImpl)
 
   container.registerSingleton(MenuTokens.MenuCategoryByIdUseCase, MenuCategoryByIdUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuCategoryNameUpdateUseCase, MenuCategoryNameUpdateUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuCategoryDescriptionUpdateUseCase, MenuCategoryDescriptionUpdateUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuCategoryDisplayOrderUpdateUseCase, MenuCategoryDisplayOrderUpdateUseCaseImpl)
 }
