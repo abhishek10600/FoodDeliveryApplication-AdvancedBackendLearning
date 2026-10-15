@@ -27,6 +27,8 @@ import { MenuCategoryDescriptionUpdateController } from "../controllers/menu-cat
 import { updateMenuCategoryDescriptionSchema } from "../../validators/update-menu-category-description.validator.js"
 import { MenuCategoryDisplayOrderUpdateController } from "../controllers/menu-category-display-order-update.controller.js"
 import { updateMenuCategoryDisplayOrderSchema } from "../../validators/update-menu-category-display-order.validator.js"
+import { MenuCategoryStatusUpdateController } from "../controllers/menu-category-status-update.controller.js"
+import { MenuCategoryDeleteController } from "../controllers/menu-category-delete.controller.js"
 
 const router = express.Router()
 
@@ -44,6 +46,8 @@ const menuCategoryByIdController = container.resolve(MenuCategoryByIdController)
 const menuCategoryNameUpdateController = container.resolve(MenuCategoryNameUpdateController)
 const menuCategoryDescriptionUpdateController = container.resolve(MenuCategoryDescriptionUpdateController)
 const menuCategoryDisplayOrderUpdateController = container.resolve(MenuCategoryDisplayOrderUpdateController)
+const menuCategoryStatusUpdateController = container.resolve(MenuCategoryStatusUpdateController)
+const menuCategoryDeleteController = container.resolve(MenuCategoryDeleteController)
 
 const authenticationMiddleware = container.resolve(AuthenticationMiddleware)
 const authorizationMiddleware = container.resolve(AuthorizationMiddleware)
@@ -77,5 +81,9 @@ router.route("/restaurant/:restaurantId/category/:categoryId/update-name").patch
 router.route("/restaurant/:restaurantId/category/:categoryId/update-description").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuCategoryParamsSchema }), validate({ body: updateMenuCategoryDescriptionSchema }), menuCategoryDescriptionUpdateController.handle.bind(menuCategoryDescriptionUpdateController))
 
 router.route("/restaurant/:restaurantId/category/:categoryId/update-display-order").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuCategoryParamsSchema }), validate({ body: updateMenuCategoryDisplayOrderSchema }), menuCategoryDisplayOrderUpdateController.handle.bind(menuCategoryDisplayOrderUpdateController))
+
+router.route("/restaurant/:restaurantId/category/:categoryId/update-status").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuCategoryParamsSchema }), menuCategoryStatusUpdateController.handle.bind(menuCategoryStatusUpdateController))
+
+router.route("/restaurant/:restaurantId/category/:categoryId").delete(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuCategoryParamsSchema }), menuCategoryDeleteController.handle.bind(menuCategoryDeleteController))
 
 export default router;
