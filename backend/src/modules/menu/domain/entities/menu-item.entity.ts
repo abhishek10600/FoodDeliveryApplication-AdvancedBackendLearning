@@ -44,11 +44,11 @@ export class MenuItem {
   private updatedAt: Date
 
   constructor(props: IMenuItemProps) {
-    this.id = crypto.randomUUID()
+    this.id = props.id
     this.menuCategoryId = props.menuCategoryId
     this.name = props.name
     this.description = props.description ?? null
-    this.imageUrl = props.imageUrl ?? null
+    this.imageUrl = props.imageUrl
     this.status = MenuItemStatus.ACTIVE
     this.price = props.price
     this.currency = props.currency
