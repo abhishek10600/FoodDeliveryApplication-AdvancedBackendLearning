@@ -35,6 +35,12 @@ import { createMenuItemSchema } from "../../validators/create-menu-item.validato
 import { MenuItemListController } from "../controllers/menu-item-list.controller.js"
 import { MenuItemByIdController } from "../controllers/menu-item-by-id.controller.js"
 import { menuItemByIdParamsSchema } from "../../validators/menu-item-by-id.validator.js"
+import { MenuItemNameUpdateController } from "../controllers/menu-item-name-update.controller.js"
+import { updateMenuItemParamsSchema } from "../../validators/update-menu-item-params.validator.js"
+import { updateMenuItemNameSchema } from "../../validators/update-menu-item-name.validator.js"
+import { MenuItemDescriptionUpdateController } from "../controllers/menu-item-description-update.controller.js"
+import { MenuItemImageUpdateController } from "../controllers/menu-item-image-update.controller.js"
+import { menuItemImageUpload } from "../middleware/menu-item-image-upload.middleware.js"
 
 const router = express.Router()
 
@@ -58,6 +64,9 @@ const menuCategoryDeleteController = container.resolve(MenuCategoryDeleteControl
 const menuItemCreationController = container.resolve(MenuItemCreationController)
 const menuItemListController = container.resolve(MenuItemListController)
 const menuItemByIdController = container.resolve(MenuItemByIdController)
+const menuItemNameUpdateController = container.resolve(MenuItemNameUpdateController)
+const menuItemDescriptionUpdateController = container.resolve(MenuItemDescriptionUpdateController)
+const menuItemImageUpdateController = container.resolve(MenuItemImageUpdateController)
 
 const authenticationMiddleware = container.resolve(AuthenticationMiddleware)
 const authorizationMiddleware = container.resolve(AuthorizationMiddleware)
@@ -103,5 +112,11 @@ router.route("/restaurant/:restaurantId/category/:categoryId/menu-item/create").
 router.route("/category/:categoryId/menu-item/list").get(validate({ params: menuCategoryByIdParamsSchema }), menuItemListController.handle.bind(menuItemListController))
 
 router.route("/menu-item/:id").get(validate({ params: menuItemByIdParamsSchema }), menuItemByIdController.handle.bind(menuItemByIdController))
+
+router.route("/restaurant/:restaurantId/category/:categoryId/menu-item/:menuItemId/update-name").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuItemParamsSchema }), validate({ body: updateMenuItemNameSchema }), menuItemNameUpdateController.handle.bind(menuItemNameUpdateController))
+
+router.route("/restaurant/:restaurantId/category/:categoryId/menu-item/:menuItemId/update-description").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuItemParamsSchema }), menuItemDescriptionUpdateController.handle.bind(menuItemDescriptionUpdateController))
+
+router.route("/restaurant/:restaurantId/category/:categoryId/menu-item/:menuItemId/update-image").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuItemParamsSchema }), menuItemImageUpload.single("menuItemImage"), menuItemImageUpdateController.handle.bind(menuItemImageUpdateController))
 
 export default router;
