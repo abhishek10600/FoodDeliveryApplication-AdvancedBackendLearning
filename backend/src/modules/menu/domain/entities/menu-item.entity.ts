@@ -49,7 +49,7 @@ export class MenuItem {
     this.name = props.name
     this.description = props.description ?? null
     this.imageUrl = props.imageUrl
-    this.status = MenuItemStatus.ACTIVE
+    this.status = props.status
     this.price = props.price
     this.currency = props.currency
     this.displayOrder = props.displayOrder ?? 0
@@ -104,6 +104,7 @@ export class MenuItem {
       throw new MenuDomainError("Menu item status is already active", 400)
     }
 
+    console.log({MenuItemEntityStatus: this.status})
     this.status = MenuItemStatus.ACTIVE
     this.touch()
   }
@@ -113,7 +114,9 @@ export class MenuItem {
       throw new MenuDomainError("Menu item status is already inactive", 400)
     }
 
+    console.log({MenuItemEntityStatus: this.status})
     this.status = MenuItemStatus.INACTIVE
+    console.log({MenuItemEntityStatusAfterChange: this.status})
     this.touch()
   }
 

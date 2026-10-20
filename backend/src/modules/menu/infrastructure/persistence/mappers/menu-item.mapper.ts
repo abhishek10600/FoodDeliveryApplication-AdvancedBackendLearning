@@ -4,6 +4,21 @@ import { MenuItemStatus } from "../../../domain/enums/menu-item-status.enum.js"
 import { MenuItemDescription } from "../../../domain/value-objects/menu-item-description.vo.js"
 import { MenuItemImageUrl } from "../../../domain/value-objects/menu-item-image-url.vo.js"
 import { MenuItemName } from "../../../domain/value-objects/menu-item-name.vo.js"
+import { IMenuItemWithForeignData } from "../../../types/index.js"
+
+export type MenuItemWithForeignDataPayload = Prisma.MenuItemGetPayload<{
+  include: {
+    category: {
+      include: {
+        menu: {
+          include: {
+            restaurant: true
+          }
+        }
+      }
+    }
+  }
+}>
 
 export class MenuItemMapper {
   public static toDomain(data: Prisma.MenuItemGetPayload<{}>): MenuItem {
@@ -21,6 +36,31 @@ export class MenuItemMapper {
       createdAt: data.createdAt,
       updatedAt: data.updatedAt
     })
+  }
+
+  public static toDomainWithForeignData(data: MenuItemWithForeignDataPayload): IMenuItemWithForeignData {
+    return {
+      menuItem: this.toDomain(data),
+      category: {
+        id: data.category.id,
+        name: data.category.name,
+        description: data.category.description,
+        displayOrder: data.category.displayOrder,
+        status: data.category.status,
+        createdAt: data.createdAt,
+        updateAt: data.updatedAt
+      },
+      menu: {
+        id: data.category.menu.id,
+        name: data.category.menu.name,
+        status: data.category.status
+      },
+      restaurant: {
+        id: data.category.menu.restaurant.id,
+        name: data.category.menu.restaurant.name,
+        ownerId: data.category.menu.restaurant.ownerId
+      }
+    }
   }
 
   public static toPersistence(menuItem: MenuItem): Prisma.MenuItemCreateInput {

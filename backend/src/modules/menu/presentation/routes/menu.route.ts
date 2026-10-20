@@ -41,6 +41,13 @@ import { updateMenuItemNameSchema } from "../../validators/update-menu-item-name
 import { MenuItemDescriptionUpdateController } from "../controllers/menu-item-description-update.controller.js"
 import { MenuItemImageUpdateController } from "../controllers/menu-item-image-update.controller.js"
 import { menuItemImageUpload } from "../middleware/menu-item-image-upload.middleware.js"
+import { MenuItemPriceUpdateController } from "../controllers/menu-item-price-update.controller.js"
+import { menuItemPriceUpdateSchema } from "../../validators/menu-item-price-update.validator.js"
+import { MenuItemCurrencyUpdateController } from "../controllers/menu-item-currency-update.controller.js"
+import { menuItemCurrencyUpdateSchema } from "../../validators/menu-item-currency-update.validator.js"
+import { MenuItemStatusUpdateController } from "../controllers/menu-item-status-update.controller.js"
+import { MenuItemDeletionController } from "../controllers/menu-item-deletion.controller.js"
+import { MenuItemAvailabilityUpdateController } from "../controllers/menu-item-availability-update.controller.js"
 
 const router = express.Router()
 
@@ -67,6 +74,11 @@ const menuItemByIdController = container.resolve(MenuItemByIdController)
 const menuItemNameUpdateController = container.resolve(MenuItemNameUpdateController)
 const menuItemDescriptionUpdateController = container.resolve(MenuItemDescriptionUpdateController)
 const menuItemImageUpdateController = container.resolve(MenuItemImageUpdateController)
+const menuItemPriceUpdateController = container.resolve(MenuItemPriceUpdateController)
+const menuItemCurrencyUpdateController = container.resolve(MenuItemCurrencyUpdateController)
+const menuItemStatusUpdateController = container.resolve(MenuItemStatusUpdateController)
+const menuItemDeletionController = container.resolve(MenuItemDeletionController)
+const menuItemAvailabilityUpdateController = container.resolve(MenuItemAvailabilityUpdateController)
 
 const authenticationMiddleware = container.resolve(AuthenticationMiddleware)
 const authorizationMiddleware = container.resolve(AuthorizationMiddleware)
@@ -118,5 +130,15 @@ router.route("/restaurant/:restaurantId/category/:categoryId/menu-item/:menuItem
 router.route("/restaurant/:restaurantId/category/:categoryId/menu-item/:menuItemId/update-description").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuItemParamsSchema }), menuItemDescriptionUpdateController.handle.bind(menuItemDescriptionUpdateController))
 
 router.route("/restaurant/:restaurantId/category/:categoryId/menu-item/:menuItemId/update-image").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuItemParamsSchema }), menuItemImageUpload.single("menuItemImage"), menuItemImageUpdateController.handle.bind(menuItemImageUpdateController))
+
+router.route("/restaurant/:restaurantId/category/:categoryId/menu-item/:menuItemId/update-price").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuItemParamsSchema }), validate({ body: menuItemPriceUpdateSchema }), menuItemPriceUpdateController.handle.bind(menuItemPriceUpdateController))
+
+router.route("/menu-item/:id/update-currency").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: menuItemByIdParamsSchema }), validate({ body: menuItemCurrencyUpdateSchema }), menuItemCurrencyUpdateController.handle.bind(menuItemCurrencyUpdateController))
+
+router.route("/menu-item/:id/update-status").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: menuItemByIdParamsSchema }), menuItemStatusUpdateController.handle.bind(menuItemStatusUpdateController))
+
+router.route("/menu-item/:id/update-availability").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: menuItemByIdParamsSchema }), menuItemAvailabilityUpdateController.handle.bind(menuItemAvailabilityUpdateController))
+
+router.route("/menu-item/:id").delete(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: menuItemByIdParamsSchema }), menuItemDeletionController.handle.bind(menuItemDeletionController))
 
 export default router;

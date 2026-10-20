@@ -27,6 +27,11 @@ export const MenuTokens = {
   MenuItemByIdUseCase: Symbol.for("Menu.MenuItemByIdUseCase"),
   MenuItemNameUpdateUseCase: Symbol.for("Menu.MenuItemNameUpdateUseCase"),
   MenuItemDescriptionUpdateUseCase: Symbol.for("Menu.MenuItemDescriptionUpdateUseCase"),
-  MenuItemImageUpdateUseCase: Symbol.for("Menu.MenuItemImageUpdateUseCase")
+  MenuItemImageUpdateUseCase: Symbol.for("Menu.MenuItemImageUpdateUseCase"),
+  MenuItemPriceUpdateUseCase: Symbol.for("Menu.MenuItemPriceUpdateUseCase"),
+  MenuItemCurrencyUpdateUseCase: Symbol.for("Menu.MenuItemCurrencyUpdateUseCase"),
+  MenuItemStatusUpdateUseCase: Symbol.for("Menu.MenuItemStatusUpdateUseCase"),
+  MenuItemDeletionUseCase: Symbol.for("Menu.MenuItemDeletionUseCase"),
+  MenuItemAvailabilityUpdateUseCase: Symbol.for("Menu.MenuItemAvailabilityUpdateUseCase"),
 
 } as const

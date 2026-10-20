@@ -26,6 +26,11 @@ import { MenuItemByIdUseCaseImpl } from "../../../modules/menu/application/use-c
 import { MenuItemNameUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-item/menu-item-name-update.use-case.impl.js"
 import { MenuItemDescriptonUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-item/menu-item-description-update.use-case.impl.js"
 import { MenuItemImageUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-item/menu-item-image-update.use-case.impl.js"
+import { MenuItemPriceUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-item/menu-item-price-update.use-case.impl.js"
+import { MenuItemCurrencyUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-item/menu-item-currency-update.use-case.impl.js"
+import { MenuItemStatusUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-item/menu-item-status-update.use-case.impl.js"
+import { MenuItemDeletionUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-item/menu-item-deletion.use-case.impl.js"
+import { MenuItemAvailabilityUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-item/menu-item-availability-update.use-case.impl.js"
 
 export const registerMenu = (): void => {
   container.register(MenuTokens.MenuRepository, {
@@ -89,4 +94,14 @@ export const registerMenu = (): void => {
   container.registerSingleton(MenuTokens.MenuItemDescriptionUpdateUseCase, MenuItemDescriptonUpdateUseCaseImpl)
 
   container.registerSingleton(MenuTokens.MenuItemImageUpdateUseCase, MenuItemImageUpdateUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuItemPriceUpdateUseCase, MenuItemPriceUpdateUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuItemCurrencyUpdateUseCase, MenuItemCurrencyUpdateUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuItemStatusUpdateUseCase, MenuItemStatusUpdateUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuItemDeletionUseCase, MenuItemDeletionUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuItemAvailabilityUpdateUseCase, MenuItemAvailabilityUpdateUseCaseImpl)
 }

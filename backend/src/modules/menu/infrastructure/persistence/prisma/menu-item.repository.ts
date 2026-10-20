@@ -4,6 +4,7 @@ import { InfrastructureTokens } from "../../../../../infrastructure/container/in
 import type { PrismaExecutor } from "../../../../../infrastructure/database/prisma-client.type.js";
 import { MenuItem } from "../../../domain/entities/menu-item.entity.js";
 import { MenuItemMapper } from "../mappers/menu-item.mapper.js";
+import { IMenuItemWithForeignData } from "../../../types/index.js";
 
 @injectable()
 export class MenuItemRepository implements IMenuItemRepository {
@@ -26,6 +27,33 @@ export class MenuItemRepository implements IMenuItemRepository {
     }
 
     return MenuItemMapper.toDomain(menuItem)
+  }
+
+  async findByIdIncludeForeignData(id: string): Promise<IMenuItemWithForeignData | null> {
+    const menuItem = await this.prisma.menuItem.findUnique({
+      where: {
+        id
+      },
+      include: {
+        category: {
+          include: {
+            menu: {
+              include: {
+                restaurant: true
+              }
+            }
+          }
+        }
+      }
+    })
+
+    if (!menuItem) {
+      return null
+    }
+
+    console.log({ menuItemFromRepository: menuItem })
+
+    return MenuItemMapper.toDomainWithForeignData(menuItem)
   }
 
   async findByMenuCategoryId(menuCategoryId: string): Promise<MenuItem[]> {

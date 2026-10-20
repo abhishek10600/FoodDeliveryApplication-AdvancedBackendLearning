@@ -1,7 +1,9 @@
+import { IMenuItemWithForeignData } from "../../types/index.js";
 import { MenuItem } from "../entities/menu-item.entity.js";
 
 export interface IMenuItemRepository {
   findById(id: string): Promise<MenuItem | null>
+  findByIdIncludeForeignData(id: string): Promise<IMenuItemWithForeignData | null>
   findByMenuCategoryId(menuCategoryId: string): Promise<MenuItem[]>
   existsByName(menuCategoryId: string, name: string): Promise<Boolean>
   create(menuItem: MenuItem): Promise<MenuItem>

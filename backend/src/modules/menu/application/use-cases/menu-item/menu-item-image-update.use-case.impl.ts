@@ -61,16 +61,46 @@ export class MenuItemImageUpdateUseCaseImpl implements MenuItemImageUpdateUseCas
 
     const key = `menuitems/${input.id}/menuitemimage/${crypto.randomUUID()}${extension}`
 
-    const response = await this.fileStorage.upload({
-      key,
-      body: input.file.buffer,
-      contentType: input.file.mimetype,
-      contentLength: input.file.size
-    })
+    if (!menuItem.getImageUrl()) {
 
-    const menuItemImageUrl = response.url
+      const response = await this.fileStorage.upload({
+        key,
+        body: input.file.buffer,
+        contentType: input.file.mimetype,
+        contentLength: input.file.size
+      })
 
-    menuItem.updateImageUrl(MenuItemImageUrl.create(menuItemImageUrl))
+      const menuItemImageUrl = response.url
+
+      menuItem.updateImageUrl(MenuItemImageUrl.create(menuItemImageUrl))
+
+    } else {
+      const oldMenuItemImageUrl = await menuItem.getImageUrl()?.getValue()
+
+      if (!oldMenuItemImageUrl) {
+        return
+      }
+
+      const response = await this.fileStorage.upload({
+        key,
+        body: input.file.buffer,
+        contentType: input.file.mimetype,
+        contentLength: input.file.size
+      })
+
+      const newItemImageUrl = response.url
+
+      menuItem.updateImageUrl(MenuItemImageUrl.create(newItemImageUrl))
+
+      const oldMenuItemImageKey = this.extractStorageKey(oldMenuItemImageUrl)
+
+      if (!oldMenuItemImageKey) {
+        return
+      }
+
+      await this.fileStorage.delete(oldMenuItemImageKey)
+    }
+
 
     await this.menuItemRepo.update(input.id, menuItem)
 
@@ -84,5 +114,17 @@ export class MenuItemImageUpdateUseCaseImpl implements MenuItemImageUpdateUseCas
     }
 
     return filename.slice(index).toLowerCase()
+  }
+
+  private extractStorageKey(avatarUrl: string): string | null {
+    try {
+      const url = new URL(avatarUrl);
+
+      const key = url.pathname.replace(/^\/+/, "");
+
+      return key ? decodeURIComponent(key) : null;
+    } catch {
+      return null;
+    }
   }
 }
