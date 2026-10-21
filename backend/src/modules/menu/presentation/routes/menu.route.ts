@@ -48,6 +48,14 @@ import { menuItemCurrencyUpdateSchema } from "../../validators/menu-item-currenc
 import { MenuItemStatusUpdateController } from "../controllers/menu-item-status-update.controller.js"
 import { MenuItemDeletionController } from "../controllers/menu-item-deletion.controller.js"
 import { MenuItemAvailabilityUpdateController } from "../controllers/menu-item-availability-update.controller.js"
+import { MenuAddOnGroupCreationController } from "../controllers/menu-add-on-group-creation.controller.js"
+import { menuAddOnGroupCreationSchema } from "../../validators/menu-add-on-group-creation.validator.js"
+import { MenuAddOnGroupUpdateController } from "../controllers/menu-add-on-group-update.controller.js"
+import { menuAddOnGroupUpdateSchema } from "../../validators/menu-add-on-group-update.validator.js"
+import { MenuAddOnGroupByMenuItemIdController } from "../controllers/menu-add-on-group-by-menu-item-id.controller.js"
+import { updateMenuAddOnGroupParamsSchema } from "../../validators/update-menu-add-on-group-params.validator.js"
+import { MenuAddOnGroupStatusUpdateController } from "../controllers/menu-add-on-group-status-update.controller.js"
+import { MenuAddOnGroupDeletionController } from "../controllers/menu-add-on-group-deletion.controller.js"
 
 const router = express.Router()
 
@@ -79,6 +87,12 @@ const menuItemCurrencyUpdateController = container.resolve(MenuItemCurrencyUpdat
 const menuItemStatusUpdateController = container.resolve(MenuItemStatusUpdateController)
 const menuItemDeletionController = container.resolve(MenuItemDeletionController)
 const menuItemAvailabilityUpdateController = container.resolve(MenuItemAvailabilityUpdateController)
+
+const menuAddOnGroupCreationController = container.resolve(MenuAddOnGroupCreationController)
+const menuAddOnGroupUpdateController = container.resolve(MenuAddOnGroupUpdateController)
+const menuAddOnGroupByMenuItemIdController = container.resolve(MenuAddOnGroupByMenuItemIdController)
+const menuAddOnGroupStatusUpdateController = container.resolve(MenuAddOnGroupStatusUpdateController)
+const menuAddOnGroupDeletionController = container.resolve(MenuAddOnGroupDeletionController)
 
 const authenticationMiddleware = container.resolve(AuthenticationMiddleware)
 const authorizationMiddleware = container.resolve(AuthorizationMiddleware)
@@ -140,5 +154,18 @@ router.route("/menu-item/:id/update-status").patch(authenticationMiddleware.auth
 router.route("/menu-item/:id/update-availability").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: menuItemByIdParamsSchema }), menuItemAvailabilityUpdateController.handle.bind(menuItemAvailabilityUpdateController))
 
 router.route("/menu-item/:id").delete(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: menuItemByIdParamsSchema }), menuItemDeletionController.handle.bind(menuItemDeletionController))
+
+
+
+// menu add on group route
+router.route("/menu-add-on-group/menu-item/:id").post(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: menuItemByIdParamsSchema }), validate({ body: menuAddOnGroupCreationSchema }), menuAddOnGroupCreationController.handle.bind(menuAddOnGroupCreationController))
+
+router.route("/menu-add-on-group/menu-item/:id").get(validate({ params: menuItemByIdParamsSchema }), menuAddOnGroupByMenuItemIdController.handle.bind(menuAddOnGroupByMenuItemIdController))
+
+router.route("/menu-add-on-group/:menuAddOnGroupId/menu-item/:menuItemId").put(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuAddOnGroupParamsSchema }), validate({ body: menuAddOnGroupUpdateSchema }), menuAddOnGroupUpdateController.handle.bind(menuAddOnGroupUpdateController))
+
+router.route("/menu-add-on-group/:menuAddOnGroupId/menu-item/:menuItemId").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuAddOnGroupParamsSchema }), menuAddOnGroupStatusUpdateController.handle.bind(menuAddOnGroupStatusUpdateController))
+
+router.route("/menu-add-on-group/:menuAddOnGroupId/menu-item/:menuItemId").delete(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuAddOnGroupParamsSchema }), menuAddOnGroupDeletionController.handle.bind(menuAddOnGroupDeletionController))
 
 export default router;

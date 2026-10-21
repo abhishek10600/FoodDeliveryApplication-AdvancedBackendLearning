@@ -107,7 +107,11 @@ export class MenuAddOnGroup {
       throw new MenuDomainError(`Menu add on group status is already active.`, 400)
     }
 
-    this.status = MenuAddOnGroupStatus.INACTIVE
+    console.log({menuAddOnGroupStatusBefore: this.status})
+
+    this.status = MenuAddOnGroupStatus.ACTIVE
+
+    console.log({menuAddOnGroupStatusAfter: this.status})
 
     this.touch()
   }
@@ -117,7 +121,11 @@ export class MenuAddOnGroup {
       throw new MenuDomainError(`Menu add on group status is already inactive`, 400)
     }
 
-    this.status = MenuAddOnGroupStatus.ACTIVE
+    console.log({menuAddOnGroupStatusBefore: this.status})
+
+    this.status = MenuAddOnGroupStatus.INACTIVE
+
+    console.log({menuAddOnGroupStatusAfter: this.status})
 
     this.touch()
   }

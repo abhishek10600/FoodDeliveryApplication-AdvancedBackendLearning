@@ -31,6 +31,11 @@ import { MenuItemCurrencyUpdateUseCaseImpl } from "../../../modules/menu/applica
 import { MenuItemStatusUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-item/menu-item-status-update.use-case.impl.js"
 import { MenuItemDeletionUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-item/menu-item-deletion.use-case.impl.js"
 import { MenuItemAvailabilityUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-item/menu-item-availability-update.use-case.impl.js"
+import { MenuAddOnGroupCreationUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-add-on-group/menu-add-on-group-creation.use-case.impl.js"
+import { MenuAddOnGroupUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-add-on-group/menu-add-on-group-update.use-case.impl.js"
+import { MenuAddOnGroupByMenuItemIdUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-add-on-group/menu-add-on-group-by-menu-item-id.use-case.impl.js"
+import { MenuAddOnGroupStatusUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-add-on-group/menu-add-on-group-status-update.use-case.impl.js"
+import { MenuAddOnGroupDeletionUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-add-on-group/menu-add-on-group-deletion.use-case.impl.js"
 
 export const registerMenu = (): void => {
   container.register(MenuTokens.MenuRepository, {
@@ -49,7 +54,7 @@ export const registerMenu = (): void => {
     useClass: MenuAddOnGroupRepository
   })
 
-  container.register(MenuTokens.MenuAddOnGroupRepository, {
+  container.register(MenuTokens.MenuAddOnRepository, {
     useClass: MenuAddOnRepository
   })
 
@@ -104,4 +109,14 @@ export const registerMenu = (): void => {
   container.registerSingleton(MenuTokens.MenuItemDeletionUseCase, MenuItemDeletionUseCaseImpl)
 
   container.registerSingleton(MenuTokens.MenuItemAvailabilityUpdateUseCase, MenuItemAvailabilityUpdateUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuAddOnGroupCreationUseCase, MenuAddOnGroupCreationUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuAddOnGroupUpdateUseCase, MenuAddOnGroupUpdateUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuAddOnGroupByMenuItemIdUseCase, MenuAddOnGroupByMenuItemIdUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuAddOnGroupStatusUpdateUseCase, MenuAddOnGroupStatusUpdateUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuAddOnGroupDeletionUseCase, MenuAddOnGroupDeletionUseCaseImpl)
 }

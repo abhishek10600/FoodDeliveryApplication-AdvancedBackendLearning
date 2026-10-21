@@ -3,7 +3,7 @@ export const MenuTokens = {
   MenuCategoryRepository: Symbol.for("Menu.MenuCategoryRepository"),
   MenuItemRepository: Symbol.for("Menu.MenuItemRepository"),
   MenuAddOnGroupRepository: Symbol.for("Menu.MenuAddOnGroupRepository"),
-  MenuAddOn: Symbol.for("Menu.MenuAddOnRepository"),
+  MenuAddOnRepository: Symbol.for("Menu.MenuAddOnRepository"),
 
   MenuCreationUseCase: Symbol.for("Menu.MenuCreationUseCase"),
   MenuByIdUseCase: Symbol.for("Menu.MenuByIdUseCase"),
@@ -33,5 +33,11 @@ export const MenuTokens = {
   MenuItemStatusUpdateUseCase: Symbol.for("Menu.MenuItemStatusUpdateUseCase"),
   MenuItemDeletionUseCase: Symbol.for("Menu.MenuItemDeletionUseCase"),
   MenuItemAvailabilityUpdateUseCase: Symbol.for("Menu.MenuItemAvailabilityUpdateUseCase"),
+
+  MenuAddOnGroupCreationUseCase: Symbol.for("Menu.MenuAddOnGroupCreationUseCase"),
+  MenuAddOnGroupUpdateUseCase: Symbol.for("Menu.MenuAddOnGroupUpdateUseCase"),
+  MenuAddOnGroupByMenuItemIdUseCase: Symbol.for("Menu.MenuAddOnGroupByMenuItemIdUseCase"),
+  MenuAddOnGroupStatusUpdateUseCase: Symbol.for("Menu.MenuAddOnGroupStatusUpdateUseCase"),
+  MenuAddOnGroupDeletionUseCase: Symbol.for("Menu.MenuAddOnGroupDeletionUseCase")
 
 } as const
