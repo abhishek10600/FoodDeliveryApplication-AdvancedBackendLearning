@@ -38,6 +38,8 @@ export const MenuTokens = {
   MenuAddOnGroupUpdateUseCase: Symbol.for("Menu.MenuAddOnGroupUpdateUseCase"),
   MenuAddOnGroupByMenuItemIdUseCase: Symbol.for("Menu.MenuAddOnGroupByMenuItemIdUseCase"),
   MenuAddOnGroupStatusUpdateUseCase: Symbol.for("Menu.MenuAddOnGroupStatusUpdateUseCase"),
-  MenuAddOnGroupDeletionUseCase: Symbol.for("Menu.MenuAddOnGroupDeletionUseCase")
+  MenuAddOnGroupDeletionUseCase: Symbol.for("Menu.MenuAddOnGroupDeletionUseCase"),
+
+  MenuAddOnCreationUseCase: Symbol.for("Menu.MenuAddOnCreationUseCase"),
 
 } as const

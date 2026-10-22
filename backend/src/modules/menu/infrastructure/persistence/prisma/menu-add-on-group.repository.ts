@@ -4,6 +4,7 @@ import { InfrastructureTokens } from "../../../../../infrastructure/container/in
 import type { PrismaExecutor } from "../../../../../infrastructure/database/prisma-client.type.js";
 import { MenuAddOnGroup } from "../../../domain/entities/menu-add-on-group.entity.js";
 import { MenuAddOnGroupMapper } from "../mappers/menu-add-on-group.mapper.js";
+import { IMenuAddOnGroupWithForeignData } from "../../../types/index.js";
 
 @injectable()
 export class MenuAddOnGroupRepository implements IMenuAddOnGroupRepository {
@@ -26,6 +27,35 @@ export class MenuAddOnGroupRepository implements IMenuAddOnGroupRepository {
     }
 
     return MenuAddOnGroupMapper.toDomain(menuAddOnGroup)
+  }
+
+  async findByIdIncludeForeignData(id: string): Promise<IMenuAddOnGroupWithForeignData | null> {
+    const menuAddOnGroup = await this.prisma.menuAddOnGroup.findUnique({
+      where: {
+        id
+      },
+      include: {
+        menuItem: {
+          include: {
+            category: {
+              include: {
+                menu: {
+                  include: {
+                    restaurant: true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    })
+
+    if (!menuAddOnGroup) {
+      return null
+    }
+
+    return MenuAddOnGroupMapper.toDomainWithForeignData(menuAddOnGroup)
   }
 
   async findByMenuItemId(menuItemId: string): Promise<MenuAddOnGroup[]> {

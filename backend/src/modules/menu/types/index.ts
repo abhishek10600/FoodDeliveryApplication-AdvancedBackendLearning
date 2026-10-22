@@ -1,3 +1,4 @@
+import { MenuAddOnGroup } from "../domain/entities/menu-add-on-group.entity.js"
 import { MenuItem } from "../domain/entities/menu-item.entity.js"
 
 export interface IMenuItemWithForeignData {
@@ -21,4 +22,24 @@ export interface IMenuItemWithForeignData {
     name: string,
     ownerId: string
     }
+}
+
+export interface IMenuAddOnGroupWithForeignData {
+  menuAddOnGroup: MenuAddOnGroup,
+  menuItem: {
+    id: string,
+    menuCategoryId: string
+  },
+  category: {
+    id: string
+    menuId: string
+  },
+  menu: {
+    id: string
+    restaurantId: string
+  },
+  restaurant: {
+    id: string
+    ownerId: string
+  }
 }

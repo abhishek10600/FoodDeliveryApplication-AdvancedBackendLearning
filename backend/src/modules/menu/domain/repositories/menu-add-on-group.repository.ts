@@ -1,7 +1,9 @@
+import { IMenuAddOnGroupWithForeignData } from "../../types/index.js";
 import { MenuAddOnGroup } from "../entities/menu-add-on-group.entity.js";
 
 export interface IMenuAddOnGroupRepository {
   findById(id: string): Promise<MenuAddOnGroup | null>
+  findByIdIncludeForeignData(id: string): Promise<IMenuAddOnGroupWithForeignData | null>
   findByMenuItemId(menuItemId: string): Promise<MenuAddOnGroup[]>
   existsByName(menuItemId: string, name: string): Promise<Boolean>
   create(menuAddOnGroup: MenuAddOnGroup): Promise<MenuAddOnGroup>

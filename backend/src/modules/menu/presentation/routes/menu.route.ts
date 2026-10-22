@@ -56,6 +56,9 @@ import { MenuAddOnGroupByMenuItemIdController } from "../controllers/menu-add-on
 import { updateMenuAddOnGroupParamsSchema } from "../../validators/update-menu-add-on-group-params.validator.js"
 import { MenuAddOnGroupStatusUpdateController } from "../controllers/menu-add-on-group-status-update.controller.js"
 import { MenuAddOnGroupDeletionController } from "../controllers/menu-add-on-group-deletion.controller.js"
+import { MenuAddOnCreationController } from "../controllers/menu-add-on-creation.controller.js"
+import { menuAddOnGroupByIdParamsSchema } from "../../validators/menu-add-on-group-by-id.validator.js"
+import { menuAddOnCreationSchema } from "../../validators/menu-add-on-creation.validator.js"
 
 const router = express.Router()
 
@@ -93,6 +96,8 @@ const menuAddOnGroupUpdateController = container.resolve(MenuAddOnGroupUpdateCon
 const menuAddOnGroupByMenuItemIdController = container.resolve(MenuAddOnGroupByMenuItemIdController)
 const menuAddOnGroupStatusUpdateController = container.resolve(MenuAddOnGroupStatusUpdateController)
 const menuAddOnGroupDeletionController = container.resolve(MenuAddOnGroupDeletionController)
+
+const menuAddOnCreationController = container.resolve(MenuAddOnCreationController)
 
 const authenticationMiddleware = container.resolve(AuthenticationMiddleware)
 const authorizationMiddleware = container.resolve(AuthorizationMiddleware)
@@ -167,5 +172,9 @@ router.route("/menu-add-on-group/:menuAddOnGroupId/menu-item/:menuItemId").put(a
 router.route("/menu-add-on-group/:menuAddOnGroupId/menu-item/:menuItemId").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuAddOnGroupParamsSchema }), menuAddOnGroupStatusUpdateController.handle.bind(menuAddOnGroupStatusUpdateController))
 
 router.route("/menu-add-on-group/:menuAddOnGroupId/menu-item/:menuItemId").delete(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: updateMenuAddOnGroupParamsSchema }), menuAddOnGroupDeletionController.handle.bind(menuAddOnGroupDeletionController))
+
+
+// menu add on route
+router.route("/menu-add-on/menuAddOnGroup/:menuAddOnGroupId").post(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: menuAddOnGroupByIdParamsSchema }), validate({ body: menuAddOnCreationSchema }), menuAddOnCreationController.handle.bind(menuAddOnCreationController))
 
 export default router;

@@ -36,6 +36,7 @@ import { MenuAddOnGroupUpdateUseCaseImpl } from "../../../modules/menu/applicati
 import { MenuAddOnGroupByMenuItemIdUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-add-on-group/menu-add-on-group-by-menu-item-id.use-case.impl.js"
 import { MenuAddOnGroupStatusUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-add-on-group/menu-add-on-group-status-update.use-case.impl.js"
 import { MenuAddOnGroupDeletionUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-add-on-group/menu-add-on-group-deletion.use-case.impl.js"
+import { MenuAddOnCreationUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-add-on/menu-add-on-creation.use-case.impl.js"
 
 export const registerMenu = (): void => {
   container.register(MenuTokens.MenuRepository, {
@@ -119,4 +120,6 @@ export const registerMenu = (): void => {
   container.registerSingleton(MenuTokens.MenuAddOnGroupStatusUpdateUseCase, MenuAddOnGroupStatusUpdateUseCaseImpl)
 
   container.registerSingleton(MenuTokens.MenuAddOnGroupDeletionUseCase, MenuAddOnGroupDeletionUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuAddOnCreationUseCase, MenuAddOnCreationUseCaseImpl)
 }
