@@ -37,6 +37,10 @@ import { MenuAddOnGroupByMenuItemIdUseCaseImpl } from "../../../modules/menu/app
 import { MenuAddOnGroupStatusUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-add-on-group/menu-add-on-group-status-update.use-case.impl.js"
 import { MenuAddOnGroupDeletionUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-add-on-group/menu-add-on-group-deletion.use-case.impl.js"
 import { MenuAddOnCreationUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-add-on/menu-add-on-creation.use-case.impl.js"
+import { MenuAddOnUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-add-on/menu-add-on-update.use-case.impl.js"
+import { MenuAddOnByIdUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-add-on/menu-add-on-by-id.use-case.impl.js"
+import { MenuAddOnStatusUpdateUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-add-on/menu-add-on-status-update.use-case.impl.js"
+import { MenuAddOnDeletionUseCaseImpl } from "../../../modules/menu/application/use-cases/menu-add-on/menu-add-on-deletion.use-case.impl.js"
 
 export const registerMenu = (): void => {
   container.register(MenuTokens.MenuRepository, {
@@ -122,4 +126,12 @@ export const registerMenu = (): void => {
   container.registerSingleton(MenuTokens.MenuAddOnGroupDeletionUseCase, MenuAddOnGroupDeletionUseCaseImpl)
 
   container.registerSingleton(MenuTokens.MenuAddOnCreationUseCase, MenuAddOnCreationUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuAddOnUpdateUseCase, MenuAddOnUpdateUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuAddOnByIdUseCase, MenuAddOnByIdUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuAddOnStatusUpdateUseCase, MenuAddOnStatusUpdateUseCaseImpl)
+
+  container.registerSingleton(MenuTokens.MenuAddOnDeletionUseCase, MenuAddOnDeletionUseCaseImpl)
 }

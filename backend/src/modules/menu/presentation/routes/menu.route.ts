@@ -59,6 +59,13 @@ import { MenuAddOnGroupDeletionController } from "../controllers/menu-add-on-gro
 import { MenuAddOnCreationController } from "../controllers/menu-add-on-creation.controller.js"
 import { menuAddOnGroupByIdParamsSchema } from "../../validators/menu-add-on-group-by-id.validator.js"
 import { menuAddOnCreationSchema } from "../../validators/menu-add-on-creation.validator.js"
+import { MenuAddOnUpdateController } from "../controllers/menu-add-on-update.controller.js"
+import { menuAddOnUpdateParamsSchema } from "../../validators/menu-add-on-update-params.validator.js"
+import { menuAddOnUpdateSchema } from "../../validators/menu-add-on-update.validator.js"
+import { menuAddOnByIdParamsSchema } from "../../validators/menu-add-on-by-id-params.validator.js"
+import { MenuAddOnByIdController } from "../controllers/menu-add-on-by-id.controller.js"
+import { MenuAddOnStatusUpdateController } from "../controllers/menu-add-on-status-update.controller.js"
+import { MenuAddOnDeletionController } from "../controllers/menu-add-on-deletion.controller.js"
 
 const router = express.Router()
 
@@ -98,6 +105,10 @@ const menuAddOnGroupStatusUpdateController = container.resolve(MenuAddOnGroupSta
 const menuAddOnGroupDeletionController = container.resolve(MenuAddOnGroupDeletionController)
 
 const menuAddOnCreationController = container.resolve(MenuAddOnCreationController)
+const menuAddOnUpdateController = container.resolve(MenuAddOnUpdateController)
+const menuAddOnByIdController = container.resolve(MenuAddOnByIdController)
+const menuAddOnStatusUpdateController = container.resolve(MenuAddOnStatusUpdateController)
+const menuAddOnDeletionController = container.resolve(MenuAddOnDeletionController)
 
 const authenticationMiddleware = container.resolve(AuthenticationMiddleware)
 const authorizationMiddleware = container.resolve(AuthorizationMiddleware)
@@ -115,7 +126,7 @@ router.route("/:menuId/deactivate").patch(authenticationMiddleware.authenticate,
 
 router.route("/:menuId").delete(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_DELETE), validate({ params: menuByIdParamSchema }), menuDeletionController.handle.bind(menuDeletionController))
 
-router.route("/restaurant/:restaurantId").get(validate({params: restaurantByIdParamsSchema}), menuByRestaurantIdController.handle.bind(menuByRestaurantIdController))
+router.route("/restaurant/:restaurantId").get(validate({ params: restaurantByIdParamsSchema }), menuByRestaurantIdController.handle.bind(menuByRestaurantIdController))
 
 
 
@@ -176,5 +187,13 @@ router.route("/menu-add-on-group/:menuAddOnGroupId/menu-item/:menuItemId").delet
 
 // menu add on route
 router.route("/menu-add-on/menuAddOnGroup/:menuAddOnGroupId").post(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: menuAddOnGroupByIdParamsSchema }), validate({ body: menuAddOnCreationSchema }), menuAddOnCreationController.handle.bind(menuAddOnCreationController))
+
+router.route("/menu-add-on/:id").get(validate({ params: menuAddOnByIdParamsSchema}), menuAddOnByIdController.handle.bind(menuAddOnByIdController))
+
+router.route("/menu-add-on/:id/menuAddOnGroup/:menuAddOnGroupId").put(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: menuAddOnUpdateParamsSchema }), validate({ body: menuAddOnUpdateSchema }), menuAddOnUpdateController.handle.bind(menuAddOnUpdateController))
+
+router.route("/menu-add-on/:id/menuAddOnGroup/:menuAddOnGroupId").patch(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: menuAddOnUpdateParamsSchema }), menuAddOnStatusUpdateController.handle.bind(menuAddOnStatusUpdateController))
+
+router.route("/menu-add-on/:id/menuAddOnGroup/:menuAddOnGroupId").delete(authenticationMiddleware.authenticate, authorizationMiddleware.authorize(Permission.MENU_UPDATE), validate({ params: menuAddOnUpdateParamsSchema}), menuAddOnDeletionController.handle.bind(menuAddOnDeletionController))
 
 export default router;

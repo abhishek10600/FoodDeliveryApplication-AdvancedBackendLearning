@@ -116,6 +116,12 @@ export class MenuAddOn {
     this.touch()
   }
 
+  public changeCurrency(currency: string): void {
+    this.currency = currency
+
+    this.touch()
+  }
+
   public getId(): string {
     return this.id
   }
