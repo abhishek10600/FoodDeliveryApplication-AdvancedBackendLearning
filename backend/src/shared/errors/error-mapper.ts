@@ -1,3 +1,4 @@
+import { DriverDomainError } from "../../modules/driver/domain/errors/driver-domain.error.js";
 import { EmailAlreadyRegisteredError } from "../../modules/identity/domain/errors/email-already-register.error.js";
 import { InvalidCredentialsError } from "../../modules/identity/domain/errors/invalid-credentials.error.js";
 import { MenuDomainError } from "../../modules/menu/domain/errors/menu-domain.error.js";
@@ -32,6 +33,10 @@ export const mapError = (error: Error, isProduction: boolean): AppError => {
 
   if (error instanceof MenuDomainError) {
     return new MenuDomainError(error.message, 500)
+  }
+
+  if (error instanceof DriverDomainError) {
+    return new DriverDomainError(error.message, 500)
   }
 
   return new InternalServerError(isProduction ? "An unexpected error occurred" : error.message)

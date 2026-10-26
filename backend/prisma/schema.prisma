@@ -34,6 +34,7 @@ model User {
   emailVerifications EmailVerification[]
   passwordResets PasswordReset[]
   customer Customer?
+  drivers Driver?
   restaurants Restaurant[]
 
   @@map("users")
@@ -330,4 +331,61 @@ model MenuAddOn{
   @@index([menuAddOnGroupId, status])
   @@unique([menuAddOnGroupId, name])
   @@map("menu_add_ons")
+}
+
+enum DriverAvailability {
+  OFFLINE
+  ONLINE
+}
+
+enum DriverStatus {
+  PENDING
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+model Driver {
+  id String @id @default(uuid()) @db.Uuid
+  userId String @unique @db.Uuid
+  firstName String
+  lastName String
+  phone String @db.VarChar(15)
+  status DriverStatus @default(ACTIVE)
+  availability DriverAvailability @default(OFFLINE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  driverVehicle DriverVehicle?
+
+  @@index([status, createdAt])
+  @@index([status, availability])
+  @@map("drivers")
+}
+
+enum DriverVehicleType {
+  bicycle
+  scooter
+  motorbike
+  car
+}
+
+model DriverVehicle {
+  id String @id @default(uuid()) @db.Uuid
+  driverId String @unique @db.Uuid
+  vehicleType DriverVehicleType
+  registrationNumber Int @map("driver_vehicle_registration_number_number")
+  color String @db.VarChar(100) @map("driver_vehicle_color")
+  model String @db.VarChar(100) @map("driver_vehicle_model")
+  make String @db.VarChar(100) @map("driver_vehicle_make")
+  isActive Boolean @default(true) @map("driver_vehicle_is_active")
+
+
+  driver Driver @relation(fields: [driverId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([driverId, isActive])
+  @@map("driver_vehicles")
+
 }
