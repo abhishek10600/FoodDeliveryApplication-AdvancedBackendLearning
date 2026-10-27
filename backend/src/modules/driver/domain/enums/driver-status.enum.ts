@@ -1,4 +1,4 @@
-export enum DRIVER_STATUS {
+export enum DRIVERSTATUS {
   PENDING = "PENDING",
   ACTIVE = "ACTIVE",
   INACTIVE = "INACTIVE",

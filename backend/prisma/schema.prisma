@@ -352,7 +352,7 @@ model Driver {
   lastName String
   phone String @db.VarChar(15)
   status DriverStatus @default(ACTIVE)
-  availability DriverAvailability @default(OFFLINE)
+  availability DriverAvailability @default(ONLINE)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -381,6 +381,8 @@ model DriverVehicle {
   model String @db.VarChar(100) @map("driver_vehicle_model")
   make String @db.VarChar(100) @map("driver_vehicle_make")
   isActive Boolean @default(true) @map("driver_vehicle_is_active")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
 
   driver Driver @relation(fields: [driverId], references: [id], onDelete: Cascade, onUpdate: Cascade)

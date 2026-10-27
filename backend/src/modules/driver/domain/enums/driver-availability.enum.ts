@@ -1,0 +1,4 @@
+export enum DRIVERAVAILABILITY {
+  ONLINE = "ONLINE",
+  OFFLINE = "OFFLINE"
+}

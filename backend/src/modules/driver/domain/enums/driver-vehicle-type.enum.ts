@@ -1,4 +1,4 @@
-export enum DRIVER_VEHICLE_TYPE {
+export enum DRIVERVEHICLETYPE {
   bicycle = "bicycle",
   motorbike = "motorbike",
   scooter = "scooter",
