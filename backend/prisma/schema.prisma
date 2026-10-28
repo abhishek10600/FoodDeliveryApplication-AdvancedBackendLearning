@@ -376,7 +376,7 @@ model DriverVehicle {
   id String @id @default(uuid()) @db.Uuid
   driverId String @unique @db.Uuid
   vehicleType DriverVehicleType
-  registrationNumber Int @map("driver_vehicle_registration_number_number")
+  registrationNumber String @map("driver_vehicle_registration_number_number")
   color String @db.VarChar(100) @map("driver_vehicle_color")
   model String @db.VarChar(100) @map("driver_vehicle_model")
   make String @db.VarChar(100) @map("driver_vehicle_make")

@@ -7,6 +7,8 @@ import { Email } from "../../../domain/value-objects/email.vo.js";
 import type { PrismaExecutor } from "../../../../../infrastructure/database/prisma-client.type.js";
 import { RestaurantOwner } from "../../../../restaurent/domain/entities/restaurant-owner.entity.js";
 import { RestaurantOwnerMapper } from "../../../../restaurent/infrastructure/persistence/prisma/mappers/restaurant-owner.mapper.js";
+import { Driver } from "../../../../driver/domain/entities/driver.entity.js";
+import { DriverMapper } from "../../../../driver/infrastructure/persistence/prisma/mappers/driver.mapper.js";
 
 @injectable()
 export class UserRepository implements IUserRepository {
@@ -117,5 +119,24 @@ export class UserRepository implements IUserRepository {
     })
 
     return RestaurantOwnerMapper.toDomain(createdRestaurantOwner)
+  }
+
+  async createDriver(driver: Driver): Promise<Driver> {
+    const data = DriverMapper.toPersistence(driver)
+
+    const createdDriver = await this.prisma.user.create({
+      data: {
+        id: data.id,
+        email: data.email.getValue(),
+        passwordHash: data.passwordHash.getValue(),
+        roles: data.roles,
+        status: data.status,
+        emailVerified: data.emailVerified,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt
+      }
+    })
+
+    return DriverMapper.toDomain(createdDriver)
   }
 }

@@ -1,59 +1,36 @@
-import { Prisma } from "../../../../../../../generated/prisma/client.js"
-import { Driver } from "../../../../domain/entities/driver.entity.js"
-import { DRIVERAVAILABILITY } from "../../../../domain/enums/driver-availability.enum.js"
-import { DRIVERSTATUS } from "../../../../domain/enums/driver-status.enum.js"
-import { DriverFirstName } from "../../../../domain/value-objects/driver-first-name.vo.js"
-import { DriverLastName } from "../../../../domain/value-objects/driver-last-name.vo.js"
-import { DriverPhone } from "../../../../domain/value-objects/driver-phone.vo.js"
+import { User as PrismaUser } from "../../../../../../../generated/prisma/client.js";
+import { Role } from "../../../../../identity/domain/enums/role.enum.js";
+import { UserStatus } from "../../../../../identity/domain/enums/user-status.enum.js";
+import { Email } from "../../../../../identity/domain/value-objects/email.vo.js";
+import { PasswordHash } from "../../../../../identity/domain/value-objects/password-hash.vo.js";
+import { Driver } from "../../../../domain/entities/driver.entity.js";
 
 export class DriverMapper {
-  public static toDomain(data: Prisma.DriverGetPayload<{}>): Driver {
+
+  public static toDomain(prismaUser: PrismaUser): Driver {
     return Driver.rehydrate({
-      id: data.id,
-      userId: data.userId,
-      firstName: DriverFirstName.create(data.firstName),
-      lastName: DriverLastName.create(data.lastName),
-      phone: DriverPhone.create(data.phone),
-      status: data.status as DRIVERSTATUS,
-      availability: data.availability as DRIVERAVAILABILITY,
-      createdAt: data.createdAt,
-      updatedAt: data.updatedAt
+      id: prismaUser.id,
+      email: Email.create(prismaUser.email),
+      passwordHash: PasswordHash.create(prismaUser.passwordHash),
+      roles: prismaUser.roles.map((role) => role as Role),
+      status: prismaUser.status as UserStatus,
+      emailVerified: prismaUser.emailVerified,
+      createdAt: prismaUser.createdAt,
+      updatedAt: prismaUser.updatedAt
     })
   }
 
-  public static toPersistence(driver: Driver): Prisma.DriverCreateInput {
+  public static toPersistence(driver: Driver) {
     return {
       id: driver.getId(),
-      user: {
-        connect: {
-          id: driver.getUserId()
-        }
-      },
-      firstName: driver.getFirstName().getValue(),
-      lastName: driver.getLastName().getValue(),
-      phone: driver.getPhone().getValue(),
+      email: driver.getEmail(),
+      passwordHash: driver.getPasswordHash(),
+      roles: driver.getRoles(),
       status: driver.getStatus(),
-      availability: driver.getAvailability(),
+      emailVerified: driver.isEmailVerified(),
       createdAt: driver.getCreatedAt(),
       updatedAt: driver.getUpdatedAt()
     }
   }
 
-  public static toUpdatePersistence(driver: Driver): Prisma.DriverUpdateInput {
-    return {
-      id: driver.getId(),
-      user: {
-        connect: {
-          id: driver.getUserId()
-        }
-      },
-      firstName: driver.getFirstName().getValue(),
-      lastName: driver.getLastName().getValue(),
-      phone: driver.getPhone().getValue(),
-      status: driver.getStatus(),
-      availability: driver.getAvailability(),
-      createdAt: driver.getCreatedAt(),
-      updatedAt: driver.getUpdatedAt()
-    }
-  }
 }

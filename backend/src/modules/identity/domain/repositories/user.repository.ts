@@ -1,3 +1,4 @@
+import { Driver } from "../../../driver/domain/entities/driver.entity.js";
 import { RestaurantOwner } from "../../../restaurent/domain/entities/restaurant-owner.entity.js";
 import { User } from "../entities/user.entity.js";
 import { Email } from "../value-objects/email.vo.js";
@@ -14,4 +15,6 @@ export interface IUserRepository {
   update(user: User): Promise<User>
 
   createRestaurantOwner(restaurantOwner: RestaurantOwner): Promise<RestaurantOwner>
+
+  createDriver(driver: Driver): Promise<Driver>
 }

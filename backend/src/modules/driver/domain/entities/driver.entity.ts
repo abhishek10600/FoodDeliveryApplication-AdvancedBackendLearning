@@ -1,131 +1,94 @@
-import { DRIVERAVAILABILITY } from "../enums/driver-availability.enum.js"
-import { DRIVERSTATUS } from "../enums/driver-status.enum.js"
-import { DriverFirstName } from "../value-objects/driver-first-name.vo.js"
-import { DriverLastName } from "../value-objects/driver-last-name.vo.js"
-import { DriverPhone } from "../value-objects/driver-phone.vo.js"
-
-export interface IDriverProps {
-  id: string
-  userId: string
-  firstName: DriverFirstName
-  lastName: DriverLastName
-  phone: DriverPhone
-  status: DRIVERSTATUS
-  availability: DRIVERAVAILABILITY
-  createdAt: Date
-  updatedAt: Date
-}
-
-export interface ICreateDriverProps {
-  userId: string
-  firstName: DriverFirstName
-  lastName: DriverLastName
-  phone: DriverPhone
-}
-
-export interface IUpdateDriverProps {
-  firstName?: DriverFirstName,
-  lastName?: DriverLastName,
-  phone?: DriverPhone
-}
+import { Role } from "../../../identity/domain/enums/role.enum.js";
+import { UserStatus } from "../../../identity/domain/enums/user-status.enum.js";
+import { Email } from "../../../identity/domain/value-objects/email.vo.js";
+import { PasswordHash } from "../../../identity/domain/value-objects/password-hash.vo.js";
 
 export class Driver {
 
-  private readonly id: string
-  private readonly userId: string
-  private firstName: DriverFirstName
-  private lastName: DriverLastName
-  private phone: DriverPhone
-  private status: DRIVERSTATUS
-  private availability: DRIVERAVAILABILITY
-  private readonly createdAt: Date
-  private updatedAt: Date
+  private readonly id: string;
+  private email: Email;
+  private passwordHash: PasswordHash;
+  private readonly roles: Set<Role>;
+  private status: UserStatus;
+  private emailVerified: boolean;
+  private readonly createdAt: Date;
+  private updatedAt: Date;
 
-
-  private constructor(props: IDriverProps) {
-    this.id = props.id
-    this.userId = props.userId
-    this.firstName = props.firstName
-    this.lastName = props.lastName
-    this.phone = props.phone
-    this.status = props.status
-    this.availability = props.availability
-    this.createdAt = props.createdAt
-    this.updatedAt = props.updatedAt
+  constructor(props: {
+    id: string;
+    email: Email;
+    passwordHash: PasswordHash;
+    roles: Iterable<Role>;
+    status: UserStatus;
+    emailVerified: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    this.id = props.id;
+    this.email = props.email;
+    this.passwordHash = props.passwordHash;
+    this.roles = new Set(props.roles ?? [Role.DRIVER]);
+    this.status = props.status;
+    this.emailVerified = props.emailVerified;
+    this.createdAt = props.createdAt;
+    this.updatedAt = props.updatedAt;
   }
 
-  public static create(props: ICreateDriverProps): Driver {
-    const now = new Date()
+  public static create(props: {
+    email: Email;
+    passwordHash: PasswordHash;
+  }): Driver {
+
+    const now = new Date();
 
     return new Driver({
       id: crypto.randomUUID(),
-      userId: props.userId,
-      firstName: props.firstName,
-      lastName: props.lastName,
-      phone: props.phone,
-      status: DRIVERSTATUS.ACTIVE,
-      availability: DRIVERAVAILABILITY.ONLINE,
+      email: props.email,
+      passwordHash: props.passwordHash,
+      roles: [Role.DRIVER],
+      status: UserStatus.ACTIVE,
+      emailVerified: false,
       createdAt: now,
       updatedAt: now
     })
+
   }
 
-  public static rehydrate(props: IDriverProps): Driver {
+  public static rehydrate(props: {
+    id: string;
+    email: Email;
+    passwordHash: PasswordHash;
+    roles: Iterable<Role>;
+    status: UserStatus;
+    emailVerified: boolean;
+    createdAt: Date;
+    updatedAt: Date
+  }): Driver {
     return new Driver(props)
-  }
-
-  public update(props: IUpdateDriverProps): void {
-    if (props.firstName !== undefined) {
-      this.firstName = props.firstName
-    }
-
-    if (props.lastName !== undefined) {
-      this.lastName = props.lastName
-    }
-
-    if (props.phone !== undefined) {
-      this.phone = props.phone
-    }
-
-    this.touch()
-  }
-
-  public updateAvailability() {
-    if (this.availability === DRIVERAVAILABILITY.OFFLINE) {
-      this.availability = DRIVERAVAILABILITY.ONLINE
-    } else {
-      this.availability = DRIVERAVAILABILITY.OFFLINE
-    }
-
-    this.touch()
   }
 
   public getId(): string {
     return this.id
   }
 
-  public getUserId(): string {
-    return this.userId
+  public getEmail(): Email {
+    return this.email
   }
 
-  public getFirstName(): DriverFirstName {
-    return this.firstName
+  public getPasswordHash(): PasswordHash {
+    return this.passwordHash
   }
 
-  public getLastName(): DriverLastName {
-    return this.lastName
+  public getRoles(): Role[] {
+    return [...this.roles]
   }
 
-  public getPhone(): DriverPhone {
-    return this.phone
-  }
-
-  public getStatus(): DRIVERSTATUS {
+  public getStatus(): UserStatus {
     return this.status
   }
 
-  public getAvailability(): DRIVERAVAILABILITY {
-    return this.availability
+  public isEmailVerified(): boolean {
+    return this.emailVerified
   }
 
   public getCreatedAt(): Date {
@@ -136,10 +99,9 @@ export class Driver {
     return this.updatedAt
   }
 
-  public touch(): void {
-    const now = new Date()
+  // private touch(): void {
+  //   this.updatedAt = new Date
+  // }
 
-    this.updatedAt = now
-  }
 
 }
