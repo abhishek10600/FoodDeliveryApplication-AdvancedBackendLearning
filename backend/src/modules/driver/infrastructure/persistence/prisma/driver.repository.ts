@@ -28,6 +28,20 @@ export class DriverRepository implements IDriverRepository {
     return DriverProfileMapper.toDomain(driver)
   }
 
+  async findByUserId(userId: string): Promise<DriverProfile | null> {
+    const driver = await this.prisma.driver.findUnique({
+      where: {
+        userId
+      }
+    })
+
+    if (!driver) {
+      return null
+    }
+
+    return DriverProfileMapper.toDomain(driver)
+  }
+
   async create(driver: DriverProfile): Promise<DriverProfile> {
     const data = DriverProfileMapper.toPersistence(driver)
 

@@ -63,7 +63,7 @@ export class DriverVehicleRepository implements IDriverVehicleRepository {
     })
   }
 
-  async delete(id): Promise<void> {
+  async delete(id: string): Promise<void> {
     await this.prisma.driverVehicle.delete({
       where: {
         id

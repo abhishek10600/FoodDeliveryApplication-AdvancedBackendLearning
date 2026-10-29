@@ -43,7 +43,7 @@ export class DriverPhone {
       throw new DriverDomainError("Driver phone number must be a string", 400)
     }
 
-    if (normalizedValue.length < this.DRIVER_PHONE_MIN || normalizedValue.length > this.DRIVER_PHONE_MIN) {
+    if (normalizedValue.length < this.DRIVER_PHONE_MIN || normalizedValue.length > this.DRIVER_PHONE_MAX) {
       throw new DriverDomainError(`Driver phone number must contain digits between ${this.DRIVER_PHONE_MIN} and ${this.DRIVER_PHONE_MAX}`, 400)
     }
   }

@@ -3,6 +3,7 @@ import { DriverTokens } from "../../../modules/driver/infrastructure/persistence
 import { DriverRepository } from "../../../modules/driver/infrastructure/persistence/prisma/driver.repository.js"
 import { DriverVehicleRepository } from "../../../modules/driver/infrastructure/persistence/prisma/driver-vehicle.repository.js"
 import { DriverRegisterUseCaseImpl } from "../../../modules/driver/application/use-cases/register-driver.use-case.impl.js"
+import { DriverProfileUseCaseImpl } from "../../../modules/driver/application/use-cases/driver-profile.use-case.impl.js"
 
 export const registerDriver = (): void => {
 
@@ -15,5 +16,7 @@ export const registerDriver = (): void => {
   })
 
   container.registerSingleton(DriverTokens.DriverRegisterUseCase, DriverRegisterUseCaseImpl)
+
+  container.registerSingleton(DriverTokens.DriverProfileUseCase, DriverProfileUseCaseImpl)
 
 }
