@@ -4,4 +4,6 @@ export const DriverTokens = {
 
   DriverRegisterUseCase: Symbol.for("Driver.DriverRegisterUseCase"),
   DriverProfileUseCase: Symbol.for("Driver.DriverProfileUseCase"),
+  DriverProfileUpdateUseCase: Symbol.for("Driver.DriverProfileUpdateUseCase"),
+  DriverAvailabilityUpdateUseCase: Symbol.for("Driver.DriverAvailabilityUpdateUseCase"),
 } as const

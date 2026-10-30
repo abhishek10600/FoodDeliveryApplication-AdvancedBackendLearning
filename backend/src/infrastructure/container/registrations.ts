@@ -1,3 +1,4 @@
+import { registerAddress } from "./modules/address.js";
 import { registerAdmin } from "./modules/admin.js";
 import { registerCustomer } from "./modules/customer.js";
 import { registerDelivery } from "./modules/delivery.js";
@@ -15,6 +16,7 @@ export const registerDependencies = (): void => {
 
   registerIdentity()
   registerCustomer()
+  registerAddress()
   registerRestaurant()
   registerMenu()
   registerOrdering()

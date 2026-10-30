@@ -51,10 +51,32 @@ model Customer {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  addresses Address[]
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([userId])
   @@map("customers")
+}
+
+model Address {
+  id String @id @default(uuid()) @db.Uuid
+  customerId String @db.Uuid
+  houseName String @map("house_name")
+  streetName String @map("street_name")
+  landmark String?
+  city String
+  state String
+  country String
+  pin String @map("pin_code")
+  isDefault Boolean @default(false) @map("is_default")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([customerId, isDefault])
+  @@map("addresses")
 }
 
 model RefreshSession{
