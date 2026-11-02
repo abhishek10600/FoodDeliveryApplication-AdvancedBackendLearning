@@ -22,7 +22,6 @@ export interface IAddressProps {
 }
 
 export interface IAddressCreateProps {
-  id: string
   customerId: string
   houseName: AddressHouseName,
   streetName: AddressStreetName,
@@ -30,10 +29,7 @@ export interface IAddressCreateProps {
   city: AddressCity,
   state: AddressState,
   country: AddressCountry,
-  pin: AddressPin,
-  isDefault: boolean,
-  createdAt: Date,
-  updatedAt: Date
+  pin: AddressPin
 }
 
 export interface IAddressUpdateProps {
@@ -89,7 +85,7 @@ export class Address {
       state: props.state,
       country: props.country,
       pin: props.pin,
-      isDefault: props.isDefault,
+      isDefault: false,
       createdAt: now,
       updatedAt: now
     })

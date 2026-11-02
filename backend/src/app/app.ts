@@ -23,12 +23,14 @@ import customersRouter from "../modules/customer/presentation/routes/customer.ro
 import restaurantsRoute from "../modules/restaurent/presentation/routes/restaurant.route.js"
 import menuRouter from "../modules/menu/presentation/routes/menu.route.js"
 import driverRouter from "../modules/driver/presentation/routes/driver.route.js"
+import addressRouter from "../modules/address/presentation/routes/address.route.js"
 
 app.use("/api/v1/identity", identityRouter)
 app.use("/api/v1/customers", customersRouter)
 app.use("/api/v1/restaurants", restaurantsRoute)
 app.use("/api/v1/menu", menuRouter)
 app.use("/api/v1/driver", driverRouter)
+app.use("/api/v1/address", addressRouter)
 
 const errorHandler = container.resolve(ErrorHandlerMiddleware)
 app.use(errorHandler.handle)

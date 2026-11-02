@@ -11,6 +11,13 @@ CUSTOMER_PROFILE_UPDATE = "customer:update",
 CUSTOMER_AVATAR_UPLOAD = "customer:avatarupdate",
 CUSTOMER_AVATAR_REMOVE = "customer:avatarremove",
 
+CUSTOMER_ADDRESS_CREATE = "customer:address:create",
+CUSTOMER_ADDRESS_READ = "customer:address:read",
+CUSTOMER_ADDRESS_UPDATE = "customer:address:update",
+CUSTOMER_ADDRESS_DELETE = "customer:address:delete",
+
+
+
 // Restaurants
 RESTAURANT_CREATE = "restaurant:create",
 RESTAURANT_READ = "restaurant:read",
