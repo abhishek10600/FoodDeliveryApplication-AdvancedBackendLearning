@@ -19,6 +19,9 @@ import { SmtpService } from "../../email/smtp.email.service.js"
 import { EmailJobProcessor } from "../../queue/jobs/email/email.job.processor.js"
 import { RateLimitService } from "../../security/rate-limit.service.js"
 import { R2FileStorage } from "../../storage/r2/r2.file-storage.js"
+import { KafkaTokens } from "../../messaging/kafka/kafka.tokens.js"
+import { KafkaConnectionService } from "../../messaging/kafka/kafka.connection.js"
+import { kafkaConfig } from "../../messaging/kafka/kafka.config.js"
 
 export const registerInfrastructure = (): void => {
 
@@ -94,5 +97,11 @@ export const registerInfrastructure = (): void => {
   container.register(InfrastructureTokens.EmailJobProcessor, {
     useClass: EmailJobProcessor
   })
+
+  container.registerInstance(KafkaTokens.Config, kafkaConfig)
+
+  container.registerInstance(KafkaTokens.Logger, pinoLogger)
+
+  container.registerSingleton(KafkaTokens.Connection, KafkaConnectionService)
 
 }

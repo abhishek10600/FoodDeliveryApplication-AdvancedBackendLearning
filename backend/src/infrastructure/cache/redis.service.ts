@@ -12,23 +12,44 @@ export class RedisService {
     private readonly redis: Redis,
 
     @inject(InfrastructureTokens.Logger)
-    private readonly logger: ILogger
+    private readonly logger: ILogger,
 
   ){ }
 
-  connectRedis = async () => {
+connectRedis = async (): Promise<void> => {
+  try {
+    this.logger.info("Connecting to Redis");
 
-    try {
-      this.logger.info("Connecting to redis");
+    console.log("Redis status:", this.redis.status);
 
-      await this.redis.connect()
+    if (this.redis.status === "wait") {
 
-      this.logger.info("Connected to redis successfully")
+      await this.redis.connect();
 
-    } catch (error) {
-      this.logger.fatal("Failed to connect to Redis", error)
+    } else if (this.redis.status === "connecting") {
+
+      await new Promise<void>((resolve, reject) => {
+
+        this.redis.once("ready", resolve);
+        this.redis.once("error", reject);
+
+      });
+    } else if (this.redis.status !== "ready") {
+
+      throw new Error(`Unexpected Redis status: ${this.redis.status}`);
     }
+    this.logger.info("Redis connected out of the if")
+
+    this.logger.info("Connected to Redis successfully");
+
+  } catch (error) {
+    console.error("REDIS ERROR:", error);
+
+    this.logger.fatal("Failed to connect to Redis", error);
+
+    throw error;
   }
+};
 
   disconnectRedis = async() => {
     try {

@@ -89,7 +89,7 @@ services:
       - .env
 
     environment:
-      KAFKA_BROKER: kafka:9092
+      KAFKA_BROKERS: kafka:9092
 
     ports:
       - "4000:4000"
@@ -100,11 +100,11 @@ services:
     restart: unless-stopped
 
     depends_on:
-      redis-stack:
-        condition: service_healthy
+     redis-stack:
+       condition: service_healthy
 
-      kafka:
-        condition: service_healthy
+     kafka:
+       condition: service_healthy
 
 
   email-worker:
@@ -125,7 +125,7 @@ services:
 
     depends_on:
       redis-stack:
-        condition: service_healthy
+       condition: service_healthy
 
 
 networks:

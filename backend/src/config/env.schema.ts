@@ -49,7 +49,9 @@ export const envSchema = z.object({
   R2_SECRET_ACCESS_KEY: z.string(),
   S3_API: z.string(),
   R2_BUCKET_NAME: z.string(),
-  R2_PUBLIC_URL: z.string()
+  R2_PUBLIC_URL: z.string(),
+  KAFKA_CLIENT_ID: z.string(),
+  KAFKA_BROKERS: z.string()
 });
 
 export type Env = z.infer<typeof envSchema>

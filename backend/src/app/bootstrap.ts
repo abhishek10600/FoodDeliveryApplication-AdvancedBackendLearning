@@ -3,6 +3,8 @@ import { RedisService } from "../infrastructure/cache/redis.service.js"
 import { DatabaseService } from "../infrastructure/database/database.service.js"
 import { ILogger } from "../shared/logger/logger.interface.js"
 import { InfrastructureTokens } from "../infrastructure/container/index.js"
+import { KafkaConnectionService } from "../infrastructure/messaging/kafka/kafka.connection.js"
+import { KafkaTokens } from "../infrastructure/messaging/kafka/kafka.tokens.js"
 
 export const bootstrap = async (): Promise<void> => {
 
@@ -16,6 +18,12 @@ export const bootstrap = async (): Promise<void> => {
   await databaseService.connectDatabase()
 
   await redisService.connectRedis()
+
+  const kafkaConnection = container.resolve<KafkaConnectionService>(
+    KafkaTokens.Connection
+  )
+
+  await kafkaConnection.connect()
 
   logger.info("Application bootstrapped successfully")
 }
