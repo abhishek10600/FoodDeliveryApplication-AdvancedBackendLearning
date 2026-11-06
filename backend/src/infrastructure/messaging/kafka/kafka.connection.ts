@@ -23,9 +23,6 @@ export class KafkaConnectionService {
 
   constructor(
 
-    // private readonly config: KafkaConnectionConfig,
-    // private readonly logger: KafkaLogger
-    //
     @inject(KafkaTokens.Config)
     private readonly config: KafkaConnectionConfig,
 
@@ -203,5 +200,17 @@ export class KafkaConnectionService {
     }
 
     return this.kafka
+  }
+
+  getProducer(): Producer {
+    if (!this.connected || !this.producer) {
+      throw new KafkaNotConnectedError("Kafka producer is not connected")
+    }
+
+    return this.producer
+  }
+
+  isConnected(): boolean {
+    return this.connected
   }
 }

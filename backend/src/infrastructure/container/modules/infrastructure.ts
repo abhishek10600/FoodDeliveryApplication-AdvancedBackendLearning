@@ -22,6 +22,8 @@ import { R2FileStorage } from "../../storage/r2/r2.file-storage.js"
 import { KafkaTokens } from "../../messaging/kafka/kafka.tokens.js"
 import { KafkaConnectionService } from "../../messaging/kafka/kafka.connection.js"
 import { kafkaConfig } from "../../messaging/kafka/kafka.config.js"
+import { KafkaProducerService } from "../../messaging/kafka/producer/kafka.producer.js"
+import { KafkaConsumerService } from "../../messaging/kafka/consumer/kafka.consumer.js"
 
 export const registerInfrastructure = (): void => {
 
@@ -103,5 +105,11 @@ export const registerInfrastructure = (): void => {
   container.registerInstance(KafkaTokens.Logger, pinoLogger)
 
   container.registerSingleton(KafkaTokens.Connection, KafkaConnectionService)
+
+  container.registerSingleton(KafkaProducerService)
+
+  container.register(KafkaConsumerService, {
+    useClass: KafkaConsumerService
+  })
 
 }
