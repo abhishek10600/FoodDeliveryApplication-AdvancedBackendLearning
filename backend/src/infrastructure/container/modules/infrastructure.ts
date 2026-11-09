@@ -24,6 +24,7 @@ import { KafkaConnectionService } from "../../messaging/kafka/kafka.connection.j
 import { kafkaConfig } from "../../messaging/kafka/kafka.config.js"
 import { KafkaProducerService } from "../../messaging/kafka/producer/kafka.producer.js"
 import { KafkaConsumerService } from "../../messaging/kafka/consumer/kafka.consumer.js"
+import { KafkaTopicAdminService } from "../../messaging/kafka/admin/kafka.topic-admin.js"
 
 export const registerInfrastructure = (): void => {
 
@@ -111,5 +112,7 @@ export const registerInfrastructure = (): void => {
   container.register(KafkaConsumerService, {
     useClass: KafkaConsumerService
   })
+
+  container.registerSingleton(KafkaTokens.KafkaTopicAdminService, KafkaTopicAdminService)
 
 }

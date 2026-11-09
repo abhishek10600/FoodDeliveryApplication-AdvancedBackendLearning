@@ -1,5 +1,5 @@
 import { injectable, inject } from "tsyringe"
-import { Kafka, logLevel, type Producer } from "kafkajs"
+import { Kafka, logLevel, Admin, type Producer } from "kafkajs"
 import type { KafkaConnectionConfig } from "./kafka.config.js"
 import { KafkaConnectionError, KafkaNotConnectedError } from "./kafka.errors.js"
 import { KafkaTokens } from "./kafka.tokens.js"
@@ -14,12 +14,15 @@ export interface KafkaLogger {
 export class KafkaConnectionService {
   private kafka: Kafka | null = null
   private producer: Producer | null = null
+  private admin: Admin | null = null
 
   private connected = false
   private disconnecting = false
+  private adminConnected = false
 
   private connectPromise: Promise<void> | null = null
   private disconnectPromise: Promise<void> | null = null
+  private adminConnectPromise: Promise<void> | null = null
 
   constructor(
 
@@ -64,6 +67,9 @@ export class KafkaConnectionService {
     this.disconnecting = true
 
     try {
+
+      await this.disconnectAdmin()
+
       if (this.producer) {
         await this.producer.disconnect()
 
@@ -194,6 +200,76 @@ export class KafkaConnectionService {
     }
   }
 
+
+  async connectAdmin(): Promise<void> {
+    if (this.adminConnected) {
+      return;
+    }
+
+    if (this.adminConnectPromise) {
+      return this.adminConnectPromise;
+    }
+
+    if (!this.kafka || !this.connected) {
+      throw new KafkaNotConnectedError(
+        "Kafka client must be connected before connecting Admin"
+      );
+    }
+
+    const admin = this.kafka.admin();
+
+    this.admin = admin;
+
+    this.adminConnectPromise = (async () => {
+      try {
+        await admin.connect();
+
+        this.adminConnected = true;
+
+        this.logger.info(
+          {},
+          "Kafka Admin client connected successfully"
+        );
+      } catch (error) {
+        this.admin = null;
+        this.adminConnected = false;
+
+        throw new KafkaConnectionError(
+          "Failed to connect Kafka Admin client",
+          { cause: error }
+        );
+      }
+    })();
+
+    try {
+      await this.adminConnectPromise;
+    } finally {
+      this.adminConnectPromise = null;
+    }
+  }
+
+
+  async disconnectAdmin(): Promise<void> {
+    if (this.adminConnectPromise) {
+      await this.adminConnectPromise.catch(()=> undefined)
+    }
+
+    if (!this.admin) {
+      return
+    }
+
+    const admin = this.admin
+
+    try {
+      await admin.disconnect()
+
+      this.logger.info({}, "Kafka Admin client disconnected successfully")
+    } finally {
+      this.admin = null
+      this.adminConnected = false
+    }
+  }
+
   getClient(): Kafka {
     if (!this.kafka) {
       throw new KafkaNotConnectedError("Kafka client has not been initialized")
@@ -208,6 +284,14 @@ export class KafkaConnectionService {
     }
 
     return this.producer
+  }
+
+  getAdmin(): Admin {
+    if (!this.adminConnected || !this.admin) {
+      throw new KafkaNotConnectedError("Kafka Admin client is not connected")
+    }
+
+    return this.admin
   }
 
   isConnected(): boolean {

@@ -25,5 +25,7 @@ export const bootstrap = async (): Promise<void> => {
 
   await kafkaConnection.connect()
 
+  await kafkaConnection.connectAdmin()
+
   logger.info("Application bootstrapped successfully")
 }
