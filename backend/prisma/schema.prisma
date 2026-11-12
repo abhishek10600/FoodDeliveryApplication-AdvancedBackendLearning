@@ -413,3 +413,56 @@ model DriverVehicle {
   @@map("driver_vehicles")
 
 }
+
+
+enum OutboxEventStatus {
+  PENDING
+  PROCESSING
+  PUBLISHED
+  FAILED
+}
+
+model OutboxEvent {
+
+  id String @id @default(uuid()) @db.Uuid
+  eventId String @unique @map("event_id") @db.Uuid
+  eventType String @map("event_type")
+  eventVersion Int @map("event_version")
+  aggregateId String @map("aggregate_id") @db.Uuid
+  aggregateType String @map("aggregate_type")
+  topic String
+  messageKey String @map("message_key")
+  payload Json
+  correlationId String @map("correlation_id") @db.Uuid
+  causationId String? @map("causation_id") @db.Uuid
+  status OutboxEventStatus @default(PENDING)
+  attempts Int @default(0)
+  maxAttempts Int @default(10) @map("max_attempts")
+  nextAttemptAt DateTime @default(now()) @map("next_attempt_at")
+  lockedBy String? @map("locked_by")
+  lockedUntil DateTime? @map("locked_until")
+  publishedAt DateTime? @map("published_at")
+  lastError String? @map("last_error")
+  occurredAt DateTime @map("occurred_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([status, nextAttemptAt, createdAt])
+  @@index([lockedUntil])
+  @@index([aggregateId, occurredAt])
+
+  @@map("outbox_events")
+}
+
+
+model ProcessedEvent {
+
+  id String @id @default(uuid()) @db.Uuid
+  consumerName String @map("consumer_name")
+  eventId String @map("event_id") @db.Uuid
+  processedAt DateTime @default(now()) @map("processed_at")
+
+  @@unique([consumerName, eventId])
+  @@index([processedAt])
+
+  @@map("processed_events")
+}
