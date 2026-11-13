@@ -24,7 +24,17 @@ export class KafkaConsumerService {
   ) { }
 
   private async cleanupConsumer(): Promise<void> {
-    try { } catch (error) {
+
+    const consumer = this.consumer
+
+    try {
+
+      if (consumer) {
+
+        await consumer.stop()
+        await consumer.disconnect()
+      }
+    } catch (error) {
       this.logger.error({
         err: error,
 
@@ -34,6 +44,7 @@ export class KafkaConsumerService {
     } finally {
       this.consumer = null
       this.running = false
+      this.starting = false
     }
   }
 
@@ -76,11 +87,11 @@ export class KafkaConsumerService {
             throw new Error("Kafka message has an empty value")
           }
 
-          const rawMessage = message.value.toString()
-
-          const parsedMessage = JSON.parse(rawMessage) as KafkaMessage<T>
-
           try {
+
+            const rawMessage = message.value.toString()
+            const parsedMessage = JSON.parse(rawMessage) as KafkaMessage<T>
+
             await handler(parsedMessage, {
               topic,
               partition,
@@ -92,9 +103,7 @@ export class KafkaConsumerService {
               {
                 topic,
                 partition,
-                offset: (
-                  BigInt(message.offset) + 1n
-                  ).toString()
+                offset: (BigInt(message.offset) + 1n).toString()
               }
             ])
 
@@ -113,8 +122,7 @@ export class KafkaConsumerService {
               err: error,
               topic,
               partition,
-              offset: message.offset,
-              eventId: parsedMessage.id
+              offset: message.offset
             },
             "Kafka message processing failed"
             )

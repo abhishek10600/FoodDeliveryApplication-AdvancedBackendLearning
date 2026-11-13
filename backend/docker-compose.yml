@@ -127,6 +127,37 @@ services:
       redis-stack:
        condition: service_healthy
 
+    healthcheck:
+      disable: true
+
+
+  outbox_relay:
+    image: food-delivery-backend:v1
+
+    env_file:
+      - .env
+
+    environment:
+      KAFKA_BROKERS: kafka:9092
+
+    command:
+      ["node", "dist/workers/outbox-relay.main.js"]
+
+    networks:
+      - food-delivery-network
+
+    restart: unless-stopped
+
+    depends_on:
+      redis-stack:
+        condition: service_healthy
+
+      kafka:
+        condition: service_healthy
+
+    healthcheck:
+      disable: true
+
 
 networks:
   food-delivery-network:

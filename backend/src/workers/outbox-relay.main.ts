@@ -7,10 +7,10 @@ import { OutboxRelayService } from "../infrastructure/messaging/outbox/outbox-re
 import { ILogger } from "../shared/logger/logger.interface.js"
 import { InfrastructureTokens } from "../infrastructure/container/index.js"
 
-const logger = container.resolve<ILogger>(InfrastructureTokens.Logger)
-
 async function bootstrap(): Promise<void> {
   registerInfrastructure()
+
+  const logger = container.resolve<ILogger>(InfrastructureTokens.Logger)
 
   const kafkaConnection = container.resolve(KafkaConnectionService)
 
@@ -18,14 +18,31 @@ async function bootstrap(): Promise<void> {
 
   await kafkaConnection.connect()
 
+  let shuttingDown = false
+
   const shutdown = async (signal: string) => {
+
+    if (shuttingDown) {
+      return
+    }
+
+    shuttingDown = true
+
     logger.info(`Signal: ${signal} Outbox worker shutting down`)
 
-    await relay.stop()
+    try {
+      await relay.stop()
 
-    await kafkaConnection.disconnect()
+      await kafkaConnection.disconnect()
 
-    process.exit(0)
+      logger.info("Outbox worker stopped successfully")
+
+      process.exit(0)
+    } catch (error) {
+
+      logger.error(`err: ${error} , Outbox worker shutdown failed`)
+      process.exitCode = 1
+    }
   }
 
   process.once("SIGINT", () => {
@@ -40,7 +57,10 @@ async function bootstrap(): Promise<void> {
 }
 
 bootstrap().catch((error) => {
+
+  const logger = container.resolve<ILogger>(InfrastructureTokens.Logger)
+
   logger.fatal(`Error: ${error} Outbox worker failed to start`)
 
-  process.exit(1)
+  process.exitCode = 1
 })
