@@ -52,6 +52,7 @@ model Customer {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   addresses Address[]
+  orders Order[]
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -74,6 +75,7 @@ model Address {
   updatedAt DateTime @updatedAt
 
   customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  orders Order[]
 
   @@index([customerId, isDefault])
   @@map("addresses")
@@ -160,9 +162,11 @@ model Restaurant{
   updatedAt DateTime @updatedAt @map("updated_at")
 
   owner User @relation(fields: [ownerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
   cuisines RestaurantCuisines[]
   openingHours RestaurantOpeningHours[]
   menu Menu[]
+  orders Order[]
 
   @@index([ownerId])
   @@index([status])
@@ -291,6 +295,8 @@ model MenuItem {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt
 
+  orderItems OrderItem[]
+
   category MenuCategory @relation(fields: [menuCategoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   menuAddOnGroups MenuAddOnGroup[]
 
@@ -411,6 +417,104 @@ model DriverVehicle {
 
   @@index([driverId, isActive])
   @@map("driver_vehicles")
+
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  SUCCEEDED
+  FAILED
+  CANCELLED
+}
+
+enum PaymentProvider {
+  DUMMY
+}
+
+enum OrderStatus {
+
+  PENDING_PAYMENT
+  CONFIRMED
+  PAYMENT_FAILED
+  CANCELLED
+
+}
+
+model Order {
+
+  id String @id @default(uuid()) @db.Uuid
+  customerId String @db.Uuid @map("customer_id")
+  restaurantId String @db.Uuid @map("restaurant_id")
+  addressId String @db.Uuid @map("address_id")
+  status OrderStatus @default(PENDING_PAYMENT) @map("status")
+  subTotal Decimal @db.Decimal(12, 2) @map("sub_total")
+  currency String @default("INR") @map("currency")
+  deliveryFee Decimal @db.Decimal(12, 2) @map("delivery_fee")
+  total Decimal @db.Decimal(12, 2) @map("total")
+
+  items OrderItem[]
+  payment Payment[]
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Restrict)
+  address Address @relation(fields: [addressId], references: [id], onDelete: Restrict)
+
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("orders")
+  @@index([customerId, createdAt])
+  @@index([restaurantId, createdAt])
+  @@index([status, createdAt])
+
+}
+
+model OrderItem {
+
+  id String @id @db.Uuid
+  orderId String @db.Uuid @map("order_id")
+  menuItemId String @db.Uuid @map("menu_item_id")
+  itemName String @map("item_name")
+  unitPrice Decimal @db.Decimal(12, 2) @map("unit_price")
+  quantity Int @map("quantity")
+  lineTotal Decimal @db.Decimal(12, 2) @map("line_total")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  MenuItem MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("order_items")
+  @@index([orderId])
+  @@index([menuItemId])
+
+}
+
+model Payment {
+
+  id String @id @db.Uuid
+  orderId String @db.Uuid @map("order_id")
+  provider PaymentProvider @default(DUMMY) @map("provider")
+  status PaymentStatus @default(PENDING) @map("status")
+  amount Decimal @db.Decimal(12, 2) @map("amount")
+  currency String @default("INR") @map("currency")
+  idempotencyKey String @unique @map("idempotency_key")
+  providerRef String? @unique @map("provider_ref")
+  failureCode Int? @map("failure_code")
+  failureMessage String? @map("failure_message")
+  processedAt DateTime? @map("processed_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([orderId])
+  @@index([status, createdAt])
+  @@index([provider, status])
 
 }
 

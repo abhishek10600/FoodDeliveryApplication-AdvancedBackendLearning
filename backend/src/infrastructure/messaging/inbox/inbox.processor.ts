@@ -1,23 +1,28 @@
-import { injectable } from "tsyringe"
+import { injectable, inject } from "tsyringe"
 import { InboxRepository } from "./inbox.repository.js";
 import { ProcessedEventInput } from "./inbox.types.js";
-import { prisma } from "../../database/prisma.js";
+import { InfrastructureTokens } from "../../container/index.js";
+import { PrismaClient, Prisma } from "../../../../generated/prisma/index.js";
 
 @injectable()
 export class InboxProcessor {
 
   constructor(
-    private readonly repository: InboxRepository
+    private readonly repository: InboxRepository,
+
+    @inject(InfrastructureTokens.PrismaClient)
+    private readonly prisma: PrismaClient
+
   ) { }
 
   async process<T>(
     input: ProcessedEventInput, handler: (
-      tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0]
+      tx: Prisma.TransactionClient
     ) => Promise<T>): Promise<{
       processed: boolean
       result?: T
     }> {
-    return prisma.$transaction(async (tx) => {
+    return this.prisma.$transaction(async (tx) => {
       const exists = await this.repository.exists(input, tx)
 
       if (exists) {
