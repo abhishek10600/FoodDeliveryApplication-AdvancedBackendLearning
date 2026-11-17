@@ -496,7 +496,7 @@ model OrderItem {
 model Payment {
 
   id String @id @db.Uuid
-  orderId String @db.Uuid @map("order_id")
+  orderId String @unique @db.Uuid @map("order_id")
   provider PaymentProvider @default(DUMMY) @map("provider")
   status PaymentStatus @default(PENDING) @map("status")
   amount Decimal @db.Decimal(12, 2) @map("amount")
