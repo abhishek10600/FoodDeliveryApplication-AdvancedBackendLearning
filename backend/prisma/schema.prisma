@@ -503,7 +503,7 @@ model Payment {
   currency String @default("INR") @map("currency")
   idempotencyKey String @unique @map("idempotency_key")
   providerRef String? @unique @map("provider_ref")
-  failureCode Int? @map("failure_code")
+  failureCode String? @map("failure_code")
   failureMessage String? @map("failure_message")
   processedAt DateTime? @map("processed_at")
 

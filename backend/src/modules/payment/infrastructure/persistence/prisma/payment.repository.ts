@@ -4,6 +4,7 @@ import { InfrastructureTokens } from "../../../../../infrastructure/container/in
 import type { PrismaExecutor } from "../../../../../infrastructure/database/prisma-client.type.js";
 import { Payment } from "../../../domain/entities/payment.entity.js";
 import { PaymentMapper } from "./mappers/payment.mapper.js";
+import { Prisma } from "../../../../../../generated/prisma/client.js"
 
 @injectable()
 export class PaymentRepository implements IPaymentRepository {
@@ -60,11 +61,13 @@ export class PaymentRepository implements IPaymentRepository {
     return PaymentMapper.toDomain(payment)
   }
 
-  async create(payment: Payment): Promise<Payment> {
+  async create(payment: Payment, tx: Prisma.TransactionClient): Promise<Payment> {
+
+    const executor = tx ?? this.prisma
 
     const data = PaymentMapper.toPersistence(payment)
 
-    const createdPayment = await this.prisma.payment.create({
+    const createdPayment = await executor.payment.create({
       data
     })
 
@@ -72,16 +75,32 @@ export class PaymentRepository implements IPaymentRepository {
 
   }
 
-  async update(id: string, payment: Payment): Promise<void> {
+  async update(id: string, payment: Payment, tx?: Prisma.TransactionClient): Promise<void> {
+
+    const executor = tx ?? this.prisma
 
     const data = PaymentMapper.toUpdatePersistence(payment)
 
-    await this.prisma.payment.update({
+    await executor.payment.update({
       where: {
         id
       },
       data
     })
+  }
+
+  async claimForProcessing(id: string): Promise<boolean> {
+    const result = await this.prisma.payment.updateMany({
+      where: {
+        id,
+        status: "PENDING"
+      },
+      data: {
+        status: "PROCESSING"
+      }
+    })
+
+    return result.count === 1
   }
 
 }

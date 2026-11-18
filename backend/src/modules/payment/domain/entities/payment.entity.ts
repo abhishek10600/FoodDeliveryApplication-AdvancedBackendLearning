@@ -12,7 +12,7 @@ export interface IPaymentProps {
   currency: string
   idempotencyKey: string
   providerRef?: string | null
-  failureCode?: number | null
+  failureCode?: string | null
   failureMessage?: string | null
   processedAt?: Date | null
   createdAt: Date
@@ -40,7 +40,7 @@ export class Payment {
   private currency: string
   private idempotencyKey: string
   private _providerRef: string | null
-  private _failureCode: number | null
+  private _failureCode: string | null
   private _failureMessage: string | null
   private _processedAt: Date | null
   private readonly createdAt: Date
@@ -130,7 +130,7 @@ export class Payment {
     return this._providerRef
   }
 
-  public getFailureCode(): number | null {
+  public getFailureCode(): string | null {
     return this._failureCode
   }
 
