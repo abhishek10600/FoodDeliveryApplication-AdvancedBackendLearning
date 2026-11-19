@@ -31,6 +31,7 @@ import { OutboxPublisher } from "../../messaging/outbox/outbox.publisher.js"
 import { OutboxService } from "../../messaging/outbox/outbox.service.js"
 import { InboxRepository } from "../../messaging/inbox/inbox.repository.js"
 import { InboxProcessor } from "../../messaging/inbox/inbox.processor.js"
+import { EventFactory } from "../../messaging/events/event.factory.js"
 
 export const registerInfrastructure = (): void => {
 
@@ -132,5 +133,7 @@ export const registerInfrastructure = (): void => {
   container.registerSingleton(InboxRepository)
 
   container.registerSingleton(InboxProcessor)
+
+  container.registerSingleton(EventFactory)
 
 }
