@@ -170,6 +170,10 @@ export class Payment {
 
   public markFailed(failureCode: string, failureMessage: string): void {
 
+    if (!failureCode.trim()) {
+      throw new PaymentDomainError("Failure message is required to mark a payment as FAILED", 400)
+    }
+
     if (!failureMessage.trim()) {
       throw new PaymentDomainError("Failure message is required to mark a payment as FAILED", 400)
     }
