@@ -2,7 +2,7 @@ import { DriverDomainError } from "../../modules/driver/domain/errors/driver-dom
 import { EmailAlreadyRegisteredError } from "../../modules/identity/domain/errors/email-already-register.error.js";
 import { InvalidCredentialsError } from "../../modules/identity/domain/errors/invalid-credentials.error.js";
 import { MenuDomainError } from "../../modules/menu/domain/errors/menu-domain.error.js";
-import { OrderDoaminError } from "../../modules/ordering/domain/errors/order.domain.error.js";
+import { OrderDomainError } from "../../modules/ordering/domain/errors/order.domain.error.js";
 import { PaymentDomainError } from "../../modules/payment/domain/errors/payment-domain.error.js";
 import { RestaurantDomainError } from "../../modules/restaurent/domain/errors/restaurant-domain.error.js";
 import { AppError } from "./AppError.js"
@@ -45,8 +45,8 @@ export const mapError = (error: Error, isProduction: boolean): AppError => {
     return new PaymentDomainError(error.message, 500)
   }
 
-  if (error instanceof OrderDoaminError) {
-    return new OrderDoaminError(error.message, 500)
+  if (error instanceof OrderDomainError) {
+    return new OrderDomainError(error.message, 500)
   }
 
   return new InternalServerError(isProduction ? "An unexpected error occurred" : error.message)
