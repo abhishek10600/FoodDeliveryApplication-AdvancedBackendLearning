@@ -20,7 +20,8 @@ export interface IMenuItemWithForeignData {
   restaurant: {
     id: string,
     name: string,
-    ownerId: string
+    ownerId: string,
+    status: string
     }
 }
 

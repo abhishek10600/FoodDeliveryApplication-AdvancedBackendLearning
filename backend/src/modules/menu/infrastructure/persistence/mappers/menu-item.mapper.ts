@@ -47,8 +47,8 @@ export class MenuItemMapper {
         description: data.category.description,
         displayOrder: data.category.displayOrder,
         status: data.category.status,
-        createdAt: data.createdAt,
-        updateAt: data.updatedAt
+        createdAt: data.category.createdAt,
+        updateAt: data.category.updatedAt
       },
       menu: {
         id: data.category.menu.id,
@@ -58,7 +58,8 @@ export class MenuItemMapper {
       restaurant: {
         id: data.category.menu.restaurant.id,
         name: data.category.menu.restaurant.name,
-        ownerId: data.category.menu.restaurant.ownerId
+        ownerId: data.category.menu.restaurant.ownerId,
+        status: data.category.menu.restaurant.status
       }
     }
   }
