@@ -1,15 +1,23 @@
-import { randomUUID } from "node:crypto"
+import { randomUUID } from "node:crypto";
 import { OrderStatus } from "../enums/order-status.enum.js"
 import { OrderDomainError } from "../errors/order.domain.error.js"
 import { OrderItem } from "./order-item.entity.js"
 
+export interface ICreateOrderItemProps {
+  menuItemId: string;
+  itemName: string;
+  unitPrice: number;
+  quantity: number;
+  lineTotal: number;
+}
+
 export interface ICreateOrderProps {
-  customerId: string
-  restaurantId: string
-  addressId: string
-  items: OrderItem[]
-  deliveryFee: number
-  currency: string
+  customerId: string;
+  restaurantId: string;
+  addressId: string;
+  items: ICreateOrderItemProps[];
+  deliveryFee: number;
+  currency: string;
 }
 
 export interface IOrderProps {
@@ -61,23 +69,37 @@ export class Order {
 
   public static create(props: ICreateOrderProps): Order {
 
-    this.validate(props)
+    this.validate(props);
 
-    const subTotal = props.items.reduce((sum, item) => sum + item.getLineTotal(), 0)
+    const orderId = randomUUID();
 
-    const total = subTotal + props.deliveryFee
+    const items = props.items.map((item) =>
+      OrderItem.create({
+        orderId,
+        ...item
+      })
+    );
+
+    const subTotal = items.reduce(
+      (sum, item) => sum + item.getLineTotal(),
+      0
+    );
+
+    const total = subTotal + props.deliveryFee;
 
     if (!Number.isSafeInteger(subTotal) || !Number.isSafeInteger(total)) {
-
-      throw new OrderDomainError("Subtotal or total is not a safe integer", 400)
+      throw new OrderDomainError(
+        "Subtotal or total is not a safe integer",
+        400
+      );
     }
 
     return new Order({
-      id: randomUUID(),
+      id: orderId,
       customerId: props.customerId,
       restaurantId: props.restaurantId,
       addressId: props.addressId,
-      items: [...props.items],
+      items,
       status: OrderStatus.PENDING_PAYMENT,
       subTotal,
       currency: props.currency,
@@ -85,8 +107,7 @@ export class Order {
       total,
       createdAt: new Date(),
       updatedAt: new Date()
-    })
-
+    });
   }
 
   public static rehydrate(props: IOrderProps): Order {
@@ -123,14 +144,36 @@ export class Order {
     const itemIds = new Set<string>
 
     for (const item of props.items) {
-      if (itemIds.has(item.getId())) {
-        throw new OrderDomainError("Duplicate order item ID", 400)
+      if (!item.menuItemId.trim()) {
+        throw new OrderDomainError("Menu item ID is required", 400);
       }
 
-      itemIds.add(item.getId())
+      if (!item.itemName.trim()) {
+        throw new OrderDomainError("Menu item name is required", 400);
+      }
+
+      if (!Number.isSafeInteger(item.quantity) || item.quantity <= 0) {
+        throw new OrderDomainError("Invalid item quantity", 400);
+      }
+
+      if (!Number.isSafeInteger(item.unitPrice) || item.unitPrice < 0) {
+        throw new OrderDomainError("Invalid item unit price", 400);
+      }
+
+      const expectedLineTotal = item.unitPrice * item.quantity;
+
+      if (!Number.isSafeInteger(expectedLineTotal) || item.lineTotal !== expectedLineTotal) {
+        throw new OrderDomainError("Invalid item line total", 400);
+      }
+
+      if (itemIds.has(item.menuItemId)) {
+        throw new OrderDomainError("Duplicate menu item ID", 400);
+      }
+
+      itemIds.add(item.menuItemId)
     }
 
-    const subTotal = props.items.reduce((sum, item) => sum + item.getLineTotal(), 0)
+    const subTotal = props.items.reduce((sum, item) => sum + item.lineTotal, 0)
 
     if (!Number.isSafeInteger(subTotal) || subTotal < 0) {
       throw new OrderDomainError("Subtotal is not a safe integer or Subtotal is less than 0", 400)

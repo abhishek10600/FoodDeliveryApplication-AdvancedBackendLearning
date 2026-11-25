@@ -32,10 +32,16 @@ export class OrderPricingService {
         )
       }
 
-      const catalogRecords = await Promise.all(
-        input.items.map((item) =>
-          this.pricingCatalog.findByMenuItemId(item.menuItemId)
+      const catalogRecords =
+        await this.pricingCatalog.findManyByMenuItemIds(
+          input.items.map((item) => item.menuItemId)
         )
+
+      const catalogById = new Map(
+        catalogRecords.map((record) => [
+          record.menuItem.id,
+          record
+        ])
       )
 
       const pricedItems: IPricedOrderItem[] = []
@@ -45,7 +51,7 @@ export class OrderPricingService {
 
       for (let index = 0; index < input.items.length; index++) {
         const requestedItem = input.items[index]
-        const record = catalogRecords[index]
+        const record = catalogById.get(requestedItem.menuItemId)
 
         if (!record) {
           throw new OrderPricingError(
@@ -54,12 +60,7 @@ export class OrderPricingService {
           )
         }
 
-        const {
-          menuItem,
-          category,
-          menu,
-          restaurant
-        } = record
+        const { menuItem, category, menu, restaurant } = record
 
         this.validateCatalogRecord(
           menuItem,

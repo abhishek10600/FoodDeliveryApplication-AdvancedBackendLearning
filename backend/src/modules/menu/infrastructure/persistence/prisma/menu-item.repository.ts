@@ -66,7 +66,34 @@ export class MenuItemRepository implements IMenuItemRepository {
     return menuItems.map((menuItem) => MenuItemMapper.toDomain(menuItem))
   }
 
-  async existsByName(menuCategoryId: string, name: string): Promise<Boolean> {
+  async findManyByIdsIncludeForeignData(ids: string[]): Promise<IMenuItemWithForeignData[]> {
+    if (ids.length === 0) {
+      return []
+    }
+
+    const menuItems = await this.prisma.menuItem.findMany({
+      where: {
+        id: {
+          in: ids
+        }
+      },
+      include: {
+        category: {
+          include: {
+            menu: {
+              include: {
+                restaurant: true
+              }
+            }
+          }
+        }
+      }
+    })
+
+    return menuItems.map((menuItem)=> MenuItemMapper.toDomainWithForeignData(menuItem))
+  }
+
+  async existsByName(menuCategoryId: string, name: string): Promise<boolean> {
     const menuItem = await this.prisma.menuItem.findFirst({
       where: {
         menuCategoryId,

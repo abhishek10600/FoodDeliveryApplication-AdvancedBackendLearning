@@ -110,6 +110,28 @@ export class OrderRepository implements IOrderRepository {
     }
   }
 
+  async findByCustomerIdAndIdempotencyKey(customerId: string, idempotencyKey: string): Promise<Order | null> {
+
+    const order = await this.prisma.order.findUnique({
+      where: {
+        customerId_idempotencyKey: {
+          customerId,
+          idempotencyKey
+        }
+      },
+      include: {
+        items: true
+      }
+    })
+
+    if (!order) {
+      return null
+    }
+
+    return OrderMapper.toDomain(order)
+
+  }
+
   async update(order: Order): Promise<void> {
     const data = OrderMapper.toUpdatePersistence(order)
 

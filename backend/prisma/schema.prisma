@@ -460,11 +460,13 @@ model Order {
   restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Restrict)
   address Address @relation(fields: [addressId], references: [id], onDelete: Restrict)
 
+  idempotencyKey String @map("idempotency_key")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("orders")
+  @@unique([customerId, idempotencyKey])
   @@index([customerId, createdAt])
   @@index([restaurantId, createdAt])
   @@index([status, createdAt])

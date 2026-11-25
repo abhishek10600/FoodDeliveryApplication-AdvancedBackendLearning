@@ -23,6 +23,8 @@ export interface IOrderRepository {
 
   findManyByCustomerId(customerId: string, options: IOrderListOptions): Promise<IOrderResultOptions>
 
+  findByCustomerIdAndIdempotencyKey(customerId: string, idempotencyKey: string): Promise<Order | null>
+
   update(order: Order): Promise<void>
 
 }

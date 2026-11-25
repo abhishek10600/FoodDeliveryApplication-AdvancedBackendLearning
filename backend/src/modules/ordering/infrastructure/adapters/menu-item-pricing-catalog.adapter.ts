@@ -42,4 +42,29 @@ export class MenuItemPricingCatalogAdapter implements IOrderPricingCatalog {
       }
     }
   }
+
+  async findManyByMenuItemIds(menuItemIds: string[]): Promise<IOrderPricingCatalogRecord[]> {
+    const menuItems = await this.menuItemRepo.findManyByIdsIncludeForeignData(menuItemIds)
+
+    return menuItems.map((menuItem) => ({
+      menuItem: {
+        id: menuItem.menuItem.getId(),
+        name: menuItem.menuItem.getName().getValue(),
+        price: menuItem.menuItem.getPrice(),
+        currency: menuItem.menuItem.getCurrency(),
+        status: menuItem.menuItem.getStatus(),
+        isAvailable: menuItem.menuItem.getIsAvailable()
+      },
+      category: {
+        status: menuItem.category.status
+      },
+      menu: {
+        status: menuItem.menu.status
+      },
+      restaurant: {
+        id: menuItem.restaurant.id,
+        status: menuItem.restaurant.status
+      }
+    }))
+  }
 }

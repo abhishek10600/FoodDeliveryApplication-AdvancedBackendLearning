@@ -30,4 +30,5 @@ export interface IOrderPricingCatalogRecord {
 
 export interface IOrderPricingCatalog {
   findByMenuItemId(menuItemId: string): Promise<IOrderPricingCatalogRecord | null>
+  findManyByMenuItemIds(menuItemIds: string[]): Promise<IOrderPricingCatalogRecord[]>
 }
