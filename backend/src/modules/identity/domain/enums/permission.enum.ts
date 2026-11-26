@@ -17,7 +17,6 @@ CUSTOMER_ADDRESS_UPDATE = "customer:address:update",
 CUSTOMER_ADDRESS_DELETE = "customer:address:delete",
 
 
-
 // Restaurants
 RESTAURANT_CREATE = "restaurant:create",
 RESTAURANT_READ = "restaurant:read",

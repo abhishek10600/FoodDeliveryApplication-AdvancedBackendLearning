@@ -52,7 +52,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<Role, readonly Permission[]>> = {
 
     Permission.ORDER_CREATE,
     Permission.ORDER_READ,
-    Permission.ORDER_CANCEL
+    Permission.ORDER_CANCEL,
 
   ],
 

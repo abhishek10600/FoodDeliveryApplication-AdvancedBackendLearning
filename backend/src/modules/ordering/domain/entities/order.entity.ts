@@ -16,6 +16,7 @@ export interface ICreateOrderProps {
   restaurantId: string;
   addressId: string;
   items: ICreateOrderItemProps[];
+  idempotencyKey: string;
   deliveryFee: number;
   currency: string;
 }
@@ -26,6 +27,7 @@ export interface IOrderProps {
   restaurantId: string
   addressId: string
   items: OrderItem[]
+  idempotencyKey: string
   status: OrderStatus
   subTotal: number
   currency: string
@@ -43,6 +45,7 @@ export class Order {
   private readonly restaurantId: string
   private readonly addressId: string
   private readonly items: OrderItem[]
+  private readonly idempotencyKey: string
   private status: OrderStatus
   private readonly subTotal: number
   private readonly currency: string
@@ -58,6 +61,7 @@ export class Order {
     this.restaurantId = props.restaurantId
     this.addressId = props.addressId
     this.items = props.items
+    this.idempotencyKey = props.idempotencyKey
     this.status = props.status
     this.subTotal = props.subTotal
     this.currency = props.currency
@@ -100,6 +104,7 @@ export class Order {
       restaurantId: props.restaurantId,
       addressId: props.addressId,
       items,
+      idempotencyKey: props.idempotencyKey,
       status: OrderStatus.PENDING_PAYMENT,
       subTotal,
       currency: props.currency,
@@ -131,6 +136,14 @@ export class Order {
 
     if (!props.currency.trim()) {
       throw new OrderDomainError("Currency is required", 400)
+    }
+
+    if (!props.idempotencyKey?.trim()) {
+      throw new OrderDomainError("Idempotency key is required", 400);
+    }
+
+    if (props.idempotencyKey.length > 128) {
+      throw new OrderDomainError("Idempotency key cannot exceed 128 characters", 400);
     }
 
     if (!Array.isArray(props.items) || props.items.length === 0) {
@@ -230,6 +243,10 @@ export class Order {
 
   public getItems(): OrderItem[] {
     return [...this.items]
+  }
+
+  public getIdempotencyKey(): string {
+    return this.idempotencyKey
   }
 
   public getStatus(): OrderStatus {

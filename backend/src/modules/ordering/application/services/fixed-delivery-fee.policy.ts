@@ -7,7 +7,7 @@ export class FixedDeliveryFeePolicy implements IDeliveryFeePolicy {
   private readonly deliveryFee: number = 4000
 
   public async calculate(input: IDeliveryFeeInput): Promise<number> {
-    if (input.currency === "INR") {
+    if (input.currency !== "INR") {
       throw new Error(`Unsupported currency: ${input.currency}`)
     }
 

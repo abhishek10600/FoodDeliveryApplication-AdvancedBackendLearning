@@ -33,6 +33,7 @@ export class OrderMapper {
       customerId: orderWithItems.customerId,
       restaurantId: orderWithItems.restaurantId,
       items,
+      idempotencyKey: orderWithItems.idempotencyKey,
       addressId: orderWithItems.addressId,
       status: orderWithItems.status as OrderStatus,
       subTotal: Number(orderWithItems.subTotal),
@@ -76,6 +77,7 @@ export class OrderMapper {
           lineTotal: item.getLineTotal()
         }))
       },
+      idempotencyKey: order.getIdempotencyKey(),
       status: order.getStatus(),
       subTotal: order.getSubTotal(),
       currency: order.getCurrency(),

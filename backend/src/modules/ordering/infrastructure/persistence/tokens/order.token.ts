@@ -4,5 +4,6 @@ export const OrderTokens = {
   OrderPricingCatalog: Symbol.for("Order.OrderPricingCatalog"),
   DeliveryFeePolicy: Symbol.for("Order.DeliveryFeePolicy"),
   MenuItemPricingCatalogAdapter: Symbol.for("Order.MenuItemPricingCatalogAdapter"),
+  OrderCreationUseCase: Symbol.for("Order.OrderCreationUseCase"),
 
 } as const

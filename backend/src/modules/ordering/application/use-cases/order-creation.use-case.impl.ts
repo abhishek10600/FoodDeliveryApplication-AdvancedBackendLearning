@@ -16,6 +16,8 @@ import { withTransaction } from "../../../../infrastructure/database/transaction
 import { Prisma } from "../../../../../generated/prisma/client.js"
 import { OrderPlacedV1 } from "../../../../infrastructure/messaging/events/ordering/order-place.v1.js";
 import { OrderEventTopics } from "../../../../infrastructure/messaging/topics/order.event-topics.js";
+import { CustomerTokens } from "../../../customer/infrastructure/persistence/tokens/customer.tokens.js";
+import type { ICustomerRepository } from "../../../customer/domain/repositories/customer.repository.js";
 
 @injectable()
 export class OrderCreationUseCaseImpl implements OrderCreationUseCase {
@@ -30,6 +32,9 @@ export class OrderCreationUseCaseImpl implements OrderCreationUseCase {
     @inject(AddressTokens.AddressRepository)
     private readonly addressRepo: IAddressRepository,
 
+    @inject(CustomerTokens.CustomerRepository)
+    private readonly customerRepo: ICustomerRepository,
+
     private readonly pricingService: OrderPricingService,
 
     private readonly outboxService: OutboxService,
@@ -38,7 +43,15 @@ export class OrderCreationUseCaseImpl implements OrderCreationUseCase {
 
   ) { }
 
-  async execute(customerId: string, input: OrderCreationInput, metadata: OrderCreationMetadata): Promise<OrderCreationResult> {
+  async execute(userId: string, input: OrderCreationInput, metadata: OrderCreationMetadata): Promise<OrderCreationResult> {
+
+    const customer = await this.customerRepo.findByUserId(userId)
+
+    if (!customer) {
+      throw new OrderDomainError("Customer not found", 404)
+    }
+
+    const customerId = customer.getId()
 
     const existingOrder = await this.orderRepo.findByCustomerIdAndIdempotencyKey(customerId, metadata.idempotencyKey)
 
@@ -62,6 +75,9 @@ export class OrderCreationUseCaseImpl implements OrderCreationUseCase {
       throw new OrderDomainError("Delivery order not found", 404)
     }
 
+    console.log(`Address_CUstomerId: ${address.getCustomerId()}`)
+    console.log(`customer_id: ${customerId}`)
+
     if (address.getCustomerId() !== customerId) {
       throw new OrderDomainError("Delivery address does not belong to this customer", 400)
     }
@@ -76,6 +92,7 @@ export class OrderCreationUseCaseImpl implements OrderCreationUseCase {
       restaurantId: input.restaurantId,
       addressId: input.addressId,
       items: pricing.items,
+      idempotencyKey: metadata.idempotencyKey,
       deliveryFee: pricing.deliveryFee,
       currency: pricing.currency
     });
