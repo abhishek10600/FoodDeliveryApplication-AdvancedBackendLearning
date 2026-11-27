@@ -5,6 +5,7 @@ import type { PrismaExecutor } from "../../../../../infrastructure/database/pris
 import { Order } from "../../../domain/entities/order.entity.js";
 import { orderInclude, OrderMapper } from "../mappers/order.mapper.js";
 import { OrderStatus } from "../../../domain/enums/order-status.enum.js";
+import { Prisma } from "../../../../../../generated/prisma/index.js";
 
 @injectable()
 export class OrderRepository implements IOrderRepository {
@@ -141,6 +142,40 @@ export class OrderRepository implements IOrderRepository {
       },
       data
     })
+  }
+
+  async findByOrderIdInTransaction(orderId: string, tx: Prisma.TransactionClient): Promise<Order | null> {
+
+    const data = await tx.order.findUnique({
+      where: {
+        id: orderId
+      },
+
+      include: {
+        items: true
+      }
+    })
+
+    if (!data) {
+      return null
+    }
+
+    return OrderMapper.toDomain(data)
+  }
+
+  async updateInTransaction(order: Order, tx: Prisma.TransactionClient): Promise<void> {
+
+    await tx.order.update({
+      where: {
+        id: order.getId()
+      },
+
+      data: {
+        status: order.getStatus(),
+        updatedAt: order.getUpdatedAt()
+      }
+    })
+
   }
 
 }

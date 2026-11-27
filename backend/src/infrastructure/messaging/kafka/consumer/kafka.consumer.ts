@@ -144,9 +144,21 @@ export class KafkaConsumerService {
       )
 
     } catch (error) {
-      await this.cleanupConsumer()
+      this.logger.error(
+        {
+          err: error,
+          groupId: options.groupId,
+          topics: options.topics,
+        },
+        "Kafka consumer startup failed"
+      );
 
-      throw new KafkaConnectionError("Failed to start Kafka consumer", {cause: error})
+      await this.cleanupConsumer();
+
+      throw new KafkaConnectionError(
+        "Failed to start Kafka consumer",
+        { cause: error }
+      );
     }
   }
 

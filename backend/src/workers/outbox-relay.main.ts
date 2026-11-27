@@ -6,13 +6,14 @@ import { KafkaConnectionService } from "../infrastructure/messaging/kafka/kafka.
 import { OutboxRelayService } from "../infrastructure/messaging/outbox/outbox-relay.service.js"
 import { ILogger } from "../shared/logger/logger.interface.js"
 import { InfrastructureTokens } from "../infrastructure/container/index.js"
+import { KafkaTokens } from "../infrastructure/messaging/kafka/kafka.tokens.js"
 
 async function bootstrap(): Promise<void> {
   registerInfrastructure()
 
   const logger = container.resolve<ILogger>(InfrastructureTokens.Logger)
 
-  const kafkaConnection = container.resolve(KafkaConnectionService)
+  const kafkaConnection = container.resolve<KafkaConnectionService>(KafkaTokens.Connection)
 
   const relay = container.resolve(OutboxRelayService)
 

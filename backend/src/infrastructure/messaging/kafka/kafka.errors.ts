@@ -1,6 +1,6 @@
 export class KafkaConnectionError extends Error {
   constructor(message: string, options?: ErrorOptions) {
-    super(message)
+    super(message, options);
 
     this.name = "KafkaConnectionError";
   }
@@ -8,8 +8,8 @@ export class KafkaConnectionError extends Error {
 
 export class KafkaNotConnectedError extends Error {
   constructor(message = "Kafka is not connected") {
-    super(message)
+    super(message);
 
-    this.name = "KafkaNotOConnectedError";
+    this.name = "KafkaNotConnectedError";
   }
 }

@@ -1,5 +1,6 @@
 import { Order } from "../entities/order.entity.js";
 import { OrderStatus } from "../enums/order-status.enum.js";
+import { Prisma } from "../../../../../generated/prisma/client.js"
 
 export interface IOrderListOptions {
   cursor?: string
@@ -26,5 +27,9 @@ export interface IOrderRepository {
   findByCustomerIdAndIdempotencyKey(customerId: string, idempotencyKey: string): Promise<Order | null>
 
   update(order: Order): Promise<void>
+
+  findByOrderIdInTransaction(orderId: string, tx: Prisma.TransactionClient): Promise<Order | null>
+
+  updateInTransaction(order: Order, tx: Prisma.TransactionClient): Promise<void>
 
 }

@@ -6,4 +6,8 @@ export const OrderTokens = {
   MenuItemPricingCatalogAdapter: Symbol.for("Order.MenuItemPricingCatalogAdapter"),
   OrderCreationUseCase: Symbol.for("Order.OrderCreationUseCase"),
 
+  PaymentSucceededHandler: Symbol.for("Order.PaymentSucceededHandler"),
+  PaymentFailedHandler: Symbol.for("Order.PaymentFailedHandler"),
+  OrderingPaymentConsumer: Symbol.for("Order.OrderingPaymentConsumer"),
+
 } as const

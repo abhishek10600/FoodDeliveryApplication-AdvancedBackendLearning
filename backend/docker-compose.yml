@@ -159,6 +159,56 @@ services:
       disable: true
 
 
+  ordering-payment-worker:
+    image: food-delivery-backend:v1
+
+    env_file:
+      - .env
+
+    environment:
+      KAFKA_BROKERS: kafka:9092
+
+    command:
+      ["node", "dist/workers/ordering-payment.main.js"]
+
+    networks:
+      - food-delivery-network
+
+    restart: unless-stopped
+
+    depends_on:
+      kafka:
+        condition: service_healthy
+
+    healthcheck:
+      disable: true
+
+
+  payment-order-worker:
+    image: food-delivery-backend:v1
+
+    env_file:
+      - .env
+
+    environment:
+      KAFKA_BROKERS: kafka:9092
+
+    command:
+      ["node", "dist/workers/payment-order.main.js"]
+
+    networks:
+      - food-delivery-network
+
+    restart: unless-stopped
+
+    depends_on:
+      kafka:
+        condition: service_healthy
+
+    healthcheck:
+      disable: true
+
+
 networks:
   food-delivery-network:
     name: food-delivery-network

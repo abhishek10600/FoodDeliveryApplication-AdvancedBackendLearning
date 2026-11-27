@@ -60,13 +60,11 @@ export class PaymentProcessUseCaseImpl implements PaymentProcessUseCase {
       throw new PaymentDomainError("Payable order status is not PENDING_PAYMENT", 400)
     }
 
-    const amount = Number(order.amount)
+    const amountMinor = order.amount
 
-    if (!Number.isFinite(amount) || amount < 0) {
-      throw new PaymentDomainError("Order amount is not a finite number or Order amount is less than 0", 400)
+    if (!Number.isFinite(amountMinor) || amountMinor < 0) {
+      throw new PaymentDomainError("Order amount must be a non-negative safe integer in minor units", 400)
     }
-
-    const amountMinor = this.toMinorUnits(String(amount))
 
     const orderPayment = await this.paymentRepo.findByOrderId(input.orderId)
 
@@ -204,26 +202,6 @@ export class PaymentProcessUseCaseImpl implements PaymentProcessUseCase {
     if (payment.getOrderId() !== input.orderId || payment.getProvider() !== input.provider) {
       throw new PaymentDomainError("Idempotency key conflict", 400)
     }
-  }
-
-  private toMinorUnits(amount: string): number {
-
-    const normalizedAmount = amount.trim()
-
-    if (!/^\d+(\.\d{1,2})?$/.test(normalizedAmount)) {
-      throw new PaymentDomainError("Invalid amount format", 400)
-    }
-
-    const [whole, fraction = ""] = normalizedAmount.split(".")
-
-    const minor = Number(whole) * 100 + Number(fraction.padEnd(2, "0"))
-
-    if (!Number.isSafeInteger(minor) || minor < 0) {
-      throw new PaymentDomainError("Minor amount is less than zero or it is not a safe integer", 400)
-    }
-
-    return minor
-
   }
 
   private isUniqueConstraintError(error: unknown): boolean {
